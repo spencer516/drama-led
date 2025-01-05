@@ -1,0 +1,15 @@
+{
+  "name": "@spencer516/drama-led",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "workspaces": [
+    "packages/drama-led-server",
+    "packages/drama-led-ui"
+  ]
+}
