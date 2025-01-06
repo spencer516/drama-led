@@ -63,7 +63,7 @@ export default class Broadcaster {
       sourceName: 'Drama LED Server',
       priority: 200,
     }).then(() => {
-      console.log('Updated Pixels', payload);
+      console.log('Updated Pixels');
     }).catch(err => {
       console.error('Error Sending SACN', err);
     });

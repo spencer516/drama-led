@@ -44,4 +44,12 @@ export default class Light {
     this.#greenValue = greenValue;
     this.#blueValue = blueValue;
   }
+
+  turnOff() {
+    this.setValue([makeChannelValue(0), makeChannelValue(0), makeChannelValue(0)]);
+  }
+
+  turnOn() {
+    this.setValue([makeChannelValue(100), makeChannelValue(100), makeChannelValue(100)]);
+  }
 }

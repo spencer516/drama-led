@@ -4,12 +4,15 @@ import LightSequence from "./LightSequence";
 import { parseMessage, UpdateSingleLight } from "@spencer516/drama-led-messages/src/InputMessage";
 import Light from "./Light";
 import { invariant } from "./utils";
+import MacroBase from "./macros/MacroBase";
+import BasicChase from "./macros/BasicChase";
 
 export default class MessageHandler {
   #wss: WebSocketServer;
   #broadcaster: Broadcaster;
   #lightSequence: LightSequence;
   #linearSequence: Light[];
+  #currentMacro: MacroBase | null = null;
 
   constructor(
     wss: WebSocketServer,
@@ -25,9 +28,16 @@ export default class MessageHandler {
   onMessage(data: string) {
     const message = parseMessage(data);
 
+    this.#currentMacro?.stop();
+
     switch (message.type) {
       case 'UPDATE_LIGHT_BY_SEQUENCE':
         this.updateSingleLight(message.data);
+        break;
+      case 'START_BASIC_CHASE':
+        const chase = new BasicChase(this.#broadcaster, this.#lightSequence);
+        this.#currentMacro = chase;
+        chase.start();
         break;
       case 'UPDATE_ALL_LIGHTS':
         // TODO

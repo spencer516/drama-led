@@ -15,7 +15,7 @@ export type Channel = z.infer<typeof Channel>;
 export const MIN_CHANNEL_VALUE = 0;
 export const MAX_CHANNEL_VALUE = 100;
 
-export const ChannelValue = z.number().min(MIN_CHANNEL_VALUE).max(MAX_CHANNEL_VALUE).brand('ChannelValue');
+export const ChannelValue = z.number().min(MIN_CHANNEL_VALUE).max(MAX_CHANNEL_VALUE).int().brand('ChannelValue');
 export type ChannelValue = z.infer<typeof ChannelValue>;
 
 export const Address = z.tuple([Universe, Channel, ChannelValue]);

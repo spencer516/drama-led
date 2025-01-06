@@ -32,7 +32,14 @@ export const UpdateAllLights = z.object({
 
 export type UpdateAllLights = z.infer<typeof UpdateAllLights>;
 
-export const InputMessage = z.discriminatedUnion('type', [UpdateSingleLight, UpdateAllLights, EmptyMessage]);
+export const StartBasicChase = z.object({
+  type: z.literal('START_BASIC_CHASE'),
+  data: z.object({})
+});
+
+export type StartBasicChase = z.infer<typeof StartBasicChase>;
+
+export const InputMessage = z.discriminatedUnion('type', [UpdateSingleLight, UpdateAllLights, StartBasicChase, EmptyMessage]);
 
 export type InputMessage = z.infer<typeof InputMessage>;
 
