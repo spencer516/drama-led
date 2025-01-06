@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@spencer516/drama-led-messages": "^1.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -24,5 +25,10 @@
     "react-use-websocket": "^4.11.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "workspaces": {
+    "nohoist": [
+      "**"
+    ]
   }
 }

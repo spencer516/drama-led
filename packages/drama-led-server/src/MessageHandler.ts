@@ -1,7 +1,7 @@
 import { WebSocketServer } from "ws";
 import Broadcaster from "./Broadcaster";
 import LightSequence from "./LightSequence";
-import { parseMessage, UpdateSingleLight } from "./InputMessage";
+import { parseMessage, UpdateSingleLight } from "@spencer516/drama-led-messages/src/InputMessage";
 import Light from "./Light";
 import { invariant } from "./utils";
 
@@ -30,7 +30,7 @@ export default class MessageHandler {
         this.updateSingleLight(message.data);
         break;
       case 'UPDATE_ALL_LIGHTS':
-        // TODO!
+        // TODO
         break;
     }
   }

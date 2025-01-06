@@ -1,0 +1,12 @@
+{
+  "ignore": [
+    "node_modules",
+    "build"
+  ],
+  "watch": [
+    "src",
+    "index.ts",
+    "../drama-led-messages/src/**/*.ts",
+    "../drama-led-messages/index.ts"
+  ]
+}

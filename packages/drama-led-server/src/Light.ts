@@ -1,4 +1,4 @@
-import { Address, Channel, ChannelValue, LightValue, makeChannelValue, Universe } from "./AddressTypes";
+import { Address, Channel, ChannelValue, LightConfig, LightValue, makeChannelValue, Universe } from "@spencer516/drama-led-messages/src/AddressTypes";
 
 export default class Light {
   #universe: Universe;
@@ -27,6 +27,16 @@ export default class Light {
       [this.#universe, this.#greenChannel, this.#greenValue],
       [this.#universe, this.#blueChannel, this.#blueValue],
     ]
+  }
+
+  toConfig(): LightConfig {
+    return {
+      universe: this.#universe,
+      rgbChannels: [this.#redChannel, this.#greenChannel, this.#blueChannel],
+      red: this.#redValue,
+      green: this.#greenValue,
+      blue: this.#blueValue,
+    };
   }
 
   setValue([redValue, greenValue, blueValue]: LightValue): void {

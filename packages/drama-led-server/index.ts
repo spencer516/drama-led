@@ -2,7 +2,7 @@ import { WebSocketServer } from 'ws';
 import LightSequence from './src/LightSequence';
 import Broadcaster from './src/Broadcaster';
 import MessageHandler from './src/MessageHandler';
-import { makeUniverse } from './src/AddressTypes';
+import { makeUniverse } from '@spencer516/drama-led-messages/src/AddressTypes';
 
 const wss = new WebSocketServer({ port: 8080 });
 
@@ -20,10 +20,17 @@ const messageHandler = new MessageHandler(
 );
 
 wss.on('connection', function connection(ws) {
+  console.log('connected!');
+  ws.on('close', function close() {
+    console.log('disconnected');
+  });
   ws.on('error', console.error);
   ws.on('message', function message(data) {
     messageHandler.onMessage(data.toString());
   });
+
+  // Send the initial state on connect!
+  broadcaster.broadcastClient(ws);
 });
 
 wss.on('listening', function listening() {

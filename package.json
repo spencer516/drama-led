@@ -3,13 +3,26 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "tsc"
   },
+  "private": true,
   "author": "",
   "license": "ISC",
   "description": "",
-  "workspaces": [
-    "packages/drama-led-server",
-    "packages/drama-led-ui"
-  ]
+  "dependencies": {
+    "@types/node": "^22.7.5",
+    "gts": "^6.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/drama-led-server",
+      "packages/drama-led-ui",
+      "packages/drama-led-messages"
+    ],
+    "nohoist": [
+      "**"
+    ]
+  }
 }

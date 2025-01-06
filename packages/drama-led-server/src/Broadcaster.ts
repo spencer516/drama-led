@@ -1,10 +1,11 @@
 import { WebSocketServer, WebSocket } from "ws";
 import LightSequence from "./LightSequence";
 import { startEventLoop } from "./utils";
+import { safeParseMessage, OutputMessage } from "@spencer516/drama-led-messages/src/OutputMessage";
 
 export default class Broadcaster {
   #wss: WebSocketServer;
-  #latestMessage: string;
+  #latestMessage: OutputMessage;
   #lightSequence: LightSequence;
   #cancelEventLoop: (() => void) | null = null;
 
@@ -39,7 +40,7 @@ export default class Broadcaster {
   }
 
   /**
-   * Send a message to all clients about the update. 
+   * Send a message to all clients about the update.
    */
   broadcast(): this {
     for (const client of this.#wss.clients) {
@@ -53,7 +54,7 @@ export default class Broadcaster {
    * Send the latest update to a specific client
    */
   broadcastClient(client: WebSocket): this {
-    client.send(this.#latestMessage);
+    client.send(JSON.stringify(this.#latestMessage));
     return this;
   }
 
@@ -65,10 +66,13 @@ export default class Broadcaster {
     return this;
   }
 
-  getMessage(): string {
-    const addresses = this.#lightSequence.toAddresses();
-    return JSON.stringify({
-      addresses
+  getMessage(): OutputMessage {
+    const lights = this.#lightSequence.toLightConfigs();
+    return OutputMessage.parse({
+      type: 'ALL_LIGHTS',
+      data: {
+        lights
+      }
     });
   }
 }

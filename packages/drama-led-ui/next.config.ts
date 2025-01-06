@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  modularizeImports: {
+    "@spencer516/drama-led-messages": {
+      transform: "@spencer516/drama-led-messages/{{member}}",
+    }
+  }
 };
 
 export default nextConfig;

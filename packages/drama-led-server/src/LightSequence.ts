@@ -1,4 +1,4 @@
-import { Address, makeChannel, makeUniverse, Universe } from "./AddressTypes";
+import { Address, LightConfig, makeChannel, makeUniverse, Universe } from "@spencer516/drama-led-messages/src/AddressTypes";
 import Light from "./Light";
 import LightStrand from "./LightStrand";
 import { range } from "./utils";
@@ -38,5 +38,9 @@ export default class LightSequence {
 
   toLinearSequence(): Light[] {
     return this.#lightStrands.flatMap(strand => strand.lights);
+  }
+
+  toLightConfigs(): LightConfig[] {
+    return this.toLinearSequence().map(light => light.toConfig());
   }
 }

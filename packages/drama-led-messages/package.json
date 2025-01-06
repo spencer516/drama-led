@@ -1,31 +1,28 @@
 {
-  "name": "drama-led-server",
-  "version": "1.0.0",
+  "name": "@spencer516/drama-led-messages",
   "scripts": {
     "dev": "nodemon index.ts",
     "lint": "gts lint",
     "clean": "gts clean",
-    "compile": "tsc",
+    "compile": "tsc --listFilesOnly",
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint"
   },
   "main": "index.ts",
-  "devDependencies": {
-    "@spencer516/drama-led-messages": "^1.0.0",
+  "dependencies": {
     "@types/node": "^22.7.5",
-    "@types/ws": "^8.5.13",
+    "zod": "^3.24.1",
     "gts": "^6.0.2",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2",
-    "ws": "^8.18.0",
-    "zod": "^3.24.1"
+    "typescript": "^5.7.2"
   },
+  "version": "1.0.0",
   "workspaces": {
     "nohoist": [
-      "gts"
+      "**"
     ]
   }
 }

@@ -1,4 +1,4 @@
-import { Address, Channel, LightValue, makeChannel, Universe } from "./AddressTypes";
+import { Address, Channel, LightValue, makeChannel, Universe } from "@spencer516/drama-led-messages/src/AddressTypes";
 import Light from "./Light";
 import { invariant, range } from "./utils";
 
