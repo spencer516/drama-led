@@ -11,7 +11,6 @@ type Props = {
 
 export default function AllLightsRenderer({message, sendMessage}: Props) {
   const lights = message.data.lights;
-  console.log(lights);
 
   return <table className="table-auto">
     <thead>
@@ -29,6 +28,7 @@ export default function AllLightsRenderer({message, sendMessage}: Props) {
     <tbody>
       {lights.map((light, sequenceNumber) => {
         const {universe, rgbChannels, red, green, blue} = light;
+        const backgroundColor = `#${percentToHex(red)}${percentToHex(green)}${percentToHex(blue)}`;
 
         return <tr key={sequenceNumber}>
           <td>{sequenceNumber}</td>
@@ -39,9 +39,10 @@ export default function AllLightsRenderer({message, sendMessage}: Props) {
           <td>{blue}</td>
           <td>
             <div style={{
-              width: '50px',
-              height: '50px',
-              backgroundColor: `#${percentToHex(red)}${percentToHex(green)}${percentToHex(blue)}`,
+              width: '15px',
+              height: '15px',
+              backgroundColor,
+              borderRadius: '100%',
             }} />
           </td>
           <td>
@@ -66,6 +67,6 @@ export default function AllLightsRenderer({message, sendMessage}: Props) {
 }
 
 function percentToHex(percent: number): string {
-  const hex = Math.floor(percent * 255).toString(16);
+  const hex = Math.floor(percent / 100 * 255).toString(16);
   return hex.length === 1 ? `0${hex}` : hex;
 }

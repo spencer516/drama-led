@@ -8,6 +8,9 @@ type LightSequenceConfig = {
   numberOfStrands: number,
 };
 
+// TODO: I should make a light sequence tie to a specific Octo Unit
+// and increment the universe when the number of channels is exceeded.
+
 export default class LightSequence {
   #lightStrands: LightStrand[];
 
@@ -25,7 +28,7 @@ export default class LightSequence {
       LightStrand.create({
         universe: makeUniverse(startUniverse + index),
         channelStart: makeChannel(1),
-        numberOfLights: 10,
+        numberOfLights: 50,
       })
     )
 

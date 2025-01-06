@@ -1,21 +1,25 @@
 import { WebSocketServer, WebSocket } from "ws";
 import LightSequence from "./LightSequence";
-import { startEventLoop } from "./utils";
-import { safeParseMessage, OutputMessage } from "@spencer516/drama-led-messages/src/OutputMessage";
+import { range, startEventLoop } from "./utils";
+import { OutputMessage } from "@spencer516/drama-led-messages/src/OutputMessage";
+import {Sender} from 'sacn';
 
 export default class Broadcaster {
   #wss: WebSocketServer;
   #latestMessage: OutputMessage;
   #lightSequence: LightSequence;
   #cancelEventLoop: (() => void) | null = null;
+  #sacnSender: Sender;
 
   constructor(
     wss: WebSocketServer,
     lightSequence: LightSequence,
+    sacnSender: Sender,
   ) {
     this.#wss = wss;
     this.#lightSequence = lightSequence;
     this.#latestMessage = this.getMessage();
+    this.#sacnSender = sacnSender;
   }
 
   /**
@@ -46,6 +50,23 @@ export default class Broadcaster {
     for (const client of this.#wss.clients) {
       this.broadcastClient(client);
     }
+
+    const addresses = this.#lightSequence.toAddresses();
+    const payload = addresses.reduce<{[channel: string]: number}>((acc, address) => {
+      const [_universe, channel, channelValue] = address;
+      acc[channel] = channelValue;
+      return acc;
+    }, {});
+
+    this.#sacnSender.send({
+      payload,
+      sourceName: 'Drama LED Server',
+      priority: 200,
+    }).then(() => {
+      console.log('Updated Pixels', payload);
+    }).catch(err => {
+      console.error('Error Sending SACN', err);
+    });
 
     return this;
   }

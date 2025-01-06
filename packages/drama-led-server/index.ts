@@ -3,15 +3,21 @@ import LightSequence from './src/LightSequence';
 import Broadcaster from './src/Broadcaster';
 import MessageHandler from './src/MessageHandler';
 import { makeUniverse } from '@spencer516/drama-led-messages/src/AddressTypes';
+import { Sender } from 'sacn';
 
 const wss = new WebSocketServer({ port: 8080 });
 
+const sacnSender = new Sender({
+  universe: 1000,
+  iface: '192.168.0.1',
+});
+
 const lightSequence = LightSequence.create({
-  startUniverse: makeUniverse(50000),
+  startUniverse: makeUniverse(1000),
   numberOfStrands: 1,
 });
 
-const broadcaster = new Broadcaster(wss, lightSequence);
+const broadcaster = new Broadcaster(wss, lightSequence, sacnSender);
 
 const messageHandler = new MessageHandler(
   wss,
@@ -35,7 +41,7 @@ wss.on('connection', function connection(ws) {
 
 wss.on('listening', function listening() {
   console.log('listening on port 8080');
-  broadcaster.startBroadcastLoop(5000);
+  // broadcaster.startBroadcastLoop(5000);
 });
 
 wss.on('error', function error(error) {
