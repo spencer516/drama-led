@@ -2,45 +2,44 @@ import { makeChannelValue } from "@spencer516/drama-led-messages/src/AddressType
 import Broadcaster from "../Broadcaster";
 import Light from "../Light";
 import LightSequence from "../LightSequence";
-import MacroBase from "./MacroBase";
+import { scalePow, ScalePower } from 'd3-scale';
+import AnimatedMacroBase from "./AnimatedMacroBase";
 
-export default class BasicChase extends MacroBase {
+type Config = {
+  spread?: number;
+  gap?: number;
+  frequencyInSeconds?: number;
+  direction?: 'forward' | 'reverse';
+}
+
+export default class BasicChase extends AnimatedMacroBase {
   #linearSequence: Light[];
-  #intervalConfig: {
-    startTime: number,
-    timeout: NodeJS.Timeout | null,
-  };
+  #spread: number;
+  #gap: number;
+  #frequencyInSeconds: number;
+  #direction: 'forward' | 'reverse' = 'forward';
+  #scale: ScalePower<number, number>;
 
   constructor(
     broadcaster: Broadcaster,
-    lightSequence: LightSequence
+    lightSequence: LightSequence,
+    {
+      spread = 2,
+      gap = 10,
+      frequencyInSeconds = 1,
+      direction = 'forward',
+    }: Config,
   ) {
     super(broadcaster);
     this.#linearSequence = lightSequence.toLinearSequence();
-    this.#intervalConfig = {
-      startTime: 0,
-      timeout: null,
-    }
+    this.#spread = spread;
+    this.#gap = gap;
+    this.#frequencyInSeconds = frequencyInSeconds;
+    this.#direction = direction;
+    this.#scale = scalePow().domain([0, this.#spread]).rangeRound([100, 0]).exponent(2).clamp(true);
   }
 
-  start() {
-    const interval = setInterval(() => {
-      this.tick();
-    }, 16);
-
-    this.#intervalConfig = {
-      startTime: performance.now(),
-      timeout: interval,
-    };
-
-    this.tick();
-  }
-
-  stop() {
-    if (this.#intervalConfig.timeout != null) {
-      clearInterval(this.#intervalConfig.timeout);
-    }
-
+  onStop() {
     this.#linearSequence.forEach(light => {
       light.turnOff();
     });
@@ -48,28 +47,14 @@ export default class BasicChase extends MacroBase {
     this.broadcast();
   }
 
-  get msSinceStart() {
-    return performance.now() - this.#intervalConfig.startTime;
-  }
-
   tick() {
-    const gap = 5;
-    const spread = 1.5;
-    const frequency = 300;
-
-    const currentValue = (this.msSinceStart / frequency) % gap;
+    const stepsSinceStart = this.msSinceStart / (1000 / this.#frequencyInSeconds);
 
     this.#linearSequence.forEach((light, index) => {
-      const indexValue = index % gap;
-
-      // TODO: Use d3 scale here...it's better.
-      const deltaToTarget = Math.min(
-        spread,
-        Math.abs(currentValue - indexValue),
-        Math.abs(currentValue + indexValue),
-      );
-
-      const percent = Math.round(100 * (1 - (deltaToTarget / spread)));
+      const adjustedIndex = Math.abs(this.#direction === 'forward' ? index - stepsSinceStart : index + stepsSinceStart);
+      const remainder = adjustedIndex % this.#gap;
+      const deltaToNext = Math.min(remainder, this.#gap - remainder);
+      const percent = this.#scale(deltaToNext);
 
       light.setValue([
         makeChannelValue(percent),

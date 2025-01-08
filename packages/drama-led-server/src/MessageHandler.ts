@@ -35,7 +35,12 @@ export default class MessageHandler {
         this.updateSingleLight(message.data);
         break;
       case 'START_BASIC_CHASE':
-        const chase = new BasicChase(this.#broadcaster, this.#lightSequence);
+        const chase = new BasicChase(this.#broadcaster, this.#lightSequence, {
+          spread: 1,
+          gap: 10,
+          frequencyInSeconds: 30,
+          direction: 'forward',
+        });
         this.#currentMacro = chase;
         chase.start();
         break;

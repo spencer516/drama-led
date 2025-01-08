@@ -4,13 +4,25 @@ import Broadcaster from './src/Broadcaster';
 import MessageHandler from './src/MessageHandler';
 import { makeUniverse } from '@spencer516/drama-led-messages/src/AddressTypes';
 import { Sender } from 'sacn';
+import { parse } from 'ts-command-line-args'
+
+interface Args {
+  enableSacn: boolean;
+}
+
+const args = parse<Args>({
+  enableSacn: {
+    type: Boolean,
+    defaultValue: false,
+  },
+});
 
 const wss = new WebSocketServer({ port: 8080 });
 
-const sacnSender = new Sender({
+const sacnSender = args.enableSacn ? new Sender({
   universe: 1000,
   iface: '192.168.0.1',
-});
+}) : null;
 
 const lightSequence = LightSequence.create({
   startUniverse: makeUniverse(1000),
