@@ -1,11 +1,24 @@
-import LedServer from "@/components/LedServer";
+'use client';
+
+import LedStatus from "@/components/LedStatus";
+import MacroActions from "@/components/MacroActions";
+import MessageRenderer from "@/components/MessageRenderer";
+import useLEDServerWebSocket from "@/utils/useLEDServerWebSocket";
 
 export default function Home() {
+  const { sendMessage, lastMessage, readyState } = useLEDServerWebSocket();
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <LedServer />
+    <div className="grid grid-rows-[50px_1fr_100px] h-screen w-screen font-[family-name:var(--font-geist-sans)] bg-white">
+      <header className="flex items-center justify-start  px-2 h-40px bg-gray-800 text-white">
+        <h1 className="text-2xl flex-grow"><b className="font-bold">Jesuit Drama</b>: LED Media Server</h1>
+        <LedStatus readyState={readyState} />
+      </header>
+      <main className="overflow-auto border-b-2 border-slate-300 border-solid relative">
+        <MessageRenderer message={lastMessage} sendMessage={sendMessage} />
       </main>
+      <div className="overflow-auto">
+        <MacroActions sendMessage={sendMessage} />
+      </div>
     </div>
   );
 }

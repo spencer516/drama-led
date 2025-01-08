@@ -1,7 +1,7 @@
 'use client';
 
 import { SendMessage } from "@/utils/useLEDServerWebSocket";
-import {AllLights} from "@spencer516/drama-led-messages/src/OutputMessage";
+import { AllLights } from "@spencer516/drama-led-messages/src/OutputMessage";
 import { makeChannelValue } from '@spencer516/drama-led-messages/src/AddressTypes';
 
 type Props = {
@@ -9,35 +9,31 @@ type Props = {
   sendMessage: SendMessage
 };
 
-export default function AllLightsRenderer({message, sendMessage}: Props) {
+export default function AllLightsRenderer({ message, sendMessage }: Props) {
   const lights = message.data.lights;
 
-  return <table className="table-auto">
+  return <table className="table-auto w-full">
     <thead>
       <tr>
-        <th className="m-6">Sequence Number</th>
-        <th className="m-6">Universe</th>
-        <th className="m-6">Channel</th>
-        <th className="m-6">Red</th>
-        <th className="m-6">Green</th>
-        <th className="m-6">Blue</th>
-        <th className="m-6">Swatch</th>
-        <th className="m-6">Toggle</th>
+        <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Sequence Number</h3></th>
+        <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Universe</h3></th>
+        <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Channel</h3></th>
+        <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">RGB</h3></th>
+        <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Swatch</h3></th>
+        <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Toggle</h3></th>
       </tr>
     </thead>
     <tbody>
       {lights.map((light, sequenceNumber) => {
-        const {universe, rgbChannels, red, green, blue} = light;
+        const { universe, rgbChannels, red, green, blue } = light;
         const backgroundColor = `#${percentToHex(red)}${percentToHex(green)}${percentToHex(blue)}`;
 
         return <tr key={sequenceNumber}>
-          <td>{sequenceNumber}</td>
-          <td>{universe}</td>
-          <td>{rgbChannels.join(', ')}</td>
-          <td>{red}</td>
-          <td>{green}</td>
-          <td>{blue}</td>
-          <td>
+          <td className="p-1 border-2 border-slate-300 tabular-nums">{pad(sequenceNumber)}</td>
+          <td className="p-1 border-2 border-slate-300 tabular-nums">{pad(universe, 5)}</td>
+          <td className="p-1 border-2 border-slate-300 tabular-nums">{rgbChannels.map(pad).join(', ')}</td>
+          <td className="p-1 border-2 border-slate-300 tabular-nums">{pad(red)},{pad(green)},{pad(blue)}</td>
+          <td className="p-1 border-2 border-slate-300">
             <div style={{
               width: '15px',
               height: '15px',
@@ -45,7 +41,7 @@ export default function AllLightsRenderer({message, sendMessage}: Props) {
               borderRadius: '100%',
             }} />
           </td>
-          <td>
+          <td className="p-1 border-2 border-slate-300">
             <button onClick={() => {
               sendMessage({
                 type: 'UPDATE_LIGHT_BY_SEQUENCE',
@@ -64,6 +60,10 @@ export default function AllLightsRenderer({message, sendMessage}: Props) {
       })}
     </tbody>
   </table>
+}
+
+function pad(num: number, count: number = 3): string {
+  return String(num).padStart(count, '0');
 }
 
 function percentToHex(percent: number): string {

@@ -8,13 +8,13 @@ type Props = {
 
 export default function MacroActions({sendMessage}: Props) {
   return <div>
-    <button onClick={() => {
+    <button className="bg-gray-200 px-2 py-1 m-2 rounded" onClick={() => {
       sendMessage({
         type: 'START_BASIC_CHASE',
         data: {}
       });
     }}>Start Macro</button>
-    <button onClick={() => {
+    <button className="bg-gray-200 px-2 py-1 m-2 rounded" onClick={() => {
       sendMessage({
         type: 'EMPTY_MESSAGE',
       });
