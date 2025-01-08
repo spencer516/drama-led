@@ -2,14 +2,17 @@ import { makeChannelValue } from "@spencer516/drama-led-messages/src/AddressType
 import Broadcaster from "../Broadcaster";
 import Light from "../Light";
 import LightSequence from "../LightSequence";
-import { scalePow, ScalePower } from 'd3-scale';
+import { scalePow, ScalePower, scaleSequential, ScaleSequential } from 'd3-scale';
 import AnimatedMacroBase from "./AnimatedMacroBase";
+import { interpolateSinebow } from "d3-scale-chromatic";
+import { color } from "d3-color";
 
 type Config = {
   spread?: number;
   gap?: number;
   frequencyInSeconds?: number;
   direction?: 'forward' | 'reverse';
+  color?: 'rainbow' | string;
 }
 
 export default class BasicChase extends AnimatedMacroBase {
@@ -19,6 +22,7 @@ export default class BasicChase extends AnimatedMacroBase {
   #frequencyInSeconds: number;
   #direction: 'forward' | 'reverse' = 'forward';
   #scale: ScalePower<number, number>;
+  #colorScale: (num: number) => string;
 
   constructor(
     broadcaster: Broadcaster,
@@ -28,6 +32,7 @@ export default class BasicChase extends AnimatedMacroBase {
       gap = 10,
       frequencyInSeconds = 1,
       direction = 'forward',
+      color = 'white',
     }: Config,
   ) {
     super(broadcaster);
@@ -37,6 +42,7 @@ export default class BasicChase extends AnimatedMacroBase {
     this.#frequencyInSeconds = frequencyInSeconds;
     this.#direction = direction;
     this.#scale = scalePow().domain([0, this.#spread]).rangeRound([100, 0]).exponent(2).clamp(true);
+    this.#colorScale = color === 'rainbow' ? scaleSequential(interpolateSinebow).domain([0, this.#linearSequence.length - 1]) : () => color;
   }
 
   onStop() {
@@ -56,11 +62,10 @@ export default class BasicChase extends AnimatedMacroBase {
       const deltaToNext = Math.min(remainder, this.#gap - remainder);
       const percent = this.#scale(deltaToNext);
 
-      light.setValue([
-        makeChannelValue(percent),
-        makeChannelValue(percent),
-        makeChannelValue(percent),
-      ]);
+      const baseColor = this.#colorScale(index);
+      const transformedColor = color(baseColor)?.copy({ opacity: percent / 100 }) ?? color('black');
+
+      light.setColor(transformedColor);
     });
 
     this.broadcast();

@@ -39,4 +39,4 @@ export const makeUniverse = (data: any) => Universe.parse(data);
 
 export const makeChannel = (data: any) => Channel.parse(data);
 
-export const makeChannelValue = (data: any) => ChannelValue.parse(data);
+export const makeChannelValue = (data: number) => ChannelValue.parse(Math.round(data));
