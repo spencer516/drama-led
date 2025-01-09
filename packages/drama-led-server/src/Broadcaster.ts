@@ -1,28 +1,21 @@
 import { WebSocketServer, WebSocket } from "ws";
-import LightSequence from "./LightSequence";
 import { range, startEventLoop } from "./utils";
 import { OutputMessage } from "@spencer516/drama-led-messages/src/OutputMessage";
 import { Sender } from 'sacn';
+import LEDSystem from "./LEDSystem";
 
 export default class Broadcaster {
   #wss: WebSocketServer;
-  #latestMessage: OutputMessage;
-  #lightSequence: LightSequence;
+  #ledSystem: LEDSystem;
   #cancelEventLoop: (() => void) | null = null;
-  #sacnSender: Sender | null;
 
   constructor(
     wss: WebSocketServer,
-    lightSequence: LightSequence,
-    sacnSender: Sender | null,
+    lightSequence: LEDSystem,
   ) {
     this.#wss = wss;
-    this.#lightSequence = lightSequence;
-    this.#latestMessage = this.getMessage();
-    this.#sacnSender = sacnSender;
+    this.#ledSystem = lightSequence;
   }
-
-
 
   /**
    * Start loop
@@ -48,54 +41,27 @@ export default class Broadcaster {
   /**
    * Send a message to all clients about the update.
    */
-  broadcast(): this {
-    for (const client of this.#wss.clients) {
-      this.broadcastClient(client);
-    }
-
-    const addresses = this.#lightSequence.toAddresses();
-    const payload = addresses.reduce<{ [channel: string]: number }>((acc, address) => {
-      const [_universe, channel, channelValue] = address;
-      acc[channel] = channelValue;
-      return acc;
-    }, {});
-
-    this.#sacnSender?.send({
-      payload,
-      sourceName: 'Drama LED Server',
-      priority: 200,
-    }).then(() => {
-      // console.log('Updated Pixels');
-    }).catch(err => {
-      console.error('Error Sending SACN', err);
-    });
-
-    return this;
-  }
-
-  /**
-   * Send the latest update to a specific client
-   */
-  broadcastClient(client: WebSocket): this {
-    client.send(JSON.stringify(this.#latestMessage));
-    return this;
-  }
-
-  /**
-   * Evaluate the lights and serialize it into a broadcast-able message
-   */
-  updateMessage(): this {
-    this.#latestMessage = this.getMessage();
-    return this;
-  }
-
-  getMessage(): OutputMessage {
-    const lights = this.#lightSequence.toLightConfigs();
-    return OutputMessage.parse({
+  broadcast(client?: WebSocket): this {
+    const lights = this.#ledSystem.toLightConfigs();
+    const message = OutputMessage.parse({
       type: 'ALL_LIGHTS',
       data: {
         lights
       }
     });
+
+    const stringifiedMessage = JSON.stringify(message);
+
+    if (client != null) {
+      client.send(stringifiedMessage);
+    } else {
+      for (const client of this.#wss.clients) {
+        client.send(stringifiedMessage);
+      }
+    }
+
+    this.#ledSystem.broadcast();
+
+    return this;
   }
 }

@@ -1,10 +1,10 @@
 import { WebSocketServer } from 'ws';
-import LightSequence from './src/LightSequence';
 import Broadcaster from './src/Broadcaster';
 import MessageHandler from './src/MessageHandler';
-import { makeUniverse } from '@spencer516/drama-led-messages/src/AddressTypes';
 import { Sender } from 'sacn';
 import { parse } from 'ts-command-line-args'
+import OctoController from './src/OctoController';
+import LEDSystem from './src/LEDSystem';
 
 interface Args {
   enableSacn: boolean;
@@ -19,22 +19,26 @@ const args = parse<Args>({
 
 const wss = new WebSocketServer({ port: 8080 });
 
-const sacnSender = args.enableSacn ? new Sender({
-  universe: 1000,
-  iface: '192.168.0.1',
-}) : null;
+const system = new LEDSystem([
+  new OctoController({
+    id: 'desk',
+    ipAddress: '192.168.0.10',
+    outputNumber: '2',
+    startUniverse: 1000,
+    numberOfLights: 50,
+  })
+]);
 
-const lightSequence = LightSequence.create({
-  startUniverse: makeUniverse(1000),
-  numberOfStrands: 1,
-});
+if (args.enableSacn) {
+  system.enableSacnOutput();
+}
 
-const broadcaster = new Broadcaster(wss, lightSequence, sacnSender);
+const broadcaster = new Broadcaster(wss, system);
 
 const messageHandler = new MessageHandler(
   wss,
   broadcaster,
-  lightSequence
+  system
 );
 
 wss.on('connection', function connection(ws) {
@@ -48,7 +52,7 @@ wss.on('connection', function connection(ws) {
   });
 
   // Send the initial state on connect!
-  broadcaster.broadcastClient(ws);
+  broadcaster.broadcast(ws);
 });
 
 wss.on('listening', function listening() {

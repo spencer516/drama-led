@@ -1,32 +1,32 @@
 import { z } from 'zod';
-import { ChannelValue } from './AddressTypes';
+import { LightID, RGBValue } from './AddressTypes';
 
-const Channel = z.object({
-  red: ChannelValue,
-  green: ChannelValue,
-  blue: ChannelValue,
+export const RGBColor = z.object({
+  red: RGBValue,
+  green: RGBValue,
+  blue: RGBValue,
 });
 
-type Channel = z.infer<typeof Channel>;
+export type RGBColor = z.infer<typeof RGBColor>;
 
 export const EmptyMessage = z.object({
   type: z.literal('EMPTY_MESSAGE'),
 });
 
-export const UpdateSingleLight = z.object({
-  type: z.literal('UPDATE_LIGHT_BY_SEQUENCE'),
+export const UpdateLightByID = z.object({
+  type: z.literal('UPDATE_LIGHT_BY_ID'),
   data: z.object({
-    sequenceNumber: z.number().gte(0),
-    channel: Channel,
+    id: LightID,
+    rgb: RGBColor,
   })
 });
 
-export type UpdateSingleLight = z.infer<typeof UpdateSingleLight>;
+export type UpdateLightByID = z.infer<typeof UpdateLightByID>;
 
 export const UpdateAllLights = z.object({
   type: z.literal('UPDATE_ALL_LIGHTS'),
   data: z.object({
-    channel: Channel,
+    rgb: RGBColor,
   })
 });
 
@@ -39,7 +39,7 @@ export const StartBasicChase = z.object({
 
 export type StartBasicChase = z.infer<typeof StartBasicChase>;
 
-export const InputMessage = z.discriminatedUnion('type', [UpdateSingleLight, UpdateAllLights, StartBasicChase, EmptyMessage]);
+export const InputMessage = z.discriminatedUnion('type', [UpdateLightByID, UpdateAllLights, StartBasicChase, EmptyMessage]);
 
 export type InputMessage = z.infer<typeof InputMessage>;
 
@@ -56,5 +56,5 @@ export function safeParseMessage(data: string): InputMessage {
     return result.data;
   }
 
-  return InputMessage.parse({type: 'EMPTY_MESSAGE'});
+  return InputMessage.parse({ type: 'EMPTY_MESSAGE' });
 }

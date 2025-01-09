@@ -1,28 +1,25 @@
 import { WebSocketServer } from "ws";
 import Broadcaster from "./Broadcaster";
-import LightSequence from "./LightSequence";
-import { parseMessage, UpdateSingleLight } from "@spencer516/drama-led-messages/src/InputMessage";
+import { parseMessage, UpdateLightByID } from "@spencer516/drama-led-messages/src/InputMessage";
 import Light from "./Light";
-import { invariant } from "./utils";
 import MacroBase from "./macros/MacroBase";
 import BasicChase from "./macros/BasicChase";
+import LEDSystem from "./LEDSystem";
 
 export default class MessageHandler {
   #wss: WebSocketServer;
   #broadcaster: Broadcaster;
-  #lightSequence: LightSequence;
-  #linearSequence: Light[];
+  #ledSystem: LEDSystem;
   #currentMacro: MacroBase | null = null;
 
   constructor(
     wss: WebSocketServer,
     broadcaster: Broadcaster,
-    lightSequence: LightSequence
+    ledSystem: LEDSystem,
   ) {
     this.#wss = wss;
     this.#broadcaster = broadcaster;
-    this.#lightSequence = lightSequence;
-    this.#linearSequence = lightSequence.toLinearSequence();
+    this.#ledSystem = ledSystem;
   }
 
   onMessage(data: string) {
@@ -31,11 +28,11 @@ export default class MessageHandler {
     this.#currentMacro?.stop();
 
     switch (message.type) {
-      case 'UPDATE_LIGHT_BY_SEQUENCE':
-        this.updateSingleLight(message.data);
+      case 'UPDATE_LIGHT_BY_ID':
+        this.updateLightByID(message.data);
         break;
       case 'START_BASIC_CHASE':
-        const chase = new BasicChase(this.#broadcaster, this.#lightSequence, {
+        const chase = new BasicChase(this.#broadcaster, this.#ledSystem, {
           spread: 3,
           gap: 10,
           frequencyInSeconds: 30,
@@ -51,17 +48,11 @@ export default class MessageHandler {
     }
   }
 
-  updateSingleLight({ sequenceNumber, channel }: UpdateSingleLight['data']): void {
-    const light = this.#linearSequence[sequenceNumber];
+  updateLightByID({ id, rgb }: UpdateLightByID['data']): void {
+    const light = Light.getLightByID(id);
 
-    invariant(light != null, `Could not find light at sequenceNumber ${sequenceNumber}`);
+    light.setRGB(rgb);
 
-    light.setValue([
-      channel.red,
-      channel.green,
-      channel.blue,
-    ]);
-
-    this.#broadcaster.updateMessage().broadcast();
+    this.#broadcaster.broadcast();
   }
 }

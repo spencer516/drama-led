@@ -1,11 +1,11 @@
 import { makeChannelValue } from "@spencer516/drama-led-messages/src/AddressTypes";
 import Broadcaster from "../Broadcaster";
 import Light from "../Light";
-import LightSequence from "../LightSequence";
 import { scalePow, ScalePower, scaleSequential, ScaleSequential } from 'd3-scale';
 import AnimatedMacroBase from "./AnimatedMacroBase";
 import { interpolateSinebow } from "d3-scale-chromatic";
 import { color } from "d3-color";
+import LEDSystem from "../LEDSystem";
 
 type Config = {
   spread?: number;
@@ -26,7 +26,7 @@ export default class BasicChase extends AnimatedMacroBase {
 
   constructor(
     broadcaster: Broadcaster,
-    lightSequence: LightSequence,
+    ledSystem: LEDSystem,
     {
       spread = 2,
       gap = 10,
@@ -36,7 +36,7 @@ export default class BasicChase extends AnimatedMacroBase {
     }: Config,
   ) {
     super(broadcaster);
-    this.#linearSequence = lightSequence.toLinearSequence();
+    this.#linearSequence = ledSystem.toLinearSequence();
     this.#spread = spread;
     this.#gap = gap;
     this.#frequencyInSeconds = frequencyInSeconds;

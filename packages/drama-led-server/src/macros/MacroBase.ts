@@ -19,6 +19,6 @@ export default class MacroBase {
   }
 
   broadcast() {
-    this.#broadcaster.updateMessage().broadcast();
+    this.#broadcaster.broadcast();
   }
 }

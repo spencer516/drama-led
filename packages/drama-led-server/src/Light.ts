@@ -1,49 +1,66 @@
-import { Address, Channel, ChannelValue, LightConfig, LightValue, makeChannelValue, Universe } from "@spencer516/drama-led-messages/src/AddressTypes";
-import { color, HSLColor, rgb, RGBColor } from 'd3-color';
+import { Address, LightConfig, LightID, makeChannelValue, makeLightID, UniverseChannel } from "@spencer516/drama-led-messages/src/AddressTypes";
+import { color, HSLColor as d3HSLColor, rgb, RGBColor as d3RGBColor } from 'd3-color';
+import { LightChannel } from "./LightChannel";
+import { randomUUID, UUID } from "crypto";
+import { invariant } from "./utils";
+import { RGBColor } from "@spencer516/drama-led-messages/src/InputMessage";
+
+const LIGHT_STORE = new Map<LightID, Light>();
 
 export default class Light {
-  #universe: Universe;
-
-  #redChannel: Channel;
-  #blueChannel: Channel;
-  #greenChannel: Channel;
-
-  #redValue: ChannelValue = makeChannelValue(0);
-  #blueValue: ChannelValue = makeChannelValue(0);
-  #greenValue: ChannelValue = makeChannelValue(0);
+  #id: LightID;
+  #redChannel: LightChannel;
+  #greenChannel: LightChannel;
+  #blueChannel: LightChannel;
 
   constructor(
-    universe: Universe,
-    rgbChannels: [Channel, Channel, Channel],
+    universeChannels: [UniverseChannel, UniverseChannel, UniverseChannel],
   ) {
-    this.#universe = universe;
-    this.#redChannel = rgbChannels[0];
-    this.#greenChannel = rgbChannels[1];
-    this.#blueChannel = rgbChannels[2];
+    this.#redChannel = new LightChannel(universeChannels[0]);
+    this.#greenChannel = new LightChannel(universeChannels[1]);
+    this.#blueChannel = new LightChannel(universeChannels[2]);
+    this.#id = makeLightID(randomUUID());
+
+    LIGHT_STORE.set(this.#id, this);
+  }
+
+  get id() {
+    return this.#id;
+  }
+
+  static getLightByID(id: LightID): Light {
+    const light = LIGHT_STORE.get(id);
+
+    invariant(light != null, `Could not find light with id ${id}`);
+
+    return light;
+  }
+
+  toLightChannels(): [LightChannel, LightChannel, LightChannel] {
+    return [this.#redChannel, this.#greenChannel, this.#blueChannel];
   }
 
   toAddresses(): [Address, Address, Address] {
     return [
-      [this.#universe, this.#redChannel, this.#redValue],
-      [this.#universe, this.#greenChannel, this.#greenValue],
-      [this.#universe, this.#blueChannel, this.#blueValue],
-    ]
+      this.#redChannel.toAddress(),
+      this.#greenChannel.toAddress(),
+      this.#blueChannel.toAddress(),
+    ];
   }
 
-  toConfig(): LightConfig {
+  toLightConfig(): LightConfig {
     return {
-      universe: this.#universe,
-      rgbChannels: [this.#redChannel, this.#greenChannel, this.#blueChannel],
-      red: this.#redValue,
-      green: this.#greenValue,
-      blue: this.#blueValue,
+      id: this.#id,
+      red: this.#redChannel.toLightChannelConfig(),
+      green: this.#greenChannel.toLightChannelConfig(),
+      blue: this.#blueChannel.toLightChannelConfig(),
     };
   }
 
-  setValue([redValue, greenValue, blueValue]: LightValue): void {
-    this.#redValue = redValue;
-    this.#greenValue = greenValue;
-    this.#blueValue = blueValue;
+  setRGB(rgbColor: RGBColor) {
+    this.#redChannel.setRGBValue(rgbColor.red);
+    this.#greenChannel.setRGBValue(rgbColor.green);
+    this.#blueChannel.setRGBValue(rgbColor.blue);
   }
 
   setColorString(colorString: string): void {
@@ -51,20 +68,18 @@ export default class Light {
     this.setColor(colorValue);
   }
 
-  setColor(color: RGBColor | HSLColor | null): void {
+  setColor(color: d3RGBColor | d3HSLColor | null): void {
     const rgbColor = color?.rgb().clamp() ?? rgb(0, 0, 0);
-    this.setValue([
-      makeChannelValue(100 * rgbColor.r / 255 * rgbColor.opacity),
-      makeChannelValue(100 * rgbColor.g / 255 * rgbColor.opacity),
-      makeChannelValue(100 * rgbColor.b / 255 * rgbColor.opacity),
-    ]);
+    this.#redChannel.setRGBValue(rgbColor.r, rgbColor.opacity);
+    this.#greenChannel.setRGBValue(rgbColor.g, rgbColor.opacity);
+    this.#blueChannel.setRGBValue(rgbColor.b, rgbColor.opacity);
   }
 
   turnOff() {
-    this.setValue([makeChannelValue(0), makeChannelValue(0), makeChannelValue(0)]);
+    this.setColorString('black');
   }
 
   turnOn() {
-    this.setValue([makeChannelValue(100), makeChannelValue(100), makeChannelValue(100)]);
+    this.setColorString('white');
   }
 }
