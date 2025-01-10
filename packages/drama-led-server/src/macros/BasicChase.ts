@@ -1,7 +1,6 @@
-import { makeChannelValue } from "@spencer516/drama-led-messages/src/AddressTypes";
 import Broadcaster from "../Broadcaster";
 import Light from "../Light";
-import { scalePow, ScalePower, scaleSequential, ScaleSequential } from 'd3-scale';
+import { scalePow, ScalePower, scaleSequential } from 'd3-scale';
 import AnimatedMacroBase from "./AnimatedMacroBase";
 import { interpolateSinebow } from "d3-scale-chromatic";
 import { color } from "d3-color";
