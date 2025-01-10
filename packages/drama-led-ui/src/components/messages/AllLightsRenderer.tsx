@@ -18,6 +18,7 @@ export default function AllLightsRenderer({ message, sendMessage }: Props) {
         <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">ID</h3></th>
         <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Universes</h3></th>
         <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Channel</h3></th>
+        <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Coordinates</h3></th>
         <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">RGB</h3></th>
         <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Swatch</h3></th>
         <th className="sticky top-0 bg-slate-400 text-left border-2 border-slate-300"><h3 className="p-1">Toggle</h3></th>
@@ -25,17 +26,19 @@ export default function AllLightsRenderer({ message, sendMessage }: Props) {
     </thead>
     <tbody>
       {lights.map((light, sequenceNumber) => {
-        const { id, red, green, blue } = light;
+        const { id, red, green, blue, coordinates } = light;
         const rgbValues = [red.rgbValue, green.rgbValue, blue.rgbValue];
         const channels = [red.channel, green.channel, blue.channel];
         const backgroundColor = `rgb(${rgbValues.join(',')})`;
         const universes = new Set([red.universe, green.universe, blue.universe]);
         const isOff = rgbValues.every(value => value === 0);
+        const renderedCoords = `${coordinates.x}, ${coordinates.y}`;
 
         return <tr key={sequenceNumber}>
           <td className="p-1 border-2 border-slate-300 tabular-nums">{id}</td>
           <td className="p-1 border-2 border-slate-300 tabular-nums">{Array.from(universes).join(', ')}</td>
-          <td className="p-1 border-2 border-slate-300 tabular-nums">{channels.map(pad).join(', ')}</td>
+          <td className="p-1 border-2 border-slate-300 tabular-nums">{channels.map(n => pad(n, 3)).join(', ')}</td>
+          <td className="p-1 border-2 border-slate-300 tabular-nums">{renderedCoords}</td>
           <td className="p-1 border-2 border-slate-300 tabular-nums">{rgbValues.map(n => pad(n, 3)).join(', ')}</td>
           <td className="p-1 border-2 border-slate-300">
             <div style={{

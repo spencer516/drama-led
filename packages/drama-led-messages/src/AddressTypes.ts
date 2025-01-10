@@ -24,8 +24,15 @@ export const MAX_RGB_VALUE = 255;
 export const RGBValue = z.number().min(MIN_RGB_VALUE).max(MAX_RGB_VALUE).int().brand('RGBValue');
 export type RGBValue = z.infer<typeof RGBValue>;
 
-export const LightID = z.string().uuid().brand('LightID');
+export const LightID = z.string().brand('LightID');
 export type LightID = z.infer<typeof LightID>;
+
+export const LightCoordinates = z.object({
+  x: z.number().min(0),
+  y: z.number().min(0),
+});
+
+export type LightCoordinates = z.infer<typeof LightCoordinates>;
 
 export const Address = z.tuple([Universe, Channel, ChannelValue]);
 export type Address = z.infer<typeof Address>;
@@ -47,6 +54,7 @@ export type LightChannelConfig = z.infer<typeof LightChannelConfig>;
 
 export const LightConfig = z.object({
   id: LightID,
+  coordinates: LightCoordinates,
   red: LightChannelConfig,
   green: LightChannelConfig,
   blue: LightChannelConfig,

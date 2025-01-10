@@ -1,7 +1,6 @@
-import { Address, LightConfig, LightID, makeChannelValue, makeLightID, UniverseChannel } from "@spencer516/drama-led-messages/src/AddressTypes";
+import { Address, LightConfig, LightCoordinates, LightID, UniverseChannel } from "@spencer516/drama-led-messages/src/AddressTypes";
 import { color, HSLColor as d3HSLColor, rgb, RGBColor as d3RGBColor } from 'd3-color';
 import { LightChannel } from "./LightChannel";
-import { randomUUID, UUID } from "crypto";
 import { invariant } from "./utils";
 import { RGBColor } from "@spencer516/drama-led-messages/src/InputMessage";
 
@@ -9,19 +8,23 @@ const LIGHT_STORE = new Map<LightID, Light>();
 
 export default class Light {
   #id: LightID;
+  #coordinates: LightCoordinates;
   #redChannel: LightChannel;
   #greenChannel: LightChannel;
   #blueChannel: LightChannel;
 
   constructor(
+    id: LightID,
+    coordinates: LightCoordinates,
     universeChannels: [UniverseChannel, UniverseChannel, UniverseChannel],
   ) {
+    this.#coordinates = coordinates;
     this.#redChannel = new LightChannel(universeChannels[0]);
     this.#greenChannel = new LightChannel(universeChannels[1]);
     this.#blueChannel = new LightChannel(universeChannels[2]);
-    this.#id = makeLightID(randomUUID());
+    this.#id = id;
 
-    LIGHT_STORE.set(this.#id, this);
+    LIGHT_STORE.set(id, this);
   }
 
   get id() {
@@ -51,6 +54,7 @@ export default class Light {
   toLightConfig(): LightConfig {
     return {
       id: this.#id,
+      coordinates: this.#coordinates,
       red: this.#redChannel.toLightChannelConfig(),
       green: this.#greenChannel.toLightChannelConfig(),
       blue: this.#blueChannel.toLightChannelConfig(),

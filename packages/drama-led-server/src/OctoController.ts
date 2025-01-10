@@ -1,9 +1,10 @@
-import { Address, Channel, LightConfig, makeChannel, makeUniverse, Universe, UniverseChannel } from "@spencer516/drama-led-messages/src/AddressTypes";
+import { Address, Channel, LightConfig, LightID, makeChannel, makeLightID, makeUniverse, Universe, UniverseChannel } from "@spencer516/drama-led-messages/src/AddressTypes";
 import { z } from "zod";
 import Light from "./Light";
 import { range } from "./utils";
 import { Sender } from 'sacn';
 import { LightChannel } from "./LightChannel";
+import LightMapping from "./LightMapping";
 
 const IPAddress = z.string().ip({ version: 'v4' }).brand('IPAddress');
 
@@ -22,6 +23,7 @@ type OctoConfig = {
   startUniverse: number,
   dmxStartAddress?: number,
   numberOfLights: number, // Max 680
+  lightMapping: LightMapping
 };
 
 function getUniverseChannelMaker(
@@ -55,6 +57,7 @@ export default class OctoController {
     startUniverse,
     dmxStartAddress,
     numberOfLights,
+    lightMapping,
   }: OctoConfig) {
     this.#id = id;
     this.#outputNumber = outputNumber;
@@ -72,16 +75,26 @@ export default class OctoController {
         sequenceNumber
       );
 
-      const light = new Light([
-        makeChannelByOffset(0),
-        makeChannelByOffset(1),
-        makeChannelByOffset(2),
-      ]);
+      const lightID = this.makeLightID(sequenceNumber + 1);
+      const coordinates = lightMapping.getLightCoordinates(lightID);
+
+      const light = new Light(
+        lightID,
+        coordinates,
+        [
+          makeChannelByOffset(0),
+          makeChannelByOffset(1),
+          makeChannelByOffset(2),
+        ]);
 
       this.indexLightChannels(light);
 
       return light;
     });
+  }
+
+  makeLightID(sequenceNumber: number): LightID {
+    return makeLightID(`${this.#id}:${this.#outputNumber}-${sequenceNumber}`);
   }
 
   indexLightChannels(light: Light): void {
