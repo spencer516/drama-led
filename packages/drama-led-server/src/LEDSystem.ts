@@ -32,9 +32,20 @@ export default class LEDSystem {
   }
 
   toLightConfigs(): LightConfig[] {
-    return Array.from(
-      this.#octoControllers.values(),
-    ).flatMap(controller => controller.toLightConfigs());
+    const configs = [];
+
+    for (const [_, light] of this.getLightsIterator()) {
+      configs.push(light.toLightConfig());
+    }
+
+    return configs;
+  }
+
+  get countLights(): number {
+    const lightsArray = Array.from(
+      this.getLightsIterator(),
+    );
+    return lightsArray.length;
   }
 
   *getLightsIterator(): Generator<[number, Light]> {

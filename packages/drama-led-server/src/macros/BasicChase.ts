@@ -53,7 +53,7 @@ export default class BasicChase extends AnimatedMacroBase {
       color === 'rainbow'
         ? scaleSequential(interpolateSinebow).domain([
             0,
-            this.#linearSequence.length - 1,
+            this.#ledSystem.countLights - 1,
           ])
         : () => color;
   }
