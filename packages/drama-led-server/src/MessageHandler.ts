@@ -1,10 +1,14 @@
-import { WebSocketServer } from "ws";
-import Broadcaster from "./Broadcaster";
-import { parseMessage, UpdateLightByID } from "@spencer516/drama-led-messages/src/InputMessage";
-import Light from "./Light";
-import MacroBase from "./macros/MacroBase";
-import BasicChase from "./macros/BasicChase";
-import LEDSystem from "./LEDSystem";
+import {WebSocketServer} from 'ws';
+import Broadcaster from './Broadcaster';
+import {
+  parseMessage,
+  UpdateLightByID,
+} from '@spencer516/drama-led-messages/src/InputMessage';
+import Light from './Light';
+import MacroBase from './macros/MacroBase';
+import BasicChase from './macros/BasicChase';
+import LEDSystem from './LEDSystem';
+import RadialChase from './macros/RadialChase';
 
 export default class MessageHandler {
   #wss: WebSocketServer;
@@ -32,15 +36,25 @@ export default class MessageHandler {
         this.updateLightByID(message.data);
         break;
       case 'START_BASIC_CHASE':
-        const chase = new BasicChase(this.#broadcaster, this.#ledSystem, {
-          spread: 3,
-          gap: 10,
-          frequencyInSeconds: 30,
-          direction: 'forward',
-          color: 'rainbow',
-        });
-        this.#currentMacro = chase;
-        chase.start();
+        this.#currentMacro = new BasicChase(
+          this.#broadcaster,
+          this.#ledSystem,
+          {
+            spread: 3,
+            gap: 10,
+            frequencyInSeconds: 30,
+            direction: 'forward',
+            color: 'rainbow',
+          },
+        );
+        this.#currentMacro.start();
+        break;
+      case 'START_RADIAL_CHASE':
+        this.#currentMacro = new RadialChase(
+          this.#broadcaster,
+          this.#ledSystem,
+        );
+        this.#currentMacro.start();
         break;
       case 'UPDATE_ALL_LIGHTS':
         // TODO
@@ -48,7 +62,10 @@ export default class MessageHandler {
     }
   }
 
-  updateLightByID({ id, rgb }: UpdateLightByID['data']): void {
+  updateLightByID({
+    id,
+    rgb,
+  }: UpdateLightByID['data']): void {
     const light = Light.getLightByID(id);
 
     light.setRGB(rgb);

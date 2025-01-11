@@ -1,12 +1,10 @@
-import Broadcaster from "../Broadcaster";
-import Light from "../Light";
+import Broadcaster from '../Broadcaster';
+import Light from '../Light';
 
 export default class MacroBase {
   #broadcaster: Broadcaster;
 
-  constructor(
-    broadcaster: Broadcaster,
-  ) {
+  constructor(broadcaster: Broadcaster) {
     this.#broadcaster = broadcaster;
   }
 

@@ -1,22 +1,20 @@
-import Broadcaster from "../Broadcaster";
-import MacroBase from "./MacroBase";
+import Broadcaster from '../Broadcaster';
+import MacroBase from './MacroBase';
 
 export default class AnimatedMacroBase extends MacroBase {
   #intervalConfig: {
-    startTime: number,
-    timeout: NodeJS.Timeout | null,
+    startTime: number;
+    timeout: NodeJS.Timeout | null;
   };
 
-  #fps: number = 60;
+  #fps = 60;
 
-  constructor(
-    broadcaster: Broadcaster,
-  ) {
+  constructor(broadcaster: Broadcaster) {
     super(broadcaster);
     this.#intervalConfig = {
       startTime: 0,
       timeout: null,
-    }
+    };
   }
 
   setFPS(fps: number) {
@@ -45,7 +43,9 @@ export default class AnimatedMacroBase extends MacroBase {
   }
 
   get msSinceStart() {
-    return performance.now() - this.#intervalConfig.startTime;
+    return (
+      performance.now() - this.#intervalConfig.startTime
+    );
   }
 
   onStop() {

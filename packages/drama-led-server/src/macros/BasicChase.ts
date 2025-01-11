@@ -1,10 +1,13 @@
-import Broadcaster from "../Broadcaster";
-import Light from "../Light";
-import { scalePow, ScalePower, scaleSequential } from 'd3-scale';
-import AnimatedMacroBase from "./AnimatedMacroBase";
-import { interpolateSinebow } from "d3-scale-chromatic";
-import { color } from "d3-color";
-import LEDSystem from "../LEDSystem";
+import Broadcaster from '../Broadcaster';
+import {
+  scalePow,
+  ScalePower,
+  scaleSequential,
+} from 'd3-scale';
+import AnimatedMacroBase from './AnimatedMacroBase';
+import {interpolateSinebow} from 'd3-scale-chromatic';
+import {color} from 'd3-color';
+import LEDSystem from '../LEDSystem';
 
 type Config = {
   spread?: number;
@@ -12,10 +15,10 @@ type Config = {
   frequencyInSeconds?: number;
   direction?: 'forward' | 'reverse';
   color?: 'rainbow' | string;
-}
+};
 
 export default class BasicChase extends AnimatedMacroBase {
-  #linearSequence: Light[];
+  #ledSystem: LEDSystem;
   #spread: number;
   #gap: number;
   #frequencyInSeconds: number;
@@ -35,37 +38,58 @@ export default class BasicChase extends AnimatedMacroBase {
     }: Config,
   ) {
     super(broadcaster);
-    this.#linearSequence = ledSystem.toLinearSequence();
+    this.#ledSystem = ledSystem;
     this.#spread = spread;
     this.#gap = gap;
     this.#frequencyInSeconds = frequencyInSeconds;
     this.#direction = direction;
-    this.#scale = scalePow().domain([0, this.#spread]).rangeRound([100, 0]).exponent(2).clamp(true);
-    this.#colorScale = color === 'rainbow' ? scaleSequential(interpolateSinebow).domain([0, this.#linearSequence.length - 1]) : () => color;
+    this.#scale = scalePow()
+      .domain([0, this.#spread])
+      .rangeRound([100, 0])
+      .exponent(2)
+      .clamp(true);
+
+    this.#colorScale =
+      color === 'rainbow'
+        ? scaleSequential(interpolateSinebow).domain([
+            0,
+            this.#linearSequence.length - 1,
+          ])
+        : () => color;
   }
 
   onStop() {
-    this.#linearSequence.forEach(light => {
-      light.turnOff();
-    });
-
+    this.#ledSystem.turnAllOff();
     this.broadcast();
   }
 
   tick() {
-    const stepsSinceStart = this.msSinceStart / (1000 / this.#frequencyInSeconds);
+    const stepsSinceStart =
+      this.msSinceStart / (1000 / this.#frequencyInSeconds);
 
-    this.#linearSequence.forEach((light, index) => {
-      const adjustedIndex = Math.abs(this.#direction === 'forward' ? index - stepsSinceStart : index + stepsSinceStart);
+    for (const [
+      index,
+      light,
+    ] of this.#ledSystem.getLightsIterator()) {
+      const adjustedIndex = Math.abs(
+        this.#direction === 'forward'
+          ? index - stepsSinceStart
+          : index + stepsSinceStart,
+      );
       const remainder = adjustedIndex % this.#gap;
-      const deltaToNext = Math.min(remainder, this.#gap - remainder);
+      const deltaToNext = Math.min(
+        remainder,
+        this.#gap - remainder,
+      );
       const percent = this.#scale(deltaToNext);
 
       const baseColor = this.#colorScale(index);
-      const transformedColor = color(baseColor)?.copy({ opacity: percent / 100 }) ?? color('black');
+      const transformedColor =
+        color(baseColor)?.copy({opacity: percent / 100}) ??
+        color('black');
 
       light.setColor(transformedColor);
-    });
+    }
 
     this.broadcast();
   }

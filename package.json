@@ -24,5 +24,8 @@
     "nohoist": [
       "**"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2"
   }
 }

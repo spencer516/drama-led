@@ -1,6 +1,9 @@
-import { LightConfig, Universe } from "@spencer516/drama-led-messages/src/AddressTypes";
-import OctoController from "./OctoController";
-import Light from "./Light";
+import {
+  LightConfig,
+  Universe,
+} from '@spencer516/drama-led-messages/src/AddressTypes';
+import OctoController from './OctoController';
+import Light from './Light';
 
 export default class LEDSystem {
   #octoControllers: Map<string, OctoController>;
@@ -29,18 +32,29 @@ export default class LEDSystem {
   }
 
   toLightConfigs(): LightConfig[] {
-    return Array.from(this.#octoControllers.values())
-      .flatMap((controller) => controller.toLightConfigs());
+    return Array.from(
+      this.#octoControllers.values(),
+    ).flatMap(controller => controller.toLightConfigs());
   }
 
-  toLinearSequence(): Light[] {
-    return Array.from(this.#octoControllers.values())
-      .flatMap((controller) => controller.lights);
+  *getLightsIterator(): Generator<[number, Light]> {
+    let index = 0;
+    for (const [_, controller] of this.#octoControllers) {
+      for (const light of controller.lights) {
+        yield [index++, light];
+      }
+    }
   }
 
   enableSacnOutput(): void {
     for (const controller of this.#octoControllers.values()) {
       controller.setupSacnSenders();
+    }
+  }
+
+  turnAllOff(): void {
+    for (const [_, light] of this.getLightsIterator()) {
+      light.turnOff();
     }
   }
 }

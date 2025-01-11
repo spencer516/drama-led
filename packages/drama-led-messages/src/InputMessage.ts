@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { LightID, RGBValue } from './AddressTypes';
+import {z} from 'zod';
+import {LightID, RGBValue} from './AddressTypes';
 
 export const RGBColor = z.object({
   red: RGBValue,
@@ -18,7 +18,7 @@ export const UpdateLightByID = z.object({
   data: z.object({
     id: LightID,
     rgb: RGBColor,
-  })
+  }),
 });
 
 export type UpdateLightByID = z.infer<typeof UpdateLightByID>;
@@ -27,19 +27,30 @@ export const UpdateAllLights = z.object({
   type: z.literal('UPDATE_ALL_LIGHTS'),
   data: z.object({
     rgb: RGBColor,
-  })
+  }),
 });
 
 export type UpdateAllLights = z.infer<typeof UpdateAllLights>;
 
 export const StartBasicChase = z.object({
   type: z.literal('START_BASIC_CHASE'),
-  data: z.object({})
+  data: z.object({}),
+});
+
+export const StartRadialChase = z.object({
+  type: z.literal('START_RADIAL_CHASE'),
+  data: z.object({}),
 });
 
 export type StartBasicChase = z.infer<typeof StartBasicChase>;
 
-export const InputMessage = z.discriminatedUnion('type', [UpdateLightByID, UpdateAllLights, StartBasicChase, EmptyMessage]);
+export const InputMessage = z.discriminatedUnion('type', [
+  UpdateLightByID,
+  UpdateAllLights,
+  StartBasicChase,
+  StartRadialChase,
+  EmptyMessage,
+]);
 
 export type InputMessage = z.infer<typeof InputMessage>;
 
@@ -56,5 +67,5 @@ export function safeParseMessage(data: string): InputMessage {
     return result.data;
   }
 
-  return InputMessage.parse({ type: 'EMPTY_MESSAGE' });
+  return InputMessage.parse({type: 'EMPTY_MESSAGE'});
 }

@@ -1,7 +1,19 @@
-import { Address, Channel, ChannelValue, LightChannelConfig, makeChannelValue, makeRGBValue, RGBValue, Universe, UniverseChannel } from "@spencer516/drama-led-messages/src/AddressTypes";
+import {
+  Address,
+  Channel,
+  ChannelValue,
+  LightChannelConfig,
+  makeChannelValue,
+  makeRGBValue,
+  RGBValue,
+  Universe,
+  UniverseChannel,
+} from '@spencer516/drama-led-messages/src/AddressTypes';
 
-function makeRGBValueFromChannelValue(value: ChannelValue): RGBValue {
-  return makeRGBValue(Math.round(value / 100 * 255));
+function makeRGBValueFromChannelValue(
+  value: ChannelValue,
+): RGBValue {
+  return makeRGBValue(Math.round((value / 100) * 255));
 }
 
 export class LightChannel {
@@ -30,8 +42,10 @@ export class LightChannel {
     return this.#universe;
   }
 
-  setRGBValue(value: number, opacity: number = 1) {
-    this.#value = makeChannelValue(100 * value / 255 * opacity);
+  setRGBValue(value: number, opacity = 1) {
+    this.#value = makeChannelValue(
+      ((100 * value) / 255) * opacity,
+    );
   }
 
   toAddress(): Address {
