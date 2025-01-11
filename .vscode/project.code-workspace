@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "name": "drama-led-messages",
+      "path": "../packages/drama-led-messages"
+    },
+    {
+      "name": "drama-led-server",
+      "path": "../packages/drama-led-server"
+    },
+    {
+      "name": "drama-led-ui",
+      "path": "../packages/drama-led-ui"
+    },
+  ],
+  "settings": {}
+}
