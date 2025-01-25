@@ -26,8 +26,8 @@ async function startup() {
 
   const system = new LEDSystem([
     new OctoController({
-      id: 'octo_desk',
-      ipAddress: '192.168.0.10',
+      id: 'supercalifragilisticexpealidigital',
+      ipAddress: '192.168.1.200',
       outputNumber: '2',
       startUniverse: 1000,
       numberOfLights: 50,

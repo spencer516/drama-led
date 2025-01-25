@@ -25,7 +25,7 @@ const MaxLights = z.number().min(0).max(680);
 
 const CHANNELS_PER_UNIVERSE = 512;
 
-const SACN_NETWORK_INTERFACE = '192.168.0.1';
+const SACN_NETWORK_INTERFACE = '192.168.1.1';
 
 type OutputNumber = '1' | '2';
 
