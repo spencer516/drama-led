@@ -5,6 +5,7 @@ import { parse } from 'ts-command-line-args'
 import OctoController from './src/OctoController';
 import LEDSystem from './src/LEDSystem';
 import LightMapping from './src/LightMapping';
+import QLabReceiver from "./src/QLabReceiver";
 
 interface Args {
   enableSacn: boolean;
@@ -73,6 +74,13 @@ async function startup() {
     broadcaster,
     system
   );
+
+  const qlab = new QLabReceiver({
+    port: 53001,
+    messageHandler
+  });
+
+  await qlab.start();
 
   wss.on('connection', function connection(ws) {
     console.log('connected!');
