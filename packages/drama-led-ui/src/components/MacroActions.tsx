@@ -11,7 +11,13 @@ export default function MacroActions({ sendMessage }: Props) {
     <button className="bg-gray-200 px-2 py-1 m-2 rounded" onClick={() => {
       sendMessage({
         type: 'START_BASIC_CHASE',
-        data: {}
+        data: {
+          spread: 2,
+          gap: 10,
+          frequencyInSeconds: 20,
+          direction: 'forward',
+          color: 'rainbow'
+        }
       });
     }}>Start Basic Chase</button>
     <button className="bg-gray-200 px-2 py-1 m-2 rounded" onClick={() => {

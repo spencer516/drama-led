@@ -39,13 +39,7 @@ export default class MessageHandler {
         this.#currentMacro = new BasicChase(
           this.#broadcaster,
           this.#ledSystem,
-          {
-            spread: 3,
-            gap: 10,
-            frequencyInSeconds: 30,
-            direction: 'forward',
-            color: 'rainbow',
-          },
+          message.data,
         );
         this.#currentMacro.start();
         break;
