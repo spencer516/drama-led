@@ -17,22 +17,46 @@ const args = parse<Args>({
   },
 });
 
+
+
 async function startup() {
-  const lightMapping = new LightMapping('OctoDeskSetup.csv');
+  const lightMapping = new LightMapping('FullSystem.csv');
 
   await lightMapping.populateMap();
 
   const wss = new WebSocketServer({ port: 8080 });
 
+  const CONTROLLER_SUPERCALI_2 = new OctoController({
+    id: 'supercalifragilisticexpealidigital',
+    ipAddress: '192.168.1.200',
+    outputNumber: '2',
+    startUniverse: 1100,
+    numberOfLights: 50,
+    lightMapping
+  });
+  
+  const CONTROLLER_BERTS_BRIGHTS_2 = new OctoController({
+    id: 'berts_brights',
+    ipAddress: '192.168.1.201',
+    outputNumber: '2',
+    startUniverse: 1300,
+    numberOfLights: 50,
+    lightMapping
+  });
+  
+  const CONTROLLER_SPOONFUL_2 = new OctoController({
+    id: 'spoonful_of_circuit',
+    ipAddress: '192.168.1.202',
+    outputNumber: '2',
+    startUniverse: 1500,
+    numberOfLights: 50,
+    lightMapping
+  });
+
   const system = new LEDSystem([
-    new OctoController({
-      id: 'supercalifragilisticexpealidigital',
-      ipAddress: '192.168.1.200',
-      outputNumber: '2',
-      startUniverse: 1000,
-      numberOfLights: 50,
-      lightMapping
-    })
+    CONTROLLER_SUPERCALI_2,
+    CONTROLLER_BERTS_BRIGHTS_2,
+    CONTROLLER_SPOONFUL_2
   ]);
 
   if (args.enableSacn) {

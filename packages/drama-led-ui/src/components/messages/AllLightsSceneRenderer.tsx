@@ -15,7 +15,7 @@ function Camera() {
   const { camera } = useThree();
 
   useEffect(() => {
-    camera.position.set(150, 50, 200);
+    camera.position.set(150, 50, 400);
     camera.lookAt(150, 50, 0);
   }, [camera]);
 
@@ -24,7 +24,6 @@ function Camera() {
 
 export default function AllLightsSceneRenderer({ message, sendMessage }: Props) {
   const lights = message.data.lights;
-
 
   return <div className="w-full h-full bg-gray-500 text-white">
     <Canvas

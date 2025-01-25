@@ -61,6 +61,7 @@ export default class MessageHandler {
     rgb,
   }: UpdateLightByID['data']): void {
     const light = Light.getLightByID(id);
+    console.log('updating light', id, light);
 
     light.setRGB(rgb);
 
