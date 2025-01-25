@@ -25,7 +25,7 @@ export default function MacroActions({ sendMessage }: Props) {
         type: 'START_BASIC_CHASE',
         data: {
           spread: 1,
-          gap: 10,
+          gap: 20,
           frequencyInSeconds: 20,
           direction: 'forward',
           color: 'rainbow'

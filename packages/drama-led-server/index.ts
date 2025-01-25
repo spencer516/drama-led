@@ -17,7 +17,7 @@ const args = parse<Args>({
   },
 });
 
-
+const SACN_NETWORK_INTERFACE = '192.168.1.199';
 
 async function startup() {
   const lightMapping = new LightMapping('FullSystem.csv');
@@ -32,7 +32,7 @@ async function startup() {
     outputNumber: '2',
     startUniverse: 1100,
     numberOfLights: 250,
-    // numberOfLights: 3,
+    sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     lightMapping
   });
   
@@ -41,7 +41,7 @@ async function startup() {
     ipAddress: '192.168.1.201',
     outputNumber: '2',
     startUniverse: 1300,
-    // numberOfLights: 50,
+    sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     numberOfLights: 1,
     lightMapping
   });
@@ -51,7 +51,7 @@ async function startup() {
     ipAddress: '192.168.1.202',
     outputNumber: '2',
     startUniverse: 1500,
-    // numberOfLights: 50,
+    sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     numberOfLights: 1,
     lightMapping
   });

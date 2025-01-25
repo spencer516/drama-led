@@ -24,7 +24,6 @@ const IPAddress = z
 const MaxLights = z.number().min(0).max(680);
 
 const LIGHTS_PER_UNIVERSE = Math.floor(512 / 3);
-const CHANNELS_PER_UNIVERSE = 512;
 
 const SACN_NETWORK_INTERFACE = '192.168.1.1';
 
@@ -38,6 +37,7 @@ type OctoConfig = {
   dmxStartAddress?: number;
   numberOfLights: number; // Max 680
   lightMapping: LightMapping;
+  sacnNetworkInterface: string;
 };
 
 function getUniverseChannelMaker(
@@ -63,6 +63,7 @@ export default class OctoController {
   #outputNumber: OutputNumber;
   #universes: Map<Universe, LightChannel[]> = new Map();
   #sacnSenders: Map<Universe, Sender> = new Map();
+  #sacnNetworkInterface: string;
 
   constructor({
     id,
@@ -72,10 +73,12 @@ export default class OctoController {
     dmxStartAddress,
     numberOfLights,
     lightMapping,
+    sacnNetworkInterface,
   }: OctoConfig) {
     this.#id = id;
     this.#outputNumber = outputNumber;
     this.#ipAddress = IPAddress.parse(ipAddress);
+    this.#sacnNetworkInterface = IPAddress.parse(sacnNetworkInterface);
 
     const universe = makeUniverse(startUniverse);
     const startAddress =
@@ -133,7 +136,7 @@ export default class OctoController {
         universe,
         new Sender({
           universe: universe,
-          iface: SACN_NETWORK_INTERFACE,
+          iface: this.#sacnNetworkInterface,
           reuseAddr: true
         }),
       );

@@ -4,7 +4,6 @@ import {
 } from '@spencer516/drama-led-messages/src/AddressTypes';
 import OctoController from './OctoController';
 import Light from './Light';
-import { color } from 'd3-color';
 
 export default class LEDSystem {
   #octoControllers: Map<string, OctoController>;
@@ -72,8 +71,7 @@ export default class LEDSystem {
   
   turnAllOn(): void {
     for (const [_, light] of this.getLightsIterator()) {
-      // light.turnOn();
-      light.setColor(color('green'));
+      light.turnOn();
     }
   }
 }
