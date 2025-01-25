@@ -31,7 +31,8 @@ async function startup() {
     ipAddress: '192.168.1.200',
     outputNumber: '2',
     startUniverse: 1100,
-    numberOfLights: 50,
+    numberOfLights: 250,
+    // numberOfLights: 3,
     lightMapping
   });
   
@@ -40,7 +41,8 @@ async function startup() {
     ipAddress: '192.168.1.201',
     outputNumber: '2',
     startUniverse: 1300,
-    numberOfLights: 50,
+    // numberOfLights: 50,
+    numberOfLights: 1,
     lightMapping
   });
   
@@ -49,7 +51,8 @@ async function startup() {
     ipAddress: '192.168.1.202',
     outputNumber: '2',
     startUniverse: 1500,
-    numberOfLights: 50,
+    // numberOfLights: 50,
+    numberOfLights: 1,
     lightMapping
   });
 

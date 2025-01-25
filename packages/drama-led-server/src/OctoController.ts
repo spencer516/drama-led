@@ -23,6 +23,7 @@ const IPAddress = z
 
 const MaxLights = z.number().min(0).max(680);
 
+const LIGHTS_PER_UNIVERSE = Math.floor(512 / 3);
 const CHANNELS_PER_UNIVERSE = 512;
 
 const SACN_NETWORK_INTERFACE = '192.168.1.1';
@@ -45,17 +46,13 @@ function getUniverseChannelMaker(
   sequenceNumber: number,
 ): (offset: number) => UniverseChannel {
   return offset => {
-    const channelSequence =
-      dmxStartAddress + sequenceNumber * 3 + offset;
-    const universe = makeUniverse(
-      startUniverse +
-        Math.floor(channelSequence / CHANNELS_PER_UNIVERSE),
-    );
-    const channel = makeChannel(
-      channelSequence % CHANNELS_PER_UNIVERSE,
-    );
+    const universeOffset = Math.floor(sequenceNumber / LIGHTS_PER_UNIVERSE);
+    const universe = startUniverse + universeOffset;
+    const sequenceInUniverse = sequenceNumber % LIGHTS_PER_UNIVERSE;
 
-    return [universe, channel];
+    const channel = sequenceInUniverse * 3 + offset + 1;
+
+    return [makeUniverse(universe), makeChannel(channel)];
   };
 }
 
@@ -137,6 +134,7 @@ export default class OctoController {
         new Sender({
           universe: universe,
           iface: SACN_NETWORK_INTERFACE,
+          reuseAddr: true
         }),
       );
     }

@@ -9,6 +9,7 @@ import MacroBase from './macros/MacroBase';
 import BasicChase from './macros/BasicChase';
 import LEDSystem from './LEDSystem';
 import RadialChase from './macros/RadialChase';
+import RandomSparkle from './macros/RandomSparkle';
 
 export default class MessageHandler {
   #wss: WebSocketServer;
@@ -31,6 +32,8 @@ export default class MessageHandler {
 
     this.#currentMacro?.stop();
 
+    console.log('Received message:', message.type);
+
     switch (message.type) {
       case 'UPDATE_LIGHT_BY_ID':
         this.updateLightByID(message.data);
@@ -50,6 +53,21 @@ export default class MessageHandler {
         );
         this.#currentMacro.start();
         break;
+      case 'START_RANDOM_SPARKLE':
+        this.#currentMacro = new RandomSparkle(
+          this.#broadcaster,
+          this.#ledSystem,
+        );
+        this.#currentMacro.start();
+        break;
+      case 'TURN_ALL_OFF':
+        this.#ledSystem.turnAllOff();
+        this.#broadcaster.broadcast();
+        break;
+      case 'TURN_ALL_ON':
+        this.#ledSystem.turnAllOn();
+        this.#broadcaster.broadcast();
+        break;
       case 'UPDATE_ALL_LIGHTS':
         // TODO
         break;
@@ -61,7 +79,6 @@ export default class MessageHandler {
     rgb,
   }: UpdateLightByID['data']): void {
     const light = Light.getLightByID(id);
-    console.log('updating light', id, light);
 
     light.setRGB(rgb);
 

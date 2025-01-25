@@ -48,6 +48,21 @@ export const StartRadialChase = z.object({
   data: z.object({}),
 });
 
+export const StartRandomSparkle = z.object({
+  type: z.literal('START_RANDOM_SPARKLE'),
+  data: z.object({}),
+});
+
+export const TurnAllOn = z.object({
+  type: z.literal('TURN_ALL_ON'),
+  data: z.object({}),
+});
+
+export const TurnAllOff = z.object({
+  type: z.literal('TURN_ALL_OFF'),
+  data: z.object({}),
+});
+
 export type StartBasicChase = z.infer<typeof StartBasicChase>;
 
 export const InputMessage = z.discriminatedUnion('type', [
@@ -55,7 +70,10 @@ export const InputMessage = z.discriminatedUnion('type', [
   UpdateAllLights,
   StartBasicChase,
   StartRadialChase,
+  StartRandomSparkle,
   EmptyMessage,
+  TurnAllOn,
+  TurnAllOff
 ]);
 
 export type InputMessage = z.infer<typeof InputMessage>;
