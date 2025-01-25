@@ -12,7 +12,7 @@ export default function MacroActions({ sendMessage }: Props) {
       sendMessage({
         type: 'START_BASIC_CHASE',
         data: {
-          spread: 2,
+          spread: 1,
           gap: 10,
           frequencyInSeconds: 20,
           direction: 'forward',
