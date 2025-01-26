@@ -7,7 +7,7 @@ type OctoName = 'supercalifragilisticexpealidigital' | 'berts_brights' | 'spoonf
 type Channel = 1 | 2;
 type Coordinate = [number, number];
 
-const SPACING = 1.5;
+const SPACING = 3;
 
 // @ts-ignore
 const DIRNAME = import.meta.dirname;
