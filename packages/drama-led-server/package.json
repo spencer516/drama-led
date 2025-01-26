@@ -1,8 +1,10 @@
 {
   "name": "drama-led-server",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "nodemon index.ts",
+    "dev-mapping": "nodemon ./mapping/mapping_script.ts",
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",

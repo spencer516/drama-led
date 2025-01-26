@@ -6,6 +6,7 @@
   "watch": [
     "src",
     "index.ts",
+    "mapping",
     "../drama-led-messages/src/**/*.ts",
     "../drama-led-messages/index.ts"
   ]
