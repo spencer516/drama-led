@@ -56,6 +56,9 @@ export default class LightMapping {
   }
 
   getLightCoordinates(id: LightID): LightCoordinates {
+    if (!this.#map.has(id)) {
+      console.error(`No coordinates found for ${id}`);
+    }
     return this.#map.get(id) ?? this.#defaultCoordinates;
   }
 }

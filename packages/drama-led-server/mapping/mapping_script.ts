@@ -3,7 +3,7 @@ import {promises as fs} from 'fs';
 
 // Excalidraw Link: https://excalidraw.com/#json=a9Q76cp1RPUeVrFnGxhF0,7Xcl1kiNea7mJ_Dw_FPowQ
 
-type OctoName = 'supercalifragilisticexpealidigital' | 'berts_brights' | 'spoonful_of_circuitry';
+type OctoName = 'supercalifragilisticexpealidigital' | 'berts_brights' | 'spoonful_of_circuit';
 type Channel = 1 | 2;
 type Coordinate = [number, number];
 
@@ -39,12 +39,6 @@ async function writeToCSV(lights: Light[]): Promise<void> {
 }
 
 writeToCSV(allLights);
-
-// console.log('light_id,x_coordinate,y_coordinate');
-
-// for (const light of allLights) {
-//   console.log(`${light.light_id},${light.x_coordinate},${light.y_coordinate}`);
-// }
 
 
 type LightsForOpeningArgs = {
@@ -100,7 +94,7 @@ function generateAllLights(): Light[] {
   });
   
   const spoonful1 = generateLightsForOpening({
-    octoName: 'spoonful_of_circuitry',
+    octoName: 'spoonful_of_circuit',
     channel: 1,
     startCoordinate: [294, 0],
     spacing: SPACING,
@@ -109,7 +103,7 @@ function generateAllLights(): Light[] {
   });
   
   const spoonful2 = generateLightsForOpening({
-    octoName: 'spoonful_of_circuitry',
+    octoName: 'spoonful_of_circuit',
     channel: 2,
     startCoordinate: [272.5, 0],
     spacing: SPACING,
@@ -135,7 +129,7 @@ function generateLightsForOpening({
   width,
   height,
 }: LightsForOpeningArgs): Light[] {
-  let sequence = 0;
+  let sequence = 1;
   let [xPos, yPos] = startCoordinate;
 
   const lights: Light[] = [];

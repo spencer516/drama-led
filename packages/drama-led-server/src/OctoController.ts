@@ -110,6 +110,8 @@ export default class OctoController {
 
       return light;
     });
+
+    console.log(`Created ${this.#lights.length} lights for ${this.#id}:${this.#outputNumber}`);
   }
 
   makeLightID(sequenceNumber: number): LightID {
@@ -168,7 +170,7 @@ export default class OctoController {
   }
 
   get id() {
-    return this.#id;
+    return `${this.#id}:${this.#outputNumber}`;
   }
 
   get universes() {

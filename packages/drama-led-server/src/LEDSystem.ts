@@ -7,22 +7,15 @@ import Light from './Light';
 
 export default class LEDSystem {
   #octoControllers: Map<string, OctoController>;
-  #controllersByUniverse: Map<Universe, OctoController>;
 
   constructor(octoControllers: OctoController[]) {
     const controllers = new Map();
-    const controllersByUniverse = new Map();
 
     for (const octoController of octoControllers) {
       controllers.set(octoController.id, octoController);
-
-      for (const universe of octoController.universes) {
-        controllersByUniverse.set(universe, octoController);
-      }
     }
 
     this.#octoControllers = controllers;
-    this.#controllersByUniverse = controllersByUniverse;
   }
 
   broadcast(): void {
