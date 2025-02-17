@@ -32,7 +32,7 @@ async function startup() {
     ipAddress: '192.168.1.200',
     outputNumber: '1',
     startUniverse: 1000,
-    numberOfLights: 79, // TODO: Auto-detect the lights frmo the generated map
+    numberOfLights: 79, // TODO: Auto-detect the lights from the generated map
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     lightMapping,
   });
