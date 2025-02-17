@@ -1,16 +1,12 @@
 "use client";
 
-import { SendMessage } from "@/utils/useLEDServerWebSocket";
-import { AllLights } from "@spencer516/drama-led-messages/src/OutputMessage";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useEffect, useMemo } from "react";
 import { makeRGBValue } from "@spencer516/drama-led-messages/src/AddressTypes";
 import * as THREE from "three";
+import { useLatestMessage, useSendMessage } from "@/utils/LEDServerContext";
 
-type Props = {
-  message: AllLights;
-  sendMessage: SendMessage;
-};
+type Props = {};
 
 function Camera() {
   const { camera } = useThree();
@@ -23,11 +19,10 @@ function Camera() {
   return <></>;
 }
 
-export default function AllLightsSceneRenderer({
-  message,
-  sendMessage,
-}: Props) {
-  const lights = message.data.lights;
+export default function AllLightsSceneRenderer({}: Props) {
+  const sendMessage = useSendMessage();
+  const message = useLatestMessage();
+  const lights = message.lights;
 
   return (
     <div className="w-full h-full bg-gray-500 text-white">

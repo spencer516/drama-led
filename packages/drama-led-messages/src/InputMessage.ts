@@ -65,6 +65,14 @@ export const TurnAllOff = z.object({
   data: z.object({}),
 });
 
+export const UpdateOctoController = z.object({
+  type: z.literal('UPDATE_OCTO_CONTROLLER'),
+  data: z.object({
+    id: z.string(),
+    isEnabled: z.boolean(),
+  }),
+});
+
 export type StartBasicChase = z.infer<typeof StartBasicChase>;
 
 export const InputMessage = z.discriminatedUnion('type', [
@@ -76,6 +84,7 @@ export const InputMessage = z.discriminatedUnion('type', [
   EmptyMessage,
   TurnAllOn,
   TurnAllOff,
+  UpdateOctoController,
 ]);
 
 export type InputMessage = z.infer<typeof InputMessage>;

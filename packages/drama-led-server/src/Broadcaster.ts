@@ -39,16 +39,14 @@ export default class Broadcaster {
    */
   broadcast(client?: WebSocket): this {
     const lights = this.#ledSystem.toLightConfigs();
+    const octos = this.#ledSystem.toOctoControllerStatus();
+
     const message = OutputMessage.parse({
-      type: 'ALL_LIGHTS',
-      data: {
-        lights,
+      lights,
+      system: {
+        octos,
       },
     });
-
-    setTimeout(function foo() {
-      console.log('hello');
-    }, 10);
 
     const stringifiedMessage = JSON.stringify(message);
 

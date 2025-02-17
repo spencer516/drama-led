@@ -1,6 +1,7 @@
 import { LightConfig } from '@spencer516/drama-led-messages/src/AddressTypes';
 import OctoController from './OctoController';
 import Light from './Light';
+import { OctoControllerStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 
 export default class LEDSystem {
   #octoControllers: Map<string, OctoController>;
@@ -31,6 +32,12 @@ export default class LEDSystem {
     return configs;
   }
 
+  toOctoControllerStatus(): OctoControllerStatus[] {
+    return Array.from(this.#octoControllers.values()).map(
+      (controller) => controller.status,
+    );
+  }
+
   get countLights(): number {
     const lightsArray = Array.from(this.getLightsIterator());
     return lightsArray.length;
@@ -45,10 +52,14 @@ export default class LEDSystem {
     }
   }
 
-  enableSacnOutput(): void {
-    for (const controller of this.#octoControllers.values()) {
-      controller.setupSacnSenders();
-    }
+  enableSacnOutput(controllerID: string): void {
+    const controller = this.#octoControllers.get(controllerID);
+    controller?.setupSacnSenders();
+  }
+
+  disableSacnOutput(controllerID: string): void {
+    const controller = this.#octoControllers.get(controllerID);
+    controller?.stopSacnSenders();
   }
 
   turnAllOff(): void {

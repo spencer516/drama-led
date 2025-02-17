@@ -19,6 +19,7 @@
     "@react-three/drei": "^9.120.6",
     "@react-three/fiber": "^9.0.0-rc.1",
     "@spencer516/drama-led-messages": "^1.0.0",
+    "@spencer516/drama-led-server": "^1.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

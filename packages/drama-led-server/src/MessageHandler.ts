@@ -68,6 +68,14 @@ export default class MessageHandler {
         this.#ledSystem.turnAllOn();
         this.#broadcaster.broadcast();
         break;
+      case 'UPDATE_OCTO_CONTROLLER':
+        if (message.data.isEnabled) {
+          this.#ledSystem.enableSacnOutput(message.data.id);
+        } else {
+          this.#ledSystem.disableSacnOutput(message.data.id);
+        }
+        this.#broadcaster.broadcast();
+        break;
       case 'UPDATE_ALL_LIGHTS':
         // TODO
         break;

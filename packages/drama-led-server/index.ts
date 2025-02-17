@@ -1,22 +1,10 @@
 import { WebSocketServer } from 'ws';
 import Broadcaster from './src/Broadcaster';
 import MessageHandler from './src/MessageHandler';
-import { parse } from 'ts-command-line-args';
 import OctoController from './src/OctoController';
 import LEDSystem from './src/LEDSystem';
 import LightMapping from './src/LightMapping';
 import QLabReceiver from './src/QLabReceiver';
-
-interface Args {
-  enableSacn: boolean;
-}
-
-const args = parse<Args>({
-  enableSacn: {
-    type: Boolean,
-    defaultValue: false,
-  },
-});
 
 const SACN_NETWORK_INTERFACE = '192.168.1.199';
 
@@ -95,10 +83,6 @@ async function startup() {
     CONTROLLER_SPOONFUL_1,
     CONTROLLER_SPOONFUL_2,
   ]);
-
-  if (args.enableSacn) {
-    system.enableSacnOutput();
-  }
 
   const broadcaster = new Broadcaster(wss, system);
 

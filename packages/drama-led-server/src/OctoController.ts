@@ -9,6 +9,7 @@ import {
   Universe,
   UniverseChannel,
 } from '@spencer516/drama-led-messages/src/AddressTypes';
+import { OctoControllerStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 import { z } from 'zod';
 import Light from './Light';
 import { range } from './utils';
@@ -136,6 +137,10 @@ export default class OctoController {
     }
   }
 
+  stopSacnSenders() {
+    this.#sacnSenders = new Map();
+  }
+
   broadcast() {
     for (const [universe, lightChannels] of this.#universes) {
       const payload = lightChannels.reduce<{
@@ -175,6 +180,15 @@ export default class OctoController {
 
   get outputNumber() {
     return this.#outputNumber;
+  }
+
+  get status(): OctoControllerStatus {
+    return {
+      id: this.id,
+      ipAddress: this.ipAddress,
+      isSACNEnabled: this.#sacnSenders.size > 0,
+      numberOfLights: this.#lights.length,
+    };
   }
 
   toLightConfigs(): LightConfig[] {

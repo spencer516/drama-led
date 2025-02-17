@@ -1,12 +1,11 @@
 "use client";
 
-import { SendMessage } from "@/utils/useLEDServerWebSocket";
+import { useSendMessage } from "@/utils/LEDServerContext";
 
-type Props = {
-  sendMessage: SendMessage;
-};
+type Props = {};
 
-export default function MacroActions({ sendMessage }: Props) {
+export default function MacroActions({}: Props) {
+  const sendMessage = useSendMessage();
   return (
     <div>
       <button
