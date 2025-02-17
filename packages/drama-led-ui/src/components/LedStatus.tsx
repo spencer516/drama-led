@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { ReadyState } from 'react-use-websocket';
+import { ReadyState } from "react-use-websocket";
 
 type Props = {
   readyState: ReadyState;
@@ -37,11 +37,13 @@ function getIconColorForState(readyState: ReadyState): IconColor {
 }
 
 export default function LedStatus({ readyState }: Props) {
-  return <div className="flex gap-2 items-center">
-    <p className="text-sm text-slate-400">{getTextForState(readyState)}</p>
-    <div
-      data-color={getIconColorForState(readyState)}
-      className="rounded-full w-4 h-4 bg-slate-400 data-[color=red]:bg-red-600 data-[color=yellow]:bg-yellow-600 data-[color=green]:bg-green-600 ">
+  return (
+    <div className="flex gap-2 items-center">
+      <p className="text-sm text-slate-400">{getTextForState(readyState)}</p>
+      <div
+        data-color={getIconColorForState(readyState)}
+        className="rounded-full w-4 h-4 bg-slate-400 data-[color=red]:bg-red-600 data-[color=yellow]:bg-yellow-600 data-[color=green]:bg-green-600 "
+      ></div>
     </div>
-  </div>;
+  );
 }

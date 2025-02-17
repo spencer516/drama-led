@@ -1,7 +1,4 @@
-import {
-  LightConfig,
-  Universe,
-} from '@spencer516/drama-led-messages/src/AddressTypes';
+import { LightConfig } from '@spencer516/drama-led-messages/src/AddressTypes';
 import OctoController from './OctoController';
 import Light from './Light';
 
@@ -35,9 +32,7 @@ export default class LEDSystem {
   }
 
   get countLights(): number {
-    const lightsArray = Array.from(
-      this.getLightsIterator(),
-    );
+    const lightsArray = Array.from(this.getLightsIterator());
     return lightsArray.length;
   }
 
@@ -61,7 +56,7 @@ export default class LEDSystem {
       light.turnOff();
     }
   }
-  
+
   turnAllOn(): void {
     for (const [_, light] of this.getLightsIterator()) {
       light.turnOn();

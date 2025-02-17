@@ -3,9 +3,9 @@ import {
   LightID,
   makeLightID,
 } from '@spencer516/drama-led-messages/src/AddressTypes';
-import {z} from 'zod';
-import {promises as fs} from 'fs';
-import {parse} from 'csv-parse/sync';
+import { z } from 'zod';
+import { promises as fs } from 'fs';
+import { parse } from 'csv-parse/sync';
 
 const CSVMapping = z.array(
   z.object({
@@ -18,11 +18,10 @@ const CSVMapping = z.array(
 export default class LightMapping {
   #filename: string;
   #map: Map<LightID, LightCoordinates> = new Map();
-  #defaultCoordinates: LightCoordinates =
-    LightCoordinates.parse({
-      x: 0,
-      y: 0,
-    });
+  #defaultCoordinates: LightCoordinates = LightCoordinates.parse({
+    x: 0,
+    y: 0,
+  });
 
   constructor(filename: string) {
     this.#filename = filename;
@@ -39,11 +38,7 @@ export default class LightMapping {
       }),
     );
 
-    for (const {
-      light_id,
-      x_coordinate,
-      y_coordinate,
-    } of csv) {
+    for (const { light_id, x_coordinate, y_coordinate } of csv) {
       const lightID = makeLightID(light_id);
       this.#map.set(
         lightID,

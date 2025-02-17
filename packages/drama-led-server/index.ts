@@ -1,11 +1,11 @@
 import { WebSocketServer } from 'ws';
 import Broadcaster from './src/Broadcaster';
 import MessageHandler from './src/MessageHandler';
-import { parse } from 'ts-command-line-args'
+import { parse } from 'ts-command-line-args';
 import OctoController from './src/OctoController';
 import LEDSystem from './src/LEDSystem';
 import LightMapping from './src/LightMapping';
-import QLabReceiver from "./src/QLabReceiver";
+import QLabReceiver from './src/QLabReceiver';
 
 interface Args {
   enableSacn: boolean;
@@ -34,9 +34,9 @@ async function startup() {
     startUniverse: 1000,
     numberOfLights: 79, // TODO: Auto-detect the lights frmo the generated map
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    lightMapping
+    lightMapping,
   });
-  
+
   const CONTROLLER_SUPERCALI_2 = new OctoController({
     id: 'supercalifragilisticexpealidigital',
     ipAddress: '192.168.1.200',
@@ -44,9 +44,9 @@ async function startup() {
     startUniverse: 1100,
     numberOfLights: 114,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    lightMapping
+    lightMapping,
   });
-  
+
   const CONTROLLER_BERTS_BRIGHTS_1 = new OctoController({
     id: 'berts_brights',
     ipAddress: '192.168.1.201',
@@ -54,7 +54,7 @@ async function startup() {
     startUniverse: 1200,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     numberOfLights: 113,
-    lightMapping
+    lightMapping,
   });
 
   const CONTROLLER_BERTS_BRIGHTS_2 = new OctoController({
@@ -64,9 +64,9 @@ async function startup() {
     startUniverse: 1300,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     numberOfLights: 163,
-    lightMapping
+    lightMapping,
   });
-  
+
   const CONTROLLER_SPOONFUL_1 = new OctoController({
     id: 'spoonful_of_circuit',
     ipAddress: '192.168.1.202',
@@ -74,9 +74,9 @@ async function startup() {
     startUniverse: 1400,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     numberOfLights: 79,
-    lightMapping
+    lightMapping,
   });
-  
+
   const CONTROLLER_SPOONFUL_2 = new OctoController({
     id: 'spoonful_of_circuit',
     ipAddress: '192.168.1.202',
@@ -84,7 +84,7 @@ async function startup() {
     startUniverse: 1500,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     numberOfLights: 114,
-    lightMapping
+    lightMapping,
   });
 
   const system = new LEDSystem([
@@ -102,15 +102,11 @@ async function startup() {
 
   const broadcaster = new Broadcaster(wss, system);
 
-  const messageHandler = new MessageHandler(
-    wss,
-    broadcaster,
-    system
-  );
+  const messageHandler = new MessageHandler(wss, broadcaster, system);
 
   const qlab = new QLabReceiver({
     port: 53001,
-    messageHandler
+    messageHandler,
   });
 
   await qlab.start();

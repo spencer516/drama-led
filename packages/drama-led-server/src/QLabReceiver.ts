@@ -1,7 +1,4 @@
 import { createSocket, Socket } from 'dgram';
-import {
-  parseMessage
-} from '@spencer516/drama-led-messages/src/InputMessage';
 import MessageHandler from './MessageHandler';
 
 type Props = {
@@ -14,10 +11,7 @@ export default class QLabReceiver {
   #port: number;
   #messageHandler: MessageHandler;
 
-  constructor({
-    port,
-    messageHandler
-  }: Props) {
+  constructor({ port, messageHandler }: Props) {
     this.#socket = createSocket('udp4');
     this.#port = port;
     this.#messageHandler = messageHandler;
@@ -37,11 +31,11 @@ export default class QLabReceiver {
         reject(err);
       });
 
-      this.#socket.on('message', (msg, rinfo) => {
+      this.#socket.on('message', (msg) => {
         this.handleMessage(msg);
       });
 
-      this.#socket.bind(this.#port)
+      this.#socket.bind(this.#port);
     });
   }
 

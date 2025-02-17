@@ -43,9 +43,7 @@ export default class AnimatedMacroBase extends MacroBase {
   }
 
   get msSinceStart() {
-    return (
-      performance.now() - this.#intervalConfig.startTime
-    );
+    return performance.now() - this.#intervalConfig.startTime;
   }
 
   onStop() {

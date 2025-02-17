@@ -1,4 +1,4 @@
-import {WebSocketServer} from 'ws';
+import { WebSocketServer } from 'ws';
 import Broadcaster from './Broadcaster';
 import {
   parseMessage,
@@ -74,10 +74,7 @@ export default class MessageHandler {
     }
   }
 
-  updateLightByID({
-    id,
-    rgb,
-  }: UpdateLightByID['data']): void {
+  updateLightByID({ id, rgb }: UpdateLightByID['data']): void {
     const light = Light.getLightByID(id);
 
     light.setRGB(rgb);

@@ -1,6 +1,6 @@
-import {WebSocketServer, WebSocket} from 'ws';
-import {startEventLoop} from './utils';
-import {OutputMessage} from '@spencer516/drama-led-messages/src/OutputMessage';
+import { WebSocketServer, WebSocket } from 'ws';
+import { startEventLoop } from './utils';
+import { OutputMessage } from '@spencer516/drama-led-messages/src/OutputMessage';
 import LEDSystem from './LEDSystem';
 
 export default class Broadcaster {
@@ -8,10 +8,7 @@ export default class Broadcaster {
   #ledSystem: LEDSystem;
   #cancelEventLoop: (() => void) | null = null;
 
-  constructor(
-    wss: WebSocketServer,
-    lightSequence: LEDSystem,
-  ) {
+  constructor(wss: WebSocketServer, lightSequence: LEDSystem) {
     this.#wss = wss;
     this.#ledSystem = lightSequence;
   }
@@ -24,10 +21,7 @@ export default class Broadcaster {
       this.#cancelEventLoop();
     }
 
-    this.#cancelEventLoop = startEventLoop(
-      () => this.broadcast(),
-      frequency,
-    );
+    this.#cancelEventLoop = startEventLoop(() => this.broadcast(), frequency);
 
     return this;
   }
@@ -51,6 +45,10 @@ export default class Broadcaster {
         lights,
       },
     });
+
+    setTimeout(function foo() {
+      console.log('hello');
+    }, 10);
 
     const stringifiedMessage = JSON.stringify(message);
 

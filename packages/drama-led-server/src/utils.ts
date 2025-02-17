@@ -1,8 +1,5 @@
-export function range(
-  start: number,
-  length: number,
-): number[] {
-  return Array.from({length}, (_, index) => index + start);
+export function range(start: number, length: number): number[] {
+  return Array.from({ length }, (_, index) => index + start);
 }
 
 export function invariant(
@@ -29,10 +26,7 @@ export function startEventLoop(
   }
 
   return () => {
-    console.log(
-      'Canceling event loop!: %d',
-      performance.now(),
-    );
+    console.log('Canceling event loop!: %d', performance.now());
     clearInterval(intervalID);
   };
 }

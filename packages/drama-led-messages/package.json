@@ -2,10 +2,8 @@
   "name": "@spencer516/drama-led-messages",
   "scripts": {
     "dev": "nodemon index.ts",
-    "lint": "gts lint",
-    "clean": "gts clean",
-    "compile": "tsc --listFilesOnly",
-    "fix": "gts fix",
+    "lint": "eslint .",
+    "compile": "tsc",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint"
@@ -13,7 +11,6 @@
   "main": "index.ts",
   "dependencies": {
     "@types/node": "^22.7.5",
-    "gts": "^6.0.2",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",

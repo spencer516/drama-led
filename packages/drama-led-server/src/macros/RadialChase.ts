@@ -6,10 +6,7 @@ import Light from '../Light';
 export default class RadialChase extends AnimatedMacroBase {
   #ledSystem: LEDSystem;
 
-  constructor(
-    broadcaster: Broadcaster,
-    ledSystem: LEDSystem,
-  ) {
+  constructor(broadcaster: Broadcaster, ledSystem: LEDSystem) {
     super(broadcaster);
     this.#ledSystem = ledSystem;
   }

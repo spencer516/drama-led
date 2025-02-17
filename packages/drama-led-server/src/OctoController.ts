@@ -9,23 +9,18 @@ import {
   Universe,
   UniverseChannel,
 } from '@spencer516/drama-led-messages/src/AddressTypes';
-import {z} from 'zod';
+import { z } from 'zod';
 import Light from './Light';
-import {range} from './utils';
-import {Sender} from 'sacn';
-import {LightChannel} from './LightChannel';
+import { range } from './utils';
+import { Sender } from 'sacn';
+import { LightChannel } from './LightChannel';
 import LightMapping from './LightMapping';
 
-const IPAddress = z
-  .string()
-  .ip({version: 'v4'})
-  .brand('IPAddress');
+const IPAddress = z.string().ip({ version: 'v4' }).brand('IPAddress');
 
 const MaxLights = z.number().min(0).max(680);
 
 const LIGHTS_PER_UNIVERSE = Math.floor(512 / 3);
-
-const SACN_NETWORK_INTERFACE = '192.168.1.1';
 
 type OutputNumber = '1' | '2';
 
@@ -45,7 +40,7 @@ function getUniverseChannelMaker(
   dmxStartAddress: Channel,
   sequenceNumber: number,
 ): (offset: number) => UniverseChannel {
-  return offset => {
+  return (offset) => {
     const universeOffset = Math.floor(sequenceNumber / LIGHTS_PER_UNIVERSE);
     const universe = startUniverse + universeOffset;
     const sequenceInUniverse = sequenceNumber % LIGHTS_PER_UNIVERSE;
@@ -82,42 +77,38 @@ export default class OctoController {
 
     const universe = makeUniverse(startUniverse);
     const startAddress =
-      dmxStartAddress == null
-        ? makeChannel(1)
-        : makeChannel(dmxStartAddress);
+      dmxStartAddress == null ? makeChannel(1) : makeChannel(dmxStartAddress);
 
-    this.#lights = range(
-      0,
-      MaxLights.parse(numberOfLights),
-    ).map(sequenceNumber => {
-      const makeChannelByOffset = getUniverseChannelMaker(
-        universe,
-        startAddress,
-        sequenceNumber,
-      );
+    this.#lights = range(0, MaxLights.parse(numberOfLights)).map(
+      (sequenceNumber) => {
+        const makeChannelByOffset = getUniverseChannelMaker(
+          universe,
+          startAddress,
+          sequenceNumber,
+        );
 
-      const lightID = this.makeLightID(sequenceNumber + 1);
-      const coordinates =
-        lightMapping.getLightCoordinates(lightID);
+        const lightID = this.makeLightID(sequenceNumber + 1);
+        const coordinates = lightMapping.getLightCoordinates(lightID);
 
-      const light = new Light(lightID, coordinates, [
-        makeChannelByOffset(0),
-        makeChannelByOffset(1),
-        makeChannelByOffset(2),
-      ]);
+        const light = new Light(lightID, coordinates, [
+          makeChannelByOffset(0),
+          makeChannelByOffset(1),
+          makeChannelByOffset(2),
+        ]);
 
-      this.indexLightChannels(light);
+        this.indexLightChannels(light);
 
-      return light;
-    });
+        return light;
+      },
+    );
 
-    console.log(`Created ${this.#lights.length} lights for ${this.#id}:${this.#outputNumber}`);
+    console.log(
+      `Created ${this.#lights.length} lights for ${this.#id}:${this.#outputNumber}`,
+    );
   }
 
   makeLightID(sequenceNumber: number): LightID {
-    return makeLightID(
-      `${this.#id}:${this.#outputNumber}-${sequenceNumber}`,
-    );
+    return makeLightID(`${this.#id}:${this.#outputNumber}-${sequenceNumber}`);
   }
 
   indexLightChannels(light: Light): void {
@@ -139,15 +130,14 @@ export default class OctoController {
         new Sender({
           universe: universe,
           iface: this.#sacnNetworkInterface,
-          reuseAddr: true
+          reuseAddr: true,
         }),
       );
     }
   }
 
   broadcast() {
-    for (const [universe, lightChannels] of this
-      .#universes) {
+    for (const [universe, lightChannels] of this.#universes) {
       const payload = lightChannels.reduce<{
         [channel: string]: number;
       }>((acc, lightChannel) => {
@@ -163,9 +153,7 @@ export default class OctoController {
           sourceName: 'Drama LED Server',
           priority: 200,
         })
-        .catch(err =>
-          console.error('Error Sending SACN', err),
-        );
+        .catch((err) => console.error('Error Sending SACN', err));
     }
   }
 
@@ -190,12 +178,10 @@ export default class OctoController {
   }
 
   toLightConfigs(): LightConfig[] {
-    return this.#lights.map(light => light.toLightConfig());
+    return this.#lights.map((light) => light.toLightConfig());
   }
 
   toAddresses(): Address[] {
-    return this.#lights.flatMap(light =>
-      light.toAddresses(),
-    );
+    return this.#lights.flatMap((light) => light.toAddresses());
   }
 }

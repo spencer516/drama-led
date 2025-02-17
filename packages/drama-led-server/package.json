@@ -4,10 +4,8 @@
   "scripts": {
     "dev": "nodemon index.ts",
     "dev-mapping": "nodemon ./mapping/mapping_script.ts",
-    "lint": "gts lint",
-    "clean": "gts clean",
+    "lint": "eslint .",
     "compile": "tsc",
-    "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint"
@@ -27,8 +25,8 @@
     "d3-interpolate": "^3.0.1",
     "d3-scale": "^4.0.2",
     "d3-scale-chromatic": "^3.1.0",
-    "gts": "^6.0.2",
     "nodemon": "^3.1.9",
+    "prettier": "^3.5.1",
     "sacn": "^4.6.2",
     "ts-command-line-args": "^2.5.1",
     "ts-node": "^10.9.2",
@@ -38,7 +36,6 @@
   },
   "workspaces": {
     "nohoist": [
-      "gts"
     ]
   }
 }

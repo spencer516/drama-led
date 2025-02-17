@@ -1,12 +1,8 @@
 import Broadcaster from '../Broadcaster';
-import {
-  scalePow,
-  ScalePower,
-  scaleSequential,
-} from 'd3-scale';
+import { scalePow, ScalePower, scaleSequential } from 'd3-scale';
 import AnimatedMacroBase from './AnimatedMacroBase';
-import {interpolateSinebow} from 'd3-scale-chromatic';
-import {color} from 'd3-color';
+import { interpolateSinebow } from 'd3-scale-chromatic';
+import { color } from 'd3-color';
 import LEDSystem from '../LEDSystem';
 
 type Config = {
@@ -67,26 +63,19 @@ export default class BasicChase extends AnimatedMacroBase {
     const stepsSinceStart =
       this.msSinceStart / (1000 / this.#frequencyInSeconds);
 
-    for (const [
-      index,
-      light,
-    ] of this.#ledSystem.getLightsIterator()) {
+    for (const [index, light] of this.#ledSystem.getLightsIterator()) {
       const adjustedIndex = Math.abs(
         this.#direction === 'forward'
           ? index - stepsSinceStart
           : index + stepsSinceStart,
       );
       const remainder = adjustedIndex % this.#gap;
-      const deltaToNext = Math.min(
-        remainder,
-        this.#gap - remainder,
-      );
+      const deltaToNext = Math.min(remainder, this.#gap - remainder);
       const percent = this.#scale(deltaToNext);
 
       const baseColor = this.#colorScale(index);
       const transformedColor =
-        color(baseColor)?.copy({opacity: percent / 100}) ??
-        color('black');
+        color(baseColor)?.copy({ opacity: percent / 100 }) ?? color('black');
 
       light.setColor(transformedColor);
     }

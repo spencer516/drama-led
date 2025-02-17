@@ -1,5 +1,4 @@
 import Broadcaster from '../Broadcaster';
-import Light from '../Light';
 
 export default class MacroBase {
   #broadcaster: Broadcaster;

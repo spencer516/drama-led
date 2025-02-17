@@ -1,15 +1,19 @@
 import { parse } from 'ts-command-line-args';
-import {promises as fs} from 'fs';
+import { promises as fs } from 'fs';
 
 // Excalidraw Link: https://excalidraw.com/#json=a9Q76cp1RPUeVrFnGxhF0,7Xcl1kiNea7mJ_Dw_FPowQ
 
-type OctoName = 'supercalifragilisticexpealidigital' | 'berts_brights' | 'spoonful_of_circuit';
+type OctoName =
+  | 'supercalifragilisticexpealidigital'
+  | 'berts_brights'
+  | 'spoonful_of_circuit';
+
 type Channel = 1 | 2;
 type Coordinate = [number, number];
 
 const SPACING = 3;
 
-// @ts-ignore
+// @ts-expect-error - Import issue with TS config
 const DIRNAME = import.meta.dirname;
 
 interface Args {
@@ -25,21 +29,17 @@ const args = parse<Args>({
 const allLights = generateAllLights();
 
 async function writeToCSV(lights: Light[]): Promise<void> {
-  const csvContent = lights.map(light => {
+  const csvContent = lights.map((light) => {
     return `${light.light_id},${light.x_coordinate},${light.y_coordinate}`;
   });
 
-  const csvWithHeaders = [
-    'light_id,x_coordinate,y_coordinate',
-    ...csvContent,
-  ];
+  const csvWithHeaders = ['light_id,x_coordinate,y_coordinate', ...csvContent];
 
   await fs.writeFile(`${DIRNAME}/${args.fileName}`, csvWithHeaders.join('\n'));
   console.log(`Wrote ${lights.length} lights to ${args.fileName}`);
 }
 
 writeToCSV(allLights);
-
 
 type LightsForOpeningArgs = {
   octoName: OctoName;
@@ -48,12 +48,12 @@ type LightsForOpeningArgs = {
   spacing: number;
   width: number;
   height: number;
-}
+};
 
 type Light = {
-  light_id: string,
-  x_coordinate: number,
-  y_coordinate: number,
+  light_id: string;
+  x_coordinate: number;
+  y_coordinate: number;
 };
 
 function generateAllLights(): Light[] {
@@ -63,58 +63,58 @@ function generateAllLights(): Light[] {
     startCoordinate: [21.5, 0],
     spacing: SPACING,
     width: 43.5,
-    height: 96
+    height: 96,
   });
-  
+
   const supercali2 = generateLightsForOpening({
     octoName: 'supercalifragilisticexpealidigital',
     channel: 2,
     startCoordinate: [0, 0],
     spacing: SPACING,
     width: 86.5,
-    height: 127
+    height: 127,
   });
-  
+
   const bertsBrights1 = generateLightsForOpening({
     octoName: 'berts_brights',
     channel: 1,
     startCoordinate: [148.75, 0],
     spacing: SPACING,
     width: 58.5,
-    height: 140
+    height: 140,
   });
-  
+
   const bertsBrights2 = generateLightsForOpening({
     octoName: 'berts_brights',
     channel: 2,
     startCoordinate: [114.5, 0],
     spacing: SPACING,
     width: 127,
-    height: 180
+    height: 180,
   });
-  
+
   const spoonful1 = generateLightsForOpening({
     octoName: 'spoonful_of_circuit',
     channel: 1,
     startCoordinate: [294, 0],
     spacing: SPACING,
     width: 43.5,
-    height: 96
+    height: 96,
   });
-  
+
   const spoonful2 = generateLightsForOpening({
     octoName: 'spoonful_of_circuit',
     channel: 2,
     startCoordinate: [272.5, 0],
     spacing: SPACING,
     width: 86.5,
-    height: 127
+    height: 127,
   });
-  
+
   return [
-    ...supercali1, 
-    ...supercali2, 
-    ...bertsBrights1, 
+    ...supercali1,
+    ...supercali2,
+    ...bertsBrights1,
     ...bertsBrights2,
     ...spoonful1,
     ...spoonful2,

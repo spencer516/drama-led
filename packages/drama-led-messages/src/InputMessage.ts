@@ -1,5 +1,5 @@
-import {z} from 'zod';
-import {LightID, RGBValue} from './AddressTypes';
+import { z } from 'zod';
+import { LightID, RGBValue } from './AddressTypes';
 
 export const RGBColor = z.object({
   red: RGBValue,
@@ -39,7 +39,9 @@ export const StartBasicChase = z.object({
     gap: z.number().min(0).max(50).optional(),
     frequencyInSeconds: z.number().min(0).max(50).optional(),
     direction: z.enum(['forward', 'reverse']).optional(),
-    color: z.enum(['rainbow', 'white', 'red', 'green', 'blue', 'yellow']).optional(),
+    color: z
+      .enum(['rainbow', 'white', 'red', 'green', 'blue', 'yellow'])
+      .optional(),
   }),
 });
 
@@ -73,7 +75,7 @@ export const InputMessage = z.discriminatedUnion('type', [
   StartRandomSparkle,
   EmptyMessage,
   TurnAllOn,
-  TurnAllOff
+  TurnAllOff,
 ]);
 
 export type InputMessage = z.infer<typeof InputMessage>;
@@ -91,5 +93,5 @@ export function safeParseMessage(data: string): InputMessage {
     return result.data;
   }
 
-  return InputMessage.parse({type: 'EMPTY_MESSAGE'});
+  return InputMessage.parse({ type: 'EMPTY_MESSAGE' });
 }

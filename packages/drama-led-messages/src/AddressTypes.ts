@@ -1,4 +1,4 @@
-import {z} from 'zod';
+import { z } from 'zod';
 
 export const MIN_UNIVERSE = 1;
 export const MAX_UNIVERSE = 63999;
@@ -8,6 +8,7 @@ export const Universe = z
   .min(MIN_UNIVERSE)
   .max(MAX_UNIVERSE)
   .brand('Universe');
+
 export type Universe = z.infer<typeof Universe>;
 
 export const MIN_CHANNEL = 1;
@@ -18,6 +19,7 @@ export const Channel = z
   .min(MIN_CHANNEL)
   .max(MAX_CHANNEL)
   .brand('Channel');
+
 export type Channel = z.infer<typeof Channel>;
 
 export const MIN_CHANNEL_VALUE = 0;
