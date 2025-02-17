@@ -3,13 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function HeaderLink({
-  children,
-  href,
-}: Readonly<{
+type Params = Readonly<{
   children: React.ReactNode;
   href: string;
-}>) {
+}>;
+
+export default function HeaderLink({ children, href }: Params) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
