@@ -73,9 +73,7 @@ export default class GledoptoController {
       this.#connectionError = null;
       this.#sacnStatus = 'connecting';
 
-      broadcaster.broadcastPartial({
-        gledoptos: [this.status],
-      });
+      broadcaster.broadcastGledoptosStatus();
 
       await checkSACNSocket(WIFI_INTERFACE);
       const ipAddress = await getIPAddressForHost(this.#host);

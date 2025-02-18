@@ -1,5 +1,4 @@
 import Broadcaster from '../Broadcaster';
-import LEDSystem from '../LEDSystem';
 import Light from '../Light';
 import AnimatedMacroBase from './AnimatedMacroBase';
 

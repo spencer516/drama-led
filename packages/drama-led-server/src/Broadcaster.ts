@@ -34,8 +34,22 @@ export default class Broadcaster {
     return this;
   }
 
-  broadcastPartial(message: OutputMessage): this {
-    const stringifiedMessage = JSON.stringify(message);
+  broadcastGledoptosStatus(): this {
+    const stringifiedMessage = JSON.stringify({
+      gledoptos: this.#ledSystem.toGledOptoControllerStatus(),
+    });
+
+    for (const client of this.#wss.clients) {
+      client.send(stringifiedMessage);
+    }
+
+    return this;
+  }
+
+  broadcastQLabStatus(): this {
+    const stringifiedMessage = JSON.stringify({
+      qlabStatus: this.#ledSystem.toQLabReceiverStatus(),
+    });
 
     for (const client of this.#wss.clients) {
       client.send(stringifiedMessage);

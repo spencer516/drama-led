@@ -30,9 +30,7 @@ export default class QLabReceiver {
 
     try {
       this.#status = 'starting';
-      broadcaster.broadcastPartial({
-        qlabStatus: this.status,
-      });
+      broadcaster.broadcastQLabStatus();
       await this.#startImpl(messageHandler);
       this.#status = 'listening';
     } catch (err: unknown) {
