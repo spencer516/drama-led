@@ -19,6 +19,7 @@ type GledoptoControllerConfig = {
   id: string;
   host: string;
   startUniverse: number;
+  numberOfLights: number;
 };
 
 const WIFI_INTERFACE = getIPForInterface('en1');
@@ -38,7 +39,7 @@ export default class GledoptoController {
 
     this.#universe = makeUniverse(config.startUniverse);
 
-    this.#lights = range(0, 10).map((sequenceNumber) => {
+    this.#lights = range(0, config.numberOfLights).map((sequenceNumber) => {
       const makeChannelByOffset = getUniverseChannelMaker(
         this.#universe,
         sequenceNumber,
@@ -72,7 +73,6 @@ export default class GledoptoController {
       this.#connectionError = null;
       this.#sacnStatus = 'connecting';
 
-      console.log('CONNECTING!', this.status);
       broadcaster.broadcastPartial({
         gledoptos: [this.status],
       });

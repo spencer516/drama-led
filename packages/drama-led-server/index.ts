@@ -78,6 +78,7 @@ async function startup() {
     id: 'gledopto_1',
     host: 'gledopto-1-wireless.local',
     startUniverse: 1600,
+    numberOfLights: 50,
   });
 
   const qlab = new QLabReceiver({
