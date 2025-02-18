@@ -61,14 +61,14 @@ export default class MessageHandler {
         this.#currentMacro.start();
         break;
       case 'TURN_ALL_OFF':
-        this.#ledSystem.turnAllOff();
+        this.#ledSystem.turnAllOff(message.data.controllerID ?? null);
         this.#broadcaster.broadcast();
         break;
       case 'TURN_ALL_ON':
-        this.#ledSystem.turnAllOn();
+        this.#ledSystem.turnAllOn(message.data.controllerID ?? null);
         this.#broadcaster.broadcast();
         break;
-      case 'UPDATE_OCTO_CONTROLLER':
+      case 'UPDATE_CONTROLLER':
         if (message.data.isSACNEnabled) {
           await this.#ledSystem.enableSacnOutput(message.data.id);
         } else {

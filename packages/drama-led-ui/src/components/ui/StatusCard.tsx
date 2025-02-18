@@ -1,11 +1,18 @@
 type Params = Readonly<{
   children: React.ReactNode;
   actions?: React.ReactNode | null;
+  footer?: React.ReactNode | null;
   title: string;
   subtitle?: string;
 }>;
 
-export default function Card({ actions, children, title, subtitle }: Params) {
+export default function Card({
+  actions,
+  footer,
+  children,
+  title,
+  subtitle,
+}: Params) {
   return (
     <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm w-[400px] grow">
       <div className="border-b border-gray-200 bg-white px-2 py-2">
@@ -22,6 +29,7 @@ export default function Card({ actions, children, title, subtitle }: Params) {
         </div>
       </div>
       <div className="px-2 py-2">{children}</div>
+      {footer == null ? null : <div className="px-2 py-2">{footer}</div>}
     </div>
   );
 }

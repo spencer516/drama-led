@@ -61,7 +61,7 @@ export default class GledoptoController {
     return makeLightID(`${this.#id}:${sequenceNumber}`);
   }
 
-  async setupSacnSender() {
+  async setupSacnSenders() {
     try {
       this.#connectionError = null;
       await checkSACNSocket(WIFI_INTERFACE);
@@ -75,7 +75,7 @@ export default class GledoptoController {
     }
   }
 
-  stopSacnSender() {
+  stopSacnSenders() {
     if (this.#sacnSender) {
       this.#sacnSender.close();
     }
@@ -108,10 +108,12 @@ export default class GledoptoController {
   }
 
   get status(): GledoptoControllerStatus {
+    const onLights = this.#lights.filter((light) => light.isOn);
     return {
       id: this.#id,
       host: this.#host,
       numberOfLights: this.#lights.length,
+      numberOfLightsOn: onLights.length,
       isSACNEnabled: this.#sacnSender !== null,
       universe: this.#universe,
       connectionError: this.#connectionError,

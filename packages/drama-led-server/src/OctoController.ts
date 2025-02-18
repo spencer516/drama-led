@@ -171,6 +171,7 @@ export default class OctoController {
 
   get status(): OctoControllerStatus {
     const lights = this.#lights;
+    const onLights = lights.filter((light) => light.isOn);
 
     const firstLight = lights.at(0);
     const lastLight = lights.at(-1);
@@ -184,6 +185,7 @@ export default class OctoController {
       ipAddress: this.ipAddress,
       isSACNEnabled: this.#sacnSenders.size > 0,
       numberOfLights: lights.length,
+      numberOfLightsOn: onLights.length,
       connectionError: this.#connectionError,
       universeRange: [firstLight.universe, lastLight.universe],
     };

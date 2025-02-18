@@ -26,7 +26,7 @@ export default function OctoUnitCard({ octoStatus }: Params) {
           enabled={isEnabled}
           onChange={() => {
             sendMessage({
-              type: "UPDATE_OCTO_CONTROLLER",
+              type: "UPDATE_CONTROLLER",
               data: {
                 id: octoStatus.id,
                 isSACNEnabled: !isEnabled,
@@ -51,6 +51,7 @@ export default function OctoUnitCard({ octoStatus }: Params) {
         <div className="flex gap-2 items-center">
           <LightBulbIcon className="size-4 text-gray-400" />
           <dd className="text-sm/6 text-gray-900 font-mono">
+            {octoStatus.numberOfLightsOn}&nbsp;/&nbsp;
             {octoStatus.numberOfLights}
           </dd>
         </div>

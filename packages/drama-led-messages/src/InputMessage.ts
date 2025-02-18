@@ -57,16 +57,20 @@ export const StartRandomSparkle = z.object({
 
 export const TurnAllOn = z.object({
   type: z.literal('TURN_ALL_ON'),
-  data: z.object({}),
+  data: z.object({
+    controllerID: z.string().optional(),
+  }),
 });
 
 export const TurnAllOff = z.object({
   type: z.literal('TURN_ALL_OFF'),
-  data: z.object({}),
+  data: z.object({
+    controllerID: z.string().optional(),
+  }),
 });
 
 export const UpdateOctoController = z.object({
-  type: z.literal('UPDATE_OCTO_CONTROLLER'),
+  type: z.literal('UPDATE_CONTROLLER'),
   data: z.object({
     id: z.string(),
     isSACNEnabled: z.boolean(),

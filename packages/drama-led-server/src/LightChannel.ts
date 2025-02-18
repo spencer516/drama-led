@@ -32,6 +32,10 @@ export class LightChannel {
     return this.#value;
   }
 
+  get isOn(): boolean {
+    return this.#value > 0;
+  }
+
   get channel(): Channel {
     return this.#channel;
   }

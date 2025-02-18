@@ -70,45 +70,62 @@ export default class LEDSystem {
     return lightsArray.length;
   }
 
-  *getLightsIterator(): Generator<[number, Light]> {
-    let index = 0;
-    for (const [_, controller] of this.#octoControllers) {
-      for (const light of controller.lights) {
-        yield [index++, light];
+  *getLightsIterator(
+    controllerID: string | null = null,
+  ): Generator<[number, Light]> {
+    if (controllerID == null) {
+      let index = 0;
+      for (const [_, controller] of this.#octoControllers) {
+        for (const light of controller.lights) {
+          yield [index++, light];
+        }
       }
-    }
 
-    for (const [_, controller] of this.#gledOptoControllers) {
+      for (const [_, controller] of this.#gledOptoControllers) {
+        for (const light of controller.lights) {
+          yield [index++, light];
+        }
+      }
+    } else {
+      const controller = this.#getControllerById(controllerID);
+      if (controller == null) {
+        return;
+      }
+
+      let index = 0;
       for (const light of controller.lights) {
         yield [index++, light];
       }
     }
+  }
+
+  #getControllerById(
+    controllerID: string,
+  ): OctoController | GledoptoController | void {
+    return (
+      this.#octoControllers.get(controllerID) ??
+      this.#gledOptoControllers.get(controllerID)
+    );
   }
 
   async enableSacnOutput(controllerID: string): Promise<void> {
-    const controller = this.#octoControllers.get(controllerID);
+    const controller = this.#getControllerById(controllerID);
     await controller?.setupSacnSenders();
-
-    const gledOptoController = this.#gledOptoControllers.get(controllerID);
-    await gledOptoController?.setupSacnSender();
   }
 
   disableSacnOutput(controllerID: string): void {
-    const controller = this.#octoControllers.get(controllerID);
+    const controller = this.#getControllerById(controllerID);
     controller?.stopSacnSenders();
-
-    const gledOptoController = this.#gledOptoControllers.get(controllerID);
-    gledOptoController?.stopSacnSender();
   }
 
-  turnAllOff(): void {
-    for (const [_, light] of this.getLightsIterator()) {
+  turnAllOff(controllerID: string | null = null): void {
+    for (const [_, light] of this.getLightsIterator(controllerID)) {
       light.turnOff();
     }
   }
 
-  turnAllOn(): void {
-    for (const [_, light] of this.getLightsIterator()) {
+  turnAllOn(controllerID: string | null = null): void {
+    for (const [_, light] of this.getLightsIterator(controllerID)) {
       light.turnOn();
     }
   }

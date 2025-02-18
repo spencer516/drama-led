@@ -23,7 +23,7 @@ export default function GledOptoUnitCard({ gledoptoStatus }: Params) {
           enabled={isEnabled}
           onChange={() => {
             sendMessage({
-              type: "UPDATE_OCTO_CONTROLLER",
+              type: "UPDATE_CONTROLLER",
               data: {
                 id: gledoptoStatus.id,
                 isSACNEnabled: !isEnabled,
@@ -33,6 +33,40 @@ export default function GledOptoUnitCard({ gledoptoStatus }: Params) {
           disabled={false}
           label={label}
         />
+      }
+      footer={
+        isEnabled ? (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="rounded-sm bg-white px-2 py-1 text-xs font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
+              onClick={() => {
+                sendMessage({
+                  type: "TURN_ALL_ON",
+                  data: {
+                    controllerID: gledoptoStatus.id,
+                  },
+                });
+              }}
+            >
+              All On
+            </button>
+            <button
+              type="button"
+              className="rounded-sm bg-white px-2 py-1 text-xs font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
+              onClick={() => {
+                sendMessage({
+                  type: "TURN_ALL_OFF",
+                  data: {
+                    controllerID: gledoptoStatus.id,
+                  },
+                });
+              }}
+            >
+              All Off
+            </button>
+          </div>
+        ) : null
       }
     >
       <div className="flex flex-col gap-2">
@@ -45,6 +79,7 @@ export default function GledOptoUnitCard({ gledoptoStatus }: Params) {
         <div className="flex gap-2 items-center">
           <LightBulbIcon className="size-4 text-gray-400" />
           <dd className="text-sm/6 text-gray-900 font-mono">
+            {gledoptoStatus.numberOfLightsOn}&nbsp;/&nbsp;
             {gledoptoStatus.numberOfLights}
           </dd>
         </div>

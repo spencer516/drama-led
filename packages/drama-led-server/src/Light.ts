@@ -42,6 +42,12 @@ export default class Light {
     return this.#id;
   }
 
+  get isOn() {
+    return (
+      this.#redChannel.isOn || this.#greenChannel.isOn || this.#blueChannel.isOn
+    );
+  }
+
   get universe() {
     return this.#redChannel.universe;
   }
