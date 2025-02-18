@@ -6,9 +6,14 @@ import {
 } from '@spencer516/drama-led-messages/src/AddressTypes';
 import Light from './Light';
 import { checkSACNSocket, getUniverseChannelMaker, range } from './utils';
-import { getIPForInterface } from './network';
+
 import { Sender } from 'sacn';
-import { GledoptoControllerStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
+import {
+  GledoptoControllerStatus,
+  GledoptoSACNStatus,
+} from '@spencer516/drama-led-messages/src/OutputMessage';
+import { getIPForInterface, getIPAddressForHost } from './network';
+import Broadcaster from './Broadcaster';
 
 type GledoptoControllerConfig = {
   id: string;
@@ -24,6 +29,7 @@ export default class GledoptoController {
   #universe: Universe;
   #lights: Light[];
   #sacnSender: Sender | null = null;
+  #sacnStatus: GledoptoSACNStatus = 'disconnected';
   #connectionError: string | null = null;
 
   constructor(config: GledoptoControllerConfig) {
@@ -61,17 +67,29 @@ export default class GledoptoController {
     return makeLightID(`${this.#id}:${sequenceNumber}`);
   }
 
-  async setupSacnSenders() {
+  async setupSacnSenders(broadcaster: Broadcaster) {
     try {
       this.#connectionError = null;
+      this.#sacnStatus = 'connecting';
+
+      console.log('CONNECTING!', this.status);
+      broadcaster.broadcastPartial({
+        gledoptos: [this.status],
+      });
+
       await checkSACNSocket(WIFI_INTERFACE);
+      const ipAddress = await getIPAddressForHost(this.#host);
+
       this.#sacnSender = new Sender({
         universe: this.#universe,
         iface: WIFI_INTERFACE,
         reuseAddr: true,
+        useUnicastDestination: ipAddress,
       });
+      this.#sacnStatus = 'connected';
     } catch (err: unknown) {
       this.#connectionError = String(err);
+      this.#sacnStatus = 'disconnected';
     }
   }
 
@@ -81,6 +99,7 @@ export default class GledoptoController {
     }
 
     this.#sacnSender = null;
+    this.#sacnStatus = 'disconnected';
   }
 
   broadcast() {
@@ -114,7 +133,7 @@ export default class GledoptoController {
       host: this.#host,
       numberOfLights: this.#lights.length,
       numberOfLightsOn: onLights.length,
-      isSACNEnabled: this.#sacnSender !== null,
+      sacnStatus: this.#sacnStatus,
       universe: this.#universe,
       connectionError: this.#connectionError,
     };

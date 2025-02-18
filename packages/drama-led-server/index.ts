@@ -77,7 +77,7 @@ async function startup() {
   const GLED_CONTROLLER_1 = new GledoptoController({
     id: 'gledopto_1',
     host: 'gledopto-1-wireless.local',
-    startUniverse: 1,
+    startUniverse: 1600,
   });
 
   const qlab = new QLabReceiver({

@@ -70,7 +70,10 @@ export default class MessageHandler {
         break;
       case 'UPDATE_CONTROLLER':
         if (message.data.isSACNEnabled) {
-          await this.#ledSystem.enableSacnOutput(message.data.id);
+          await this.#ledSystem.enableSacnOutput(
+            message.data.id,
+            this.#broadcaster,
+          );
         } else {
           this.#ledSystem.disableSacnOutput(message.data.id);
         }

@@ -31,12 +31,20 @@ export const OctoControllerStatus = z.object({
 
 export type OctoControllerStatus = z.infer<typeof OctoControllerStatus>;
 
+export const GledoptoSACNStatus = z.enum([
+  'connecting',
+  'connected',
+  'disconnected',
+]);
+
+export type GledoptoSACNStatus = z.infer<typeof GledoptoSACNStatus>;
+
 export const GledoptoControllerStatus = z.object({
   id: z.string(),
   host: z.string(),
   numberOfLights: z.number(),
   numberOfLightsOn: z.number(),
-  isSACNEnabled: z.boolean(),
+  sacnStatus: GledoptoSACNStatus,
   connectionError: z.string().nullable(),
   universe: Universe,
 });

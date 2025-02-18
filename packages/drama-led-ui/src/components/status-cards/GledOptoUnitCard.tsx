@@ -11,8 +11,7 @@ type Params = Readonly<{
 
 export default function GledOptoUnitCard({ gledoptoStatus }: Params) {
   const sendMessage = useSendMessage();
-  const isEnabled = gledoptoStatus.isSACNEnabled;
-  const label = isEnabled ? "connected" : "disconnected";
+  const status = gledoptoStatus.sacnStatus;
 
   return (
     <Card
@@ -20,22 +19,22 @@ export default function GledOptoUnitCard({ gledoptoStatus }: Params) {
       subtitle={gledoptoStatus.id}
       actions={
         <ToggleSwitch
-          enabled={isEnabled}
-          onChange={() => {
+          enabled={status === "connected" || status === "connecting"}
+          onChange={(isSACNEnabled) => {
             sendMessage({
               type: "UPDATE_CONTROLLER",
               data: {
                 id: gledoptoStatus.id,
-                isSACNEnabled: !isEnabled,
+                isSACNEnabled,
               },
             });
           }}
-          disabled={false}
-          label={label}
+          disabled={status === "connecting"}
+          label={status}
         />
       }
       footer={
-        isEnabled ? (
+        status === "connected" ? (
           <div className="flex gap-2">
             <button
               type="button"

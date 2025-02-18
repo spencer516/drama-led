@@ -115,9 +115,12 @@ export default class LEDSystem {
     );
   }
 
-  async enableSacnOutput(controllerID: string): Promise<void> {
+  async enableSacnOutput(
+    controllerID: string,
+    broadcaster: Broadcaster,
+  ): Promise<void> {
     const controller = this.#getControllerById(controllerID);
-    await controller?.setupSacnSenders();
+    await controller?.setupSacnSenders(broadcaster);
   }
 
   disableSacnOutput(controllerID: string): void {

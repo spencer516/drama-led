@@ -13,6 +13,8 @@ import { checkSACNSocket, getUniverseChannelMaker, range } from './utils';
 import { Sender } from 'sacn';
 import { LightChannel } from './LightChannel';
 import LightMapping from './LightMapping';
+import MessageHandler from './MessageHandler';
+import Broadcaster from './Broadcaster';
 
 const IPAddress = z.string().ip({ version: 'v4' }).brand('IPAddress');
 
@@ -99,7 +101,7 @@ export default class OctoController {
     }
   }
 
-  async setupSacnSenders() {
+  async setupSacnSenders(_broadcaster: Broadcaster) {
     // We need to attempt to connect to the socket before we create
     // the new sender so we can handle errors.
     try {
