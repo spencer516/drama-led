@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { LightConfig } from './AddressTypes';
+import { LightConfig, Universe } from './AddressTypes';
 
 export const OctoControllerStatus = z.object({
   id: z.string(),
@@ -7,12 +7,20 @@ export const OctoControllerStatus = z.object({
   numberOfLights: z.number(),
   isSACNEnabled: z.boolean(),
   connectionError: z.string().nullable(),
+  universeRange: z.tuple([Universe, Universe]),
 });
 
 export type OctoControllerStatus = z.infer<typeof OctoControllerStatus>;
 
+export const MainServerStatus = z.object({
+  sacnIPAddress: z.string().nullable(),
+});
+
+export type MainServerStatus = z.infer<typeof MainServerStatus>;
+
 export const System = z.object({
   octos: z.array(OctoControllerStatus),
+  mainServer: MainServerStatus,
 });
 
 export const LEDServerData = z.object({

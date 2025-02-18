@@ -15,6 +15,7 @@ export default function OctoUnitCard({ octoStatus }: Params) {
   const sendMessage = useSendMessage();
   const isEnabled = octoStatus.isSACNEnabled;
   const label = isEnabled ? "Connected" : "Disconnected";
+  const [startUniverse, endUniverse] = octoStatus.universeRange;
 
   return (
     <Card
@@ -41,7 +42,10 @@ export default function OctoUnitCard({ octoStatus }: Params) {
         <div className="flex gap-2 items-center">
           <GlobeAltIcon className="size-4 text-gray-400" />
           <dd className="text-sm/6 text-gray-900 font-mono">
-            {octoStatus.ipAddress}
+            {octoStatus.ipAddress}&nbsp;
+            {startUniverse === endUniverse
+              ? `(${startUniverse})`
+              : `(${startUniverse}-${endUniverse})`}
           </dd>
         </div>
         <div className="flex gap-2 items-center">

@@ -2,7 +2,7 @@ import HeaderLink from "@/components/ui/HeaderLink";
 import type { Metadata } from "next";
 import { Nunito, Roboto_Mono } from "next/font/google";
 import "tailwindcss/tailwind.css";
-import { CubeTransparentIcon } from "@heroicons/react/16/solid";
+import { CubeTransparentIcon } from "@heroicons/react/24/outline";
 import { LEDServerContextProvider } from "@/utils/LEDServerContext";
 
 const nunitoSans = Nunito({

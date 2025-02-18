@@ -2,11 +2,9 @@ import { WebSocketServer } from 'ws';
 import Broadcaster from './src/Broadcaster';
 import MessageHandler from './src/MessageHandler';
 import OctoController from './src/OctoController';
-import LEDSystem from './src/LEDSystem';
+import LEDSystem, { SACN_NETWORK_INTERFACE } from './src/LEDSystem';
 import LightMapping from './src/LightMapping';
 import QLabReceiver from './src/QLabReceiver';
-
-const SACN_NETWORK_INTERFACE = '192.168.1.199';
 
 async function startup() {
   const lightMapping = new LightMapping('FullSystemGenerated.csv');

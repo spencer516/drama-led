@@ -45,6 +45,9 @@ export default class Broadcaster {
       lights,
       system: {
         octos,
+        mainServer: {
+          sacnIPAddress: this.#ledSystem.getNetworkInterface(),
+        },
       },
     });
 

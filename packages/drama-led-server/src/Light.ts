@@ -42,6 +42,10 @@ export default class Light {
     return this.#id;
   }
 
+  get universe() {
+    return this.#redChannel.universe;
+  }
+
   static getLightByID(id: LightID): Light {
     const light = LIGHT_STORE.get(id);
 

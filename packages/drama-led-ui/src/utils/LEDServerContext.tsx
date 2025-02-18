@@ -26,6 +26,9 @@ const DEFAULT_SERVER_CONTENT = LEDServerData.parse({
   lights: [],
   system: {
     octos: [],
+    mainServer: {
+      sacnIPAddress: null,
+    },
   },
 });
 

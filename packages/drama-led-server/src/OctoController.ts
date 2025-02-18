@@ -48,7 +48,6 @@ function getUniverseChannelMaker(
     const sequenceInUniverse = sequenceNumber % LIGHTS_PER_UNIVERSE;
 
     const channel = sequenceInUniverse * 3 + offset + 1;
-
     return [makeUniverse(universe), makeChannel(channel)];
   };
 }
@@ -210,12 +209,22 @@ export default class OctoController {
   }
 
   get status(): OctoControllerStatus {
+    const lights = this.#lights;
+
+    const firstLight = lights.at(0);
+    const lastLight = lights.at(-1);
+
+    if (firstLight == null || lastLight == null) {
+      throw new Error('Could not find first or last light');
+    }
+
     return {
       id: this.id,
       ipAddress: this.ipAddress,
       isSACNEnabled: this.#sacnSenders.size > 0,
-      numberOfLights: this.#lights.length,
+      numberOfLights: lights.length,
       connectionError: this.#connectionError,
+      universeRange: [firstLight.universe, lastLight.universe],
     };
   }
 

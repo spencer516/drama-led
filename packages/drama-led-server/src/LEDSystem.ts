@@ -3,6 +3,8 @@ import OctoController from './OctoController';
 import Light from './Light';
 import { OctoControllerStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 
+export const SACN_NETWORK_INTERFACE = '192.168.1.199';
+
 export default class LEDSystem {
   #octoControllers: Map<string, OctoController>;
 
@@ -20,6 +22,10 @@ export default class LEDSystem {
     for (const controller of this.#octoControllers.values()) {
       controller.broadcast();
     }
+  }
+
+  getNetworkInterface(): string {
+    return SACN_NETWORK_INTERFACE;
   }
 
   toLightConfigs(): LightConfig[] {
