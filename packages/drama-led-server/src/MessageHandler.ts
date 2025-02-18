@@ -54,9 +54,8 @@ export default class MessageHandler {
         this.#currentMacro.start();
         break;
       case 'START_RANDOM_SPARKLE':
-        this.#currentMacro = new RandomSparkle(
-          this.#broadcaster,
-          this.#ledSystem,
+        this.#currentMacro = new RandomSparkle(this.#broadcaster, () =>
+          this.#ledSystem.getLightsIterator(message.data.controllerID ?? null),
         );
         this.#currentMacro.start();
         break;

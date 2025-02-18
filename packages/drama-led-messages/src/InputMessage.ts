@@ -59,7 +59,9 @@ export const StartRadialChase = z.object({
 
 export const StartRandomSparkle = z.object({
   type: z.literal('START_RANDOM_SPARKLE'),
-  data: z.object({}),
+  data: z.object({
+    controllerID: z.string().optional(),
+  }),
 });
 
 export const TurnAllOn = z.object({

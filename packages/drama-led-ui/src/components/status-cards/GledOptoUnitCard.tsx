@@ -41,7 +41,7 @@ export default function GledOptoUnitCard({ gledoptoStatus }: Params) {
               className="rounded-sm bg-white px-2 py-1 text-xs font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
               onClick={() => {
                 sendMessage({
-                  type: "TURN_ALL_ON",
+                  type: "START_RANDOM_SPARKLE",
                   data: {
                     controllerID: gledoptoStatus.id,
                   },

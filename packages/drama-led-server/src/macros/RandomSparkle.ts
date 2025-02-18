@@ -1,18 +1,22 @@
 import Broadcaster from '../Broadcaster';
 import LEDSystem from '../LEDSystem';
+import Light from '../Light';
 import AnimatedMacroBase from './AnimatedMacroBase';
 
 export default class RandomSparkle extends AnimatedMacroBase {
-  #ledSystem: LEDSystem;
+  #getLightsIterator: () => Iterable<[number, Light]>;
 
-  constructor(broadcaster: Broadcaster, ledSystem: LEDSystem) {
+  constructor(
+    broadcaster: Broadcaster,
+    getLightsIterator: () => Iterable<[number, Light]>,
+  ) {
     super(broadcaster);
-    this.#ledSystem = ledSystem;
-    this.setFPS(10);
+    this.#getLightsIterator = getLightsIterator;
+    this.setFPS(20);
   }
 
   tick() {
-    for (const [_, light] of this.#ledSystem.getLightsIterator()) {
+    for (const [, light] of this.#getLightsIterator()) {
       if (Math.random() > 0.8) {
         light.turnOn();
       } else {
@@ -24,7 +28,9 @@ export default class RandomSparkle extends AnimatedMacroBase {
   }
 
   onStop() {
-    this.#ledSystem.turnAllOff();
+    for (const [, light] of this.#getLightsIterator()) {
+      light.turnOff();
+    }
     this.broadcast();
   }
 }
