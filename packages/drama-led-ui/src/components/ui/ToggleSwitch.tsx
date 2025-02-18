@@ -34,11 +34,11 @@ export default function ToggleSwitch({
         />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute mx-auto h-4 w-9 rounded-full bg-gray-200 transition-colors duration-200 ease-in-out group-data-[checked]:bg-green-600"
+          className="pointer-events-none absolute mx-auto h-4 w-9 rounded-full bg-gray-200 transition-colors duration-200 ease-in-out group-data-[checked]:bg-green-600 group-data-[disabled]:bg-orange-300"
         />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute left-0 inline-block size-5 transform rounded-full border border-gray-200 bg-white ring-0 shadow-sm transition-transform duration-200 ease-in-out group-data-[checked]:translate-x-5 group-data-[disabled]:bg-gray-100"
+          className="pointer-events-none absolute left-0 inline-block size-5 transform rounded-full border border-gray-200 bg-white ring-0 shadow-sm transition-transform duration-200 ease-in-out group-data-[checked]:translate-x-5"
         />
       </Switch>
     </Field>

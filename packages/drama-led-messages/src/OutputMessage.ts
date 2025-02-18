@@ -1,6 +1,24 @@
 import { z } from 'zod';
 import { LightConfig, Universe } from './AddressTypes';
 
+export const QLabReceiverConnectionStatus = z.enum([
+  'starting',
+  'listening',
+  'stopped',
+]);
+
+export type QLabReceiverConnectionStatus = z.infer<
+  typeof QLabReceiverConnectionStatus
+>;
+
+export const QLabReceiverStatus = z.object({
+  port: z.number(),
+  status: QLabReceiverConnectionStatus,
+  connectionError: z.string().nullable(),
+});
+
+export type QLabReceiverStatus = z.infer<typeof QLabReceiverStatus>;
+
 export const OctoControllerStatus = z.object({
   id: z.string(),
   ipAddress: z.string(),
@@ -31,15 +49,12 @@ export const MainServerStatus = z.object({
 
 export type MainServerStatus = z.infer<typeof MainServerStatus>;
 
-export const System = z.object({
+export const LEDServerData = z.object({
+  lights: z.array(LightConfig),
   octos: z.array(OctoControllerStatus),
   gledoptos: z.array(GledoptoControllerStatus),
   mainServer: MainServerStatus,
-});
-
-export const LEDServerData = z.object({
-  lights: z.array(LightConfig),
-  system: System,
+  qlabStatus: QLabReceiverStatus,
 });
 
 export type LEDServerData = z.infer<typeof LEDServerData>;

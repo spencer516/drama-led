@@ -13,6 +13,13 @@ export const EmptyMessage = z.object({
   type: z.literal('EMPTY_MESSAGE'),
 });
 
+export const UpdateQLabReceiver = z.object({
+  type: z.literal('UPDATE_QLAB_RECEIVER'),
+  data: z.object({
+    isEnabled: z.boolean(),
+  }),
+});
+
 export const UpdateLightByID = z.object({
   type: z.literal('UPDATE_LIGHT_BY_ID'),
   data: z.object({
@@ -89,6 +96,7 @@ export const InputMessage = z.discriminatedUnion('type', [
   TurnAllOn,
   TurnAllOff,
   UpdateOctoController,
+  UpdateQLabReceiver,
 ]);
 
 export type InputMessage = z.infer<typeof InputMessage>;

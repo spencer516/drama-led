@@ -76,6 +76,14 @@ export default class MessageHandler {
         }
         this.#broadcaster.broadcast();
         break;
+      case 'UPDATE_QLAB_RECEIVER':
+        if (message.data.isEnabled) {
+          await this.#ledSystem.startQLabReceiver(this, this.#broadcaster);
+        } else {
+          this.#ledSystem.stopQLabReceiver();
+        }
+        this.#broadcaster.broadcast();
+        break;
       case 'UPDATE_ALL_LIGHTS':
         // TODO
         break;

@@ -8,8 +8,7 @@ import { useLatestMessage } from "@/utils/LEDServerContext";
 type Params = Readonly<{}>;
 
 export default function MainServerCard({}: Params) {
-  const { system } = useLatestMessage();
-  const mainServer = system.mainServer;
+  const { mainServer } = useLatestMessage();
 
   return (
     <Card

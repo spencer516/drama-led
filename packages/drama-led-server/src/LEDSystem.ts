@@ -4,21 +4,28 @@ import Light from './Light';
 import {
   GledoptoControllerStatus,
   OctoControllerStatus,
+  QLabReceiverStatus,
 } from '@spencer516/drama-led-messages/src/OutputMessage';
 import GledoptoController from './GledoptoController';
+import QLabReceiver from './QLabReceiver';
+import MessageHandler from './MessageHandler';
+import Broadcaster from './Broadcaster';
 
 export const SACN_NETWORK_INTERFACE = '192.168.1.199';
 
 export default class LEDSystem {
   #octoControllers: Map<string, OctoController>;
   #gledOptoControllers: Map<string, GledoptoController>;
+  #qlabReceiver: QLabReceiver;
 
   constructor(
+    qlabReceiver: QLabReceiver,
     octoControllers: OctoController[],
     gledOptoControllers: GledoptoController[],
   ) {
     this.#octoControllers = new Map();
     this.#gledOptoControllers = new Map();
+    this.#qlabReceiver = qlabReceiver;
 
     for (const octoController of octoControllers) {
       this.#octoControllers.set(octoController.id, octoController);
@@ -128,5 +135,20 @@ export default class LEDSystem {
     for (const [_, light] of this.getLightsIterator(controllerID)) {
       light.turnOn();
     }
+  }
+
+  async startQLabReceiver(
+    messageHandler: MessageHandler,
+    broadcaster: Broadcaster,
+  ): Promise<void> {
+    await this.#qlabReceiver.start(messageHandler, broadcaster);
+  }
+
+  stopQLabReceiver(): void {
+    this.#qlabReceiver.stop();
+  }
+
+  toQLabReceiverStatus(): QLabReceiverStatus {
+    return this.#qlabReceiver.status;
   }
 }

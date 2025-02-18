@@ -14,7 +14,7 @@ type Params = Readonly<{
 export default function OctoUnitCard({ octoStatus }: Params) {
   const sendMessage = useSendMessage();
   const isEnabled = octoStatus.isSACNEnabled;
-  const label = isEnabled ? "Connected" : "Disconnected";
+  const label = isEnabled ? "connected" : "disconnected";
   const [startUniverse, endUniverse] = octoStatus.universeRange;
 
   return (

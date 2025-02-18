@@ -12,7 +12,7 @@ type Params = Readonly<{
 export default function GledOptoUnitCard({ gledoptoStatus }: Params) {
   const sendMessage = useSendMessage();
   const isEnabled = gledoptoStatus.isSACNEnabled;
-  const label = isEnabled ? "Connected" : "Disconnected";
+  const label = isEnabled ? "connected" : "disconnected";
 
   return (
     <Card

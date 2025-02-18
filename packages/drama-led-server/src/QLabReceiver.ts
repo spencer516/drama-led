@@ -1,50 +1,72 @@
 import { createSocket, Socket } from 'dgram';
 import MessageHandler from './MessageHandler';
+import {
+  QLabReceiverConnectionStatus,
+  QLabReceiverStatus,
+} from '@spencer516/drama-led-messages/src/OutputMessage';
+import Broadcaster from './Broadcaster';
 
 type Props = {
   port: number;
-  messageHandler: MessageHandler;
 };
 
 export default class QLabReceiver {
-  #socket: Socket;
+  #socket: Socket | null = null;
   #port: number;
-  #messageHandler: MessageHandler;
+  #status: QLabReceiverConnectionStatus = 'stopped';
+  #connectionError: string | null = null;
 
-  constructor({ port, messageHandler }: Props) {
-    this.#socket = createSocket('udp4');
+  constructor({ port }: Props) {
     this.#port = port;
-    this.#messageHandler = messageHandler;
   }
 
-  async start(): Promise<void> {
+  async start(
+    messageHandler: MessageHandler,
+    broadcaster: Broadcaster,
+  ): Promise<void> {
+    if (this.#socket != null) {
+      return;
+    }
+
+    try {
+      this.#status = 'starting';
+      broadcaster.broadcastPartial({
+        qlabStatus: this.status,
+      });
+      await this.#startImpl(messageHandler);
+      this.#status = 'listening';
+    } catch (err: unknown) {
+      this.#connectionError = String(err);
+      this.#status = 'stopped';
+    }
+  }
+
+  #startImpl(messageHandler: MessageHandler): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.#socket.on('listening', () => {
-        const address = this.#socket.address();
-        console.log(`server listening ${address.address}:${address.port}`);
-        resolve();
+      const socket = (this.#socket = createSocket('udp4'));
+
+      socket.on('listening', resolve);
+      socket.on('error', reject);
+
+      socket.on('message', (msg) => {
+        messageHandler.onMessage(msg.toString());
       });
 
-      // Timeout and emit error if no start event
-      this.#socket.on('error', (err) => {
-        console.error('Error starting UDP socket', err);
-        reject(err);
-      });
-
-      this.#socket.on('message', (msg) => {
-        this.handleMessage(msg);
-      });
-
-      this.#socket.bind(this.#port);
+      socket.bind(this.#port);
     });
   }
 
   stop() {
-    console.log('Closing UDP socket');
-    this.#socket.close();
+    this.#socket?.close();
+    this.#socket = null;
+    this.#status = 'stopped';
   }
 
-  handleMessage(message: Buffer<ArrayBufferLike>) {
-    this.#messageHandler.onMessage(message.toString());
+  get status(): QLabReceiverStatus {
+    return {
+      port: this.#port,
+      status: this.#status,
+      connectionError: this.#connectionError,
+    };
   }
 }

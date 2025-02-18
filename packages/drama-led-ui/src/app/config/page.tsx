@@ -7,7 +7,7 @@ import QLabReceiverCard from "@/components/status-cards/QLabReceiverCard";
 import { useLatestMessage } from "@/utils/LEDServerContext";
 
 export default function ConfigPage() {
-  const { system } = useLatestMessage();
+  const system = useLatestMessage();
 
   return (
     <div className="flex flex-wrap gap-4 m-4">
@@ -24,7 +24,7 @@ export default function ConfigPage() {
           gledoptoStatus={gledopto}
         />
       ))}
-      <QLabReceiverCard />
+      <QLabReceiverCard qlabReceiverStatus={system.qlabStatus} />
     </div>
   );
 }

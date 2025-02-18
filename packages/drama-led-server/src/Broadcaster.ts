@@ -34,6 +34,16 @@ export default class Broadcaster {
     return this;
   }
 
+  broadcastPartial(message: OutputMessage): this {
+    const stringifiedMessage = JSON.stringify(message);
+
+    for (const client of this.#wss.clients) {
+      client.send(stringifiedMessage);
+    }
+
+    return this;
+  }
+
   /**
    * Send a message to all clients about the update.
    */
@@ -44,13 +54,12 @@ export default class Broadcaster {
 
     const message = OutputMessage.parse({
       lights,
-      system: {
-        octos,
-        gledoptos,
-        mainServer: {
-          sacnIPAddress: this.#ledSystem.getNetworkInterface(),
-        },
+      octos,
+      gledoptos,
+      mainServer: {
+        sacnIPAddress: this.#ledSystem.getNetworkInterface(),
       },
+      qlabStatus: this.#ledSystem.toQLabReceiverStatus(),
     });
 
     const stringifiedMessage = JSON.stringify(message);

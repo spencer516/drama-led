@@ -80,7 +80,12 @@ async function startup() {
     startUniverse: 1,
   });
 
+  const qlab = new QLabReceiver({
+    port: 53001,
+  });
+
   const system = new LEDSystem(
+    qlab,
     [
       CONTROLLER_SUPERCALI_1,
       CONTROLLER_SUPERCALI_2,
@@ -95,13 +100,6 @@ async function startup() {
   const broadcaster = new Broadcaster(wss, system);
 
   const messageHandler = new MessageHandler(wss, broadcaster, system);
-
-  const qlab = new QLabReceiver({
-    port: 53001,
-    messageHandler,
-  });
-
-  await qlab.start();
 
   wss.on('connection', function connection(ws) {
     console.log('connected!');
