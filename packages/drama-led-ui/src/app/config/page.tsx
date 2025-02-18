@@ -18,8 +18,12 @@ export default function ConfigPage() {
           octoStatus={octo}
         />
       ))}
-      <GledOptoUnitCard title="GledOpto Unit 1" />
-      <GledOptoUnitCard title="GledOpto Unit 2" />
+      {system.gledoptos.map((gledopto) => (
+        <GledOptoUnitCard
+          key={gledopto.id}
+          gledoptoStatus={gledopto}
+        />
+      ))}
       <QLabReceiverCard />
     </div>
   );

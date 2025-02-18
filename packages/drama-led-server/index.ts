@@ -5,6 +5,7 @@ import OctoController from './src/OctoController';
 import LEDSystem, { SACN_NETWORK_INTERFACE } from './src/LEDSystem';
 import LightMapping from './src/LightMapping';
 import QLabReceiver from './src/QLabReceiver';
+import GledoptoController from './src/GledoptoController';
 
 async function startup() {
   const lightMapping = new LightMapping('FullSystemGenerated.csv');
@@ -73,14 +74,23 @@ async function startup() {
     lightMapping,
   });
 
-  const system = new LEDSystem([
-    CONTROLLER_SUPERCALI_1,
-    CONTROLLER_SUPERCALI_2,
-    CONTROLLER_BERTS_BRIGHTS_1,
-    CONTROLLER_BERTS_BRIGHTS_2,
-    CONTROLLER_SPOONFUL_1,
-    CONTROLLER_SPOONFUL_2,
-  ]);
+  const GLED_CONTROLLER_1 = new GledoptoController({
+    id: 'gledopto_1',
+    host: 'gledopto-1-wireless.local',
+    startUniverse: 1,
+  });
+
+  const system = new LEDSystem(
+    [
+      CONTROLLER_SUPERCALI_1,
+      CONTROLLER_SUPERCALI_2,
+      CONTROLLER_BERTS_BRIGHTS_1,
+      CONTROLLER_BERTS_BRIGHTS_2,
+      CONTROLLER_SPOONFUL_1,
+      CONTROLLER_SPOONFUL_2,
+    ],
+    [GLED_CONTROLLER_1],
+  );
 
   const broadcaster = new Broadcaster(wss, system);
 

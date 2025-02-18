@@ -12,6 +12,17 @@ export const OctoControllerStatus = z.object({
 
 export type OctoControllerStatus = z.infer<typeof OctoControllerStatus>;
 
+export const GledoptoControllerStatus = z.object({
+  id: z.string(),
+  host: z.string(),
+  numberOfLights: z.number(),
+  isSACNEnabled: z.boolean(),
+  connectionError: z.string().nullable(),
+  universe: Universe,
+});
+
+export type GledoptoControllerStatus = z.infer<typeof GledoptoControllerStatus>;
+
 export const MainServerStatus = z.object({
   sacnIPAddress: z.string().nullable(),
 });
@@ -20,6 +31,7 @@ export type MainServerStatus = z.infer<typeof MainServerStatus>;
 
 export const System = z.object({
   octos: z.array(OctoControllerStatus),
+  gledoptos: z.array(GledoptoControllerStatus),
   mainServer: MainServerStatus,
 });
 

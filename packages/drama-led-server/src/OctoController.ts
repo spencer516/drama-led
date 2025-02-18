@@ -1,28 +1,22 @@
 import {
   Address,
-  Channel,
   LightConfig,
   LightID,
-  makeChannel,
   makeLightID,
   makeUniverse,
   Universe,
-  UniverseChannel,
 } from '@spencer516/drama-led-messages/src/AddressTypes';
 import { OctoControllerStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 import { z } from 'zod';
 import Light from './Light';
-import { range } from './utils';
+import { checkSACNSocket, getUniverseChannelMaker, range } from './utils';
 import { Sender } from 'sacn';
 import { LightChannel } from './LightChannel';
 import LightMapping from './LightMapping';
-import { createSocket } from 'dgram';
 
 const IPAddress = z.string().ip({ version: 'v4' }).brand('IPAddress');
 
 const MaxLights = z.number().min(0).max(680);
-
-const LIGHTS_PER_UNIVERSE = Math.floor(512 / 3);
 
 type OutputNumber = '1' | '2';
 
@@ -31,42 +25,10 @@ type OctoConfig = {
   ipAddress: string;
   outputNumber: OutputNumber;
   startUniverse: number;
-  dmxStartAddress?: number;
   numberOfLights: number; // Max 680
   lightMapping: LightMapping;
   sacnNetworkInterface: string;
 };
-
-function getUniverseChannelMaker(
-  startUniverse: Universe,
-  dmxStartAddress: Channel,
-  sequenceNumber: number,
-): (offset: number) => UniverseChannel {
-  return (offset) => {
-    const universeOffset = Math.floor(sequenceNumber / LIGHTS_PER_UNIVERSE);
-    const universe = startUniverse + universeOffset;
-    const sequenceInUniverse = sequenceNumber % LIGHTS_PER_UNIVERSE;
-
-    const channel = sequenceInUniverse * 3 + offset + 1;
-    return [makeUniverse(universe), makeChannel(channel)];
-  };
-}
-
-function checkSocket(iface: string): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    const socket = createSocket({ type: 'udp4', reuseAddr: true });
-    socket.bind(5568, () => {
-      try {
-        socket.setMulticastInterface(iface);
-        resolve(true);
-      } catch (err) {
-        reject(err);
-      } finally {
-        socket.close();
-      }
-    });
-  });
-}
 
 export default class OctoController {
   #id: string;
@@ -83,7 +45,6 @@ export default class OctoController {
     ipAddress,
     outputNumber,
     startUniverse,
-    dmxStartAddress,
     numberOfLights,
     lightMapping,
     sacnNetworkInterface,
@@ -94,14 +55,11 @@ export default class OctoController {
     this.#sacnNetworkInterface = IPAddress.parse(sacnNetworkInterface);
 
     const universe = makeUniverse(startUniverse);
-    const startAddress =
-      dmxStartAddress == null ? makeChannel(1) : makeChannel(dmxStartAddress);
 
     this.#lights = range(0, MaxLights.parse(numberOfLights)).map(
       (sequenceNumber) => {
         const makeChannelByOffset = getUniverseChannelMaker(
           universe,
-          startAddress,
           sequenceNumber,
         );
 
@@ -146,7 +104,7 @@ export default class OctoController {
     // the new sender so we can handle errors.
     try {
       this.#connectionError = null;
-      await checkSocket(this.#sacnNetworkInterface);
+      await checkSACNSocket(this.#sacnNetworkInterface);
 
       for (const universe of this.#universes.keys()) {
         this.#sacnSenders.set(
@@ -164,17 +122,20 @@ export default class OctoController {
   }
 
   stopSacnSenders() {
+    for (const sender of this.#sacnSenders.values()) {
+      sender.close();
+    }
+
     this.#sacnSenders = new Map();
   }
 
   broadcast() {
     for (const [universe, lightChannels] of this.#universes) {
-      const payload = lightChannels.reduce<{
-        [channel: string]: number;
-      }>((acc, lightChannel) => {
-        acc[lightChannel.channel] = lightChannel.value;
-        return acc;
-      }, {});
+      const payload: { [channel: string]: number } = {};
+
+      for (const { channel, value } of lightChannels) {
+        payload[channel] = value;
+      }
 
       const sender = this.#sacnSenders.get(universe);
 

@@ -40,11 +40,13 @@ export default class Broadcaster {
   broadcast(client?: WebSocket): this {
     const lights = this.#ledSystem.toLightConfigs();
     const octos = this.#ledSystem.toOctoControllerStatus();
+    const gledoptos = this.#ledSystem.toGledOptoControllerStatus();
 
     const message = OutputMessage.parse({
       lights,
       system: {
         octos,
+        gledoptos,
         mainServer: {
           sacnIPAddress: this.#ledSystem.getNetworkInterface(),
         },
