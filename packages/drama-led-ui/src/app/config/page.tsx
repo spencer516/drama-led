@@ -7,14 +7,17 @@ import QLabReceiverCard from "@/components/status-cards/QLabReceiverCard";
 import { useLatestMessage } from "@/utils/LEDServerContext";
 
 export default function ConfigPage() {
-  const latestMessage = useLatestMessage();
+  const { system } = useLatestMessage();
 
   return (
     <div className="flex flex-wrap gap-4 m-4">
       <MainServerCard />
-      <OctoUnitCard title="Octo Unit 1" />
-      <OctoUnitCard title="Octo Unit 2" />
-      <OctoUnitCard title="Octo Unit 3" />
+      {system.octos.map((octo) => (
+        <OctoUnitCard
+          key={octo.id}
+          octoStatus={octo}
+        />
+      ))}
       <GledOptoUnitCard title="GledOpto Unit 1" />
       <GledOptoUnitCard title="GledOpto Unit 2" />
       <QLabReceiverCard />

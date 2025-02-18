@@ -16,6 +16,7 @@ import { range } from './utils';
 import { Sender } from 'sacn';
 import { LightChannel } from './LightChannel';
 import LightMapping from './LightMapping';
+import { createSocket } from 'dgram';
 
 const IPAddress = z.string().ip({ version: 'v4' }).brand('IPAddress');
 
@@ -52,6 +53,22 @@ function getUniverseChannelMaker(
   };
 }
 
+function checkSocket(iface: string): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    const socket = createSocket({ type: 'udp4', reuseAddr: true });
+    socket.bind(5568, () => {
+      try {
+        socket.setMulticastInterface(iface);
+        resolve(true);
+      } catch (err) {
+        reject(err);
+      } finally {
+        socket.close();
+      }
+    });
+  });
+}
+
 export default class OctoController {
   #id: string;
   #ipAddress: z.infer<typeof IPAddress>;
@@ -60,6 +77,7 @@ export default class OctoController {
   #universes: Map<Universe, LightChannel[]> = new Map();
   #sacnSenders: Map<Universe, Sender> = new Map();
   #sacnNetworkInterface: string;
+  #connectionError: string | null = null;
 
   constructor({
     id,
@@ -124,16 +142,25 @@ export default class OctoController {
     }
   }
 
-  setupSacnSenders() {
-    for (const universe of this.#universes.keys()) {
-      this.#sacnSenders.set(
-        universe,
-        new Sender({
-          universe: universe,
-          iface: this.#sacnNetworkInterface,
-          reuseAddr: true,
-        }),
-      );
+  async setupSacnSenders() {
+    // We need to attempt to connect to the socket before we create
+    // the new sender so we can handle errors.
+    try {
+      this.#connectionError = null;
+      await checkSocket(this.#sacnNetworkInterface);
+
+      for (const universe of this.#universes.keys()) {
+        this.#sacnSenders.set(
+          universe,
+          new Sender({
+            universe: universe,
+            iface: this.#sacnNetworkInterface,
+            reuseAddr: true,
+          }),
+        );
+      }
+    } catch (err: unknown) {
+      this.#connectionError = String(err);
     }
   }
 
@@ -188,6 +215,7 @@ export default class OctoController {
       ipAddress: this.ipAddress,
       isSACNEnabled: this.#sacnSenders.size > 0,
       numberOfLights: this.#lights.length,
+      connectionError: this.#connectionError,
     };
   }
 

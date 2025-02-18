@@ -52,9 +52,9 @@ export default class LEDSystem {
     }
   }
 
-  enableSacnOutput(controllerID: string): void {
+  async enableSacnOutput(controllerID: string): Promise<void> {
     const controller = this.#octoControllers.get(controllerID);
-    controller?.setupSacnSenders();
+    await controller?.setupSacnSenders();
   }
 
   disableSacnOutput(controllerID: string): void {

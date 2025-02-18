@@ -27,7 +27,7 @@ export default class MessageHandler {
     this.#ledSystem = ledSystem;
   }
 
-  onMessage(data: string) {
+  async onMessage(data: string) {
     const message = parseMessage(data);
 
     this.#currentMacro?.stop();
@@ -69,8 +69,8 @@ export default class MessageHandler {
         this.#broadcaster.broadcast();
         break;
       case 'UPDATE_OCTO_CONTROLLER':
-        if (message.data.isEnabled) {
-          this.#ledSystem.enableSacnOutput(message.data.id);
+        if (message.data.isSACNEnabled) {
+          await this.#ledSystem.enableSacnOutput(message.data.id);
         } else {
           this.#ledSystem.disableSacnOutput(message.data.id);
         }

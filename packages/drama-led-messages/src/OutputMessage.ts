@@ -6,6 +6,7 @@ export const OctoControllerStatus = z.object({
   ipAddress: z.string(),
   numberOfLights: z.number(),
   isSACNEnabled: z.boolean(),
+  connectionError: z.string().nullable(),
 });
 
 export type OctoControllerStatus = z.infer<typeof OctoControllerStatus>;

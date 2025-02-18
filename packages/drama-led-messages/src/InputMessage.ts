@@ -69,7 +69,7 @@ export const UpdateOctoController = z.object({
   type: z.literal('UPDATE_OCTO_CONTROLLER'),
   data: z.object({
     id: z.string(),
-    isEnabled: z.boolean(),
+    isSACNEnabled: z.boolean(),
   }),
 });
 
