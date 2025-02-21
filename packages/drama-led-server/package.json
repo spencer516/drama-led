@@ -36,5 +36,9 @@
   },
   "workspaces": {
     "nohoist": []
+  },
+  "dependencies": {
+    "@types/d3-timer": "^3.0.2",
+    "d3-timer": "^3.0.1"
   }
 }

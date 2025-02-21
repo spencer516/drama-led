@@ -12,17 +12,11 @@ import RadialChase from './macros/RadialChase';
 import RandomSparkle from './macros/RandomSparkle';
 
 export default class MessageHandler {
-  #wss: WebSocketServer;
   #broadcaster: Broadcaster;
   #ledSystem: LEDSystem;
   #currentMacro: MacroBase | null = null;
 
-  constructor(
-    wss: WebSocketServer,
-    broadcaster: Broadcaster,
-    ledSystem: LEDSystem,
-  ) {
-    this.#wss = wss;
+  constructor(broadcaster: Broadcaster, ledSystem: LEDSystem) {
     this.#broadcaster = broadcaster;
     this.#ledSystem = ledSystem;
   }
@@ -31,8 +25,6 @@ export default class MessageHandler {
     const message = parseMessage(data);
 
     this.#currentMacro?.stop();
-
-    console.log('Received message:', message.type);
 
     switch (message.type) {
       case 'UPDATE_LIGHT_BY_ID':

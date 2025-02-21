@@ -6,6 +6,7 @@ import LEDSystem, { SACN_NETWORK_INTERFACE } from './src/LEDSystem';
 import LightMapping from './src/LightMapping';
 import QLabReceiver from './src/QLabReceiver';
 import GledoptoController from './src/GledoptoController';
+import Animator, { ONE_SECOND } from './src/Animator';
 
 async function startup() {
   const lightMapping = new LightMapping('FullSystemGenerated.csv');
@@ -100,7 +101,7 @@ async function startup() {
 
   const broadcaster = new Broadcaster(wss, system);
 
-  const messageHandler = new MessageHandler(wss, broadcaster, system);
+  const messageHandler = new MessageHandler(broadcaster, system);
 
   wss.on('connection', function connection(ws) {
     console.log('connected!');
