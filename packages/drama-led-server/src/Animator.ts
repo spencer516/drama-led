@@ -53,13 +53,14 @@ export default class Animator extends EventEmitter {
   }
 
   loop(
-    tickCallback: (timeElapsed: number) => void,
+    tickCallback: (timeElapsed: number, frameNumber: number) => void,
     maxFPS: number,
   ): () => void {
     this.startIfNotRunning();
 
     let start: number | null = null;
     let lastFrameTime: number | null = null;
+    let frameNumber = 0;
 
     const callback = (currentTime: number) => {
       if (start == null) {
@@ -68,13 +69,13 @@ export default class Animator extends EventEmitter {
 
       if (lastFrameTime == null) {
         lastFrameTime = currentTime;
-        tickCallback(0);
+        tickCallback(0, ++frameNumber);
         return;
       }
 
       if (currentTime - lastFrameTime > ONE_SECOND / maxFPS) {
         const timeElapsed = currentTime - start;
-        tickCallback(timeElapsed);
+        tickCallback(timeElapsed, ++frameNumber);
         lastFrameTime = currentTime;
       }
     };

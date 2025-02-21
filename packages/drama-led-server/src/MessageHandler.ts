@@ -10,11 +10,13 @@ import BasicChase from './macros/BasicChase';
 import LEDSystem from './LEDSystem';
 import RadialChase from './macros/RadialChase';
 import RandomSparkle from './macros/RandomSparkle';
+import Animator from './Animator';
 
 export default class MessageHandler {
   #broadcaster: Broadcaster;
   #ledSystem: LEDSystem;
   #currentMacro: MacroBase | null = null;
+  #animator: Animator = new Animator();
 
   constructor(broadcaster: Broadcaster, ledSystem: LEDSystem) {
     this.#broadcaster = broadcaster;

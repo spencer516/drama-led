@@ -11,7 +11,7 @@ type OctoName =
 type Channel = 1 | 2;
 type Coordinate = [number, number];
 
-const SPACING = 3;
+const SPACING = 1;
 
 // @ts-expect-error - Import issue with TS config
 const DIRNAME = import.meta.dirname;

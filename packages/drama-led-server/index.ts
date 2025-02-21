@@ -6,10 +6,9 @@ import LEDSystem, { SACN_NETWORK_INTERFACE } from './src/LEDSystem';
 import LightMapping from './src/LightMapping';
 import QLabReceiver from './src/QLabReceiver';
 import GledoptoController from './src/GledoptoController';
-import Animator, { ONE_SECOND } from './src/Animator';
 
 async function startup() {
-  const lightMapping = new LightMapping('FullSystemGenerated.csv');
+  const lightMapping = new LightMapping('FullSystemGeneratedV2.csv');
 
   await lightMapping.populateMap();
 
@@ -20,7 +19,7 @@ async function startup() {
     ipAddress: '192.168.1.200',
     outputNumber: '1',
     startUniverse: 1000,
-    numberOfLights: 79, // TODO: Auto-detect the lights from the generated map
+    numberOfLights: 236, // TODO: Auto-detect the lights from the generated map
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     lightMapping,
   });
@@ -30,7 +29,7 @@ async function startup() {
     ipAddress: '192.168.1.200',
     outputNumber: '2',
     startUniverse: 1100,
-    numberOfLights: 114,
+    numberOfLights: 341,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     lightMapping,
   });
@@ -41,7 +40,7 @@ async function startup() {
     outputNumber: '1',
     startUniverse: 1200,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    numberOfLights: 113,
+    numberOfLights: 339,
     lightMapping,
   });
 
@@ -51,7 +50,7 @@ async function startup() {
     outputNumber: '2',
     startUniverse: 1300,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    numberOfLights: 163,
+    numberOfLights: 487,
     lightMapping,
   });
 
@@ -61,7 +60,7 @@ async function startup() {
     outputNumber: '1',
     startUniverse: 1400,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    numberOfLights: 79,
+    numberOfLights: 236,
     lightMapping,
   });
 
@@ -71,7 +70,7 @@ async function startup() {
     outputNumber: '2',
     startUniverse: 1500,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    numberOfLights: 114,
+    numberOfLights: 341,
     lightMapping,
   });
 
