@@ -64,7 +64,7 @@ export default function AllLightsSceneRenderer({}: Props) {
                 });
               }}
             >
-              <circleGeometry args={[0.75, 10]} />
+              <circleGeometry args={[0.75, 5]} />
               <meshStandardMaterial color={backgroundColor} />
             </mesh>
           );

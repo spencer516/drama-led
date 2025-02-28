@@ -1,4 +1,3 @@
-import { WebSocketServer } from 'ws';
 import Broadcaster from './Broadcaster';
 import {
   parseMessage,
@@ -9,6 +8,7 @@ import LEDSystem from './LEDSystem';
 import Animator from './Animator';
 import MacroCoordinator from './macros/MacroCoordinator';
 import RandomSparkle from './macros/RandomSparkle';
+import BasicChase from './macros/BasicChase';
 
 export default class MessageHandler {
   #broadcaster: Broadcaster;
@@ -27,13 +27,19 @@ export default class MessageHandler {
   async onMessage(data: string) {
     const message = parseMessage(data);
 
-    console.log(`Message: ${message.type}`);
-
     switch (message.type) {
       case 'UPDATE_LIGHT_BY_ID':
         this.updateLightByID(message.data);
         break;
       case 'START_BASIC_CHASE':
+        const { id, controllerID, ...data } = message.data;
+        const chase = new BasicChase(
+          id,
+          this.#animator,
+          () => this.#ledSystem.getLightsIterator(controllerID ?? null),
+          data,
+        );
+        this.#macroCoordinator.startMacro(chase);
         break;
       case 'START_RADIAL_CHASE':
         break;

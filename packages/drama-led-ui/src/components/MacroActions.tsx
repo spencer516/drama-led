@@ -36,11 +36,13 @@ export default function MacroActions({}: Props) {
           sendMessage({
             type: "START_BASIC_CHASE",
             data: {
+              id: "single-light-chase",
               spread: 1,
               gap: 10,
-              frequencyInSeconds: 10,
+              maxFPS: 10,
               direction: "forward",
               color: "white",
+              controllerID: "spoonful_of_circuit:1",
             },
           });
         }}
@@ -53,11 +55,13 @@ export default function MacroActions({}: Props) {
           sendMessage({
             type: "START_BASIC_CHASE",
             data: {
+              id: "chase-with-spread",
               spread: 5,
               gap: 15,
-              frequencyInSeconds: 20,
+              maxFPS: 20,
               direction: "reverse",
-              color: "yellow",
+              color: "red",
+              controllerID: "supercalifragilisticexpealidigital:1",
             },
           });
         }}
@@ -71,11 +75,13 @@ export default function MacroActions({}: Props) {
           sendMessage({
             type: "START_BASIC_CHASE",
             data: {
+              id: "rainbow-chase",
               spread: 5,
               gap: 15,
-              frequencyInSeconds: 10,
+              maxFPS: 10,
               direction: "forward",
               color: "rainbow",
+              controllerID: "berts_brights:1",
             },
           });
         }}
@@ -88,7 +94,9 @@ export default function MacroActions({}: Props) {
         onClick={() => {
           sendMessage({
             type: "START_RANDOM_SPARKLE",
-            data: {},
+            data: {
+              // controllerID: "berts_brights",
+            },
           });
         }}
       >

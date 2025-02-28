@@ -77,6 +77,8 @@ export default class LEDSystem {
     return lightsArray.length;
   }
 
+  // TODO: CREATE SOME COLLECTIONS OF STRANTS FOR THE LIGHTS ITERATOR!!!
+
   *getLightsIterator(
     controllerID: string | null = null,
   ): Generator<[number, Light]> {

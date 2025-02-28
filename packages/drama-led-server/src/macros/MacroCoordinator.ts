@@ -5,15 +5,12 @@ import AnimationMacroBase from './AnimationMacroBase';
 export default class MacroCoordinator {
   #animator: Animator;
   #broadcaster: Broadcaster;
-  #broadcastCallback: () => void;
+  #broadcastCallback: (() => void) | null = null;
   #activeMacros: Map<string, AnimationMacroBase> = new Map();
 
   constructor(animator: Animator, broadcaster: Broadcaster) {
     this.#animator = animator;
     this.#broadcaster = broadcaster;
-    this.#broadcastCallback = () => {
-      setImmediate(() => this.#broadcaster.broadcast());
-    };
   }
 
   startMacro(macro: AnimationMacroBase) {
@@ -24,7 +21,16 @@ export default class MacroCoordinator {
     }
 
     this.#activeMacros.set(macro.id, macro);
-    this.#animator.on('tick', this.#broadcastCallback);
+
+    if (this.#broadcastCallback == null) {
+      this.#broadcastCallback = () => {
+        setImmediate(() => {
+          this.#broadcaster.broadcast();
+        });
+      };
+
+      this.#animator.on('tick', this.#broadcastCallback);
+    }
 
     macro.start(() => this.macroStopped(macro));
   }
@@ -32,8 +38,9 @@ export default class MacroCoordinator {
   macroStopped(macro: AnimationMacroBase) {
     this.#activeMacros.delete(macro.id);
 
-    if (this.#activeMacros.size === 0) {
+    if (this.#activeMacros.size === 0 && this.#broadcastCallback != null) {
       this.#animator.off('tick', this.#broadcastCallback);
+      this.#broadcastCallback = null;
     }
   }
 

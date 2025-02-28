@@ -4,14 +4,6 @@ import { clamp } from './utils';
 
 export const ONE_SECOND = 1000;
 
-// EXAMPLE USAGE!!
-// const animator = new Animator();
-// animator.animate((pct) => console.log(`#1: ${pct}`), ONE_SECOND * 5);
-// animator.animate((pct) => console.log(`#2: ${pct}`), ONE_SECOND * 2);
-// animator.loop((time) => console.log(`time elapsed ${time}`), 2);
-// animationLoop.start();
-// setTimeout(() => animator.stop(), 3000);
-
 type AnimateParams = {
   durationInMs: number;
   onComplete: (() => void) | undefined;
@@ -23,7 +15,6 @@ export default class Animator extends EventEmitter {
   #currentTimer: Timer | null = null;
 
   start() {
-    console.log('start animation');
     if (this.#currentTimer != null) {
       throw new Error('Could not start a timer; one already exists');
     }
@@ -38,7 +29,6 @@ export default class Animator extends EventEmitter {
   }
 
   stop() {
-    console.log('stop animation');
     this.#currentTimer?.stop();
     this.#currentTimer = null;
     this.removeAllListeners('tick');
@@ -52,6 +42,18 @@ export default class Animator extends EventEmitter {
     if (!this.isRunning) {
       this.start();
     }
+  }
+
+  off(eventName: string | symbol, listener: (...args: any[]) => void) {
+    super.off(eventName, listener);
+    this.stopIfNoListeners();
+
+    return this;
+  }
+
+  on(eventName: string | symbol, listener: (...args: any[]) => void) {
+    super.on(eventName, listener);
+    return this;
   }
 
   stopIfNoListeners() {

@@ -79,10 +79,6 @@ export default class OctoController {
         return light;
       },
     );
-
-    console.log(
-      `Created ${this.#lights.length} lights for ${this.#id}:${this.#outputNumber}`,
-    );
   }
 
   makeLightID(sequenceNumber: number): LightID {
