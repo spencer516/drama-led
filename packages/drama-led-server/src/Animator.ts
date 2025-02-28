@@ -12,11 +12,18 @@ export const ONE_SECOND = 1000;
 // animationLoop.start();
 // setTimeout(() => animator.stop(), 3000);
 
+type AnimateParams = {
+  durationInMs: number;
+  onComplete: (() => void) | undefined;
+  maxFPS: number;
+};
+
 export default class Animator extends EventEmitter {
   #fps: number = 30;
   #currentTimer: Timer | null = null;
 
   start() {
+    console.log('start animation');
     if (this.#currentTimer != null) {
       throw new Error('Could not start a timer; one already exists');
     }
@@ -31,6 +38,7 @@ export default class Animator extends EventEmitter {
   }
 
   stop() {
+    console.log('stop animation');
     this.#currentTimer?.stop();
     this.#currentTimer = null;
     this.removeAllListeners('tick');
@@ -85,10 +93,14 @@ export default class Animator extends EventEmitter {
     return () => this.off('tick', callback);
   }
 
-  animate(frameCallback: (pct: number) => void, durationInMs: number) {
+  animate(
+    frameCallback: (pct: number) => void,
+    { durationInMs, onComplete, maxFPS }: AnimateParams,
+  ): () => void {
     this.startIfNotRunning();
 
     let start: number | null = null;
+    let lastFrameTime: number | null = null;
 
     const callback = (currentTime: number) => {
       if (start == null) {
@@ -101,13 +113,22 @@ export default class Animator extends EventEmitter {
         max: 1,
       });
 
-      frameCallback(percentComplete);
+      if (lastFrameTime == null) {
+        lastFrameTime = currentTime;
+        frameCallback(0);
+      } else if (currentTime - lastFrameTime > ONE_SECOND / maxFPS) {
+        frameCallback(percentComplete);
+        lastFrameTime = currentTime;
+      }
 
       if (percentComplete >= 1) {
         this.off('tick', callback);
+        onComplete?.();
       }
     };
 
     this.on('tick', callback);
+
+    return () => this.off('tick', callback);
   }
 }

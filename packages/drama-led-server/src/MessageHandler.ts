@@ -5,55 +5,47 @@ import {
   UpdateLightByID,
 } from '@spencer516/drama-led-messages/src/InputMessage';
 import Light from './Light';
-import MacroBase from './macros/MacroBase';
-import BasicChase from './macros/BasicChase';
 import LEDSystem from './LEDSystem';
-import RadialChase from './macros/RadialChase';
-import RandomSparkle from './macros/RandomSparkle';
 import Animator from './Animator';
+import MacroCoordinator from './macros/MacroCoordinator';
+import RandomSparkle from './macros/RandomSparkle';
 
 export default class MessageHandler {
   #broadcaster: Broadcaster;
   #ledSystem: LEDSystem;
-  #currentMacro: MacroBase | null = null;
-  #animator: Animator = new Animator();
+  #animator: Animator;
+  #macroCoordinator: MacroCoordinator;
 
   constructor(broadcaster: Broadcaster, ledSystem: LEDSystem) {
     this.#broadcaster = broadcaster;
     this.#ledSystem = ledSystem;
+    this.#animator = new Animator();
+
+    this.#macroCoordinator = new MacroCoordinator(this.#animator, broadcaster);
   }
 
   async onMessage(data: string) {
     const message = parseMessage(data);
 
-    this.#currentMacro?.stop();
+    console.log(`Message: ${message.type}`);
 
     switch (message.type) {
       case 'UPDATE_LIGHT_BY_ID':
         this.updateLightByID(message.data);
         break;
       case 'START_BASIC_CHASE':
-        this.#currentMacro = new BasicChase(
-          this.#broadcaster,
-          this.#ledSystem,
-          message.data,
-        );
-        this.#currentMacro.start();
         break;
       case 'START_RADIAL_CHASE':
-        this.#currentMacro = new RadialChase(
-          this.#broadcaster,
-          this.#ledSystem,
-        );
-        this.#currentMacro.start();
         break;
       case 'START_RANDOM_SPARKLE':
-        this.#currentMacro = new RandomSparkle(this.#broadcaster, () =>
+        const sparkle = new RandomSparkle('some-id', this.#animator, () =>
           this.#ledSystem.getLightsIterator(message.data.controllerID ?? null),
         );
-        this.#currentMacro.start();
+
+        this.#macroCoordinator.startMacro(sparkle);
         break;
       case 'TURN_ALL_OFF':
+        this.#macroCoordinator.stopAllMacros();
         this.#ledSystem.turnAllOff(message.data.controllerID ?? null);
         this.#broadcaster.broadcast();
         break;

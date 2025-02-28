@@ -1,35 +1,26 @@
-import Broadcaster from '../Broadcaster';
-import Light from '../Light';
-import AnimatedMacroBase from './AnimatedMacroBase';
+import Animator from '../Animator';
+import { TGetLightsIterator } from './AnimationMacroBase';
+import SingleShotAnimationMacro from './SingleShotAnimationMacro';
 
-export default class RandomSparkle extends AnimatedMacroBase {
-  #getLightsIterator: () => Iterable<[number, Light]>;
-
+export default class RandomSparkle extends SingleShotAnimationMacro {
   constructor(
-    broadcaster: Broadcaster,
-    getLightsIterator: () => Iterable<[number, Light]>,
+    id: string,
+    animator: Animator,
+    getLightsIterator: TGetLightsIterator,
   ) {
-    super(broadcaster);
-    this.#getLightsIterator = getLightsIterator;
-    this.setFPS(20);
+    super(id, animator, getLightsIterator, {
+      duration: 1000 * 2,
+      maxFPS: 5,
+    });
   }
 
-  tick() {
-    for (const [, light] of this.#getLightsIterator()) {
+  tick(_percentComplete: number) {
+    for (const [, light] of this.getLightsIterator()) {
       if (Math.random() > 0.8) {
         light.turnOn();
       } else {
         light.turnOff();
       }
     }
-
-    this.broadcast();
-  }
-
-  onStop() {
-    for (const [, light] of this.#getLightsIterator()) {
-      light.turnOff();
-    }
-    this.broadcast();
   }
 }
