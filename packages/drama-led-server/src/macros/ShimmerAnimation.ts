@@ -1,52 +1,28 @@
-import { RGBColor } from '@spencer516/drama-led-messages/src/RGBColor';
-import Animator from '../Animator';
-import LEDSystem from '../LEDSystem';
-import { TGetLightsIterator } from './AnimationMacroBase';
-import LoopingAnimationMacro from './LoopingAnimationMacro';
 import { StartShimmerAnimation } from '@spencer516/drama-led-messages/src/macros/StartShimmerAnimation';
+import ContinuousMacro from './ContinuousMacro';
 
-export default class ShimmerAnimation extends LoopingAnimationMacro {
-  speed: number;
-  density: number;
-  color: RGBColor;
+type CustomParams = {};
 
-  constructor(
-    id: string,
-    animator: Animator,
-    getLightsIterator: TGetLightsIterator,
-    { speed, density, color }: StartShimmerAnimation['data'],
-  ) {
-    super(id, animator, getLightsIterator, { maxFPS: 60 });
-    this.speed = speed;
-    this.density = density;
-    this.color = color;
-  }
-
-  static create(
-    ledSystem: LEDSystem,
-    animator: Animator,
-    { cueID, segment, data }: StartShimmerAnimation,
-  ): ShimmerAnimation {
-    return new ShimmerAnimation(
-      cueID,
-      animator,
-      ledSystem.getSegmentIterator(segment),
-      data,
-    );
+export default class ShimmerAnimation extends ContinuousMacro<
+  StartShimmerAnimation['data'],
+  CustomParams
+> {
+  getCustomParams(): CustomParams {
+    return {};
   }
 
   tick(_timeElapsed: number, frameNumber: number) {
-    const interval = Math.floor(100 / this.speed);
+    const interval = Math.floor(100 / this.data.speed);
 
     if (frameNumber % interval !== 0) {
       return;
     }
 
-    const threshold = 1 - this.density / 100;
+    const threshold = 1 - this.data.density / 100;
 
-    for (const [, light] of this.getLightsIterator()) {
+    for (const [, light] of this.lightsIterator()) {
       if (Math.random() >= threshold) {
-        light.setRGB(this.color);
+        light.setRGB(this.data.color);
       } else {
         light.turnOff();
       }

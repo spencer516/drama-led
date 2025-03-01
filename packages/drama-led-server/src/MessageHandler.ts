@@ -29,37 +29,34 @@ export default class MessageHandler {
 
   async onMessage(data: string) {
     const message = parseMessage(data);
+    const macroParams = {
+      ledSystem: this.#ledSystem,
+      animator: this.#animator,
+      macroCoordinator: this.#macroCoordinator,
+    };
 
     switch (message.type) {
-      case 'UPDATE_LIGHT_BY_ID':
-        this.updateLightByID(message.data);
-        break;
+      /**
+       * ===========================
+       * MACROS START HERE
+       * ===========================
+       */
       case 'START_BASIC_CHASE':
-        const { id, segment, ...data } = message.data;
-        const chase = new BasicChase(
-          id,
-          this.#animator,
-          this.#ledSystem.getSegmentIterator(segment),
-          data,
-        );
-        this.#macroCoordinator.startMacro(chase);
+        BasicChase.create(message, macroParams).start();
         break;
       case 'START_SHIMMER':
-        const shimmer = ShimmerAnimation.create(
-          this.#ledSystem,
-          this.#animator,
-          message,
-        );
-        this.#macroCoordinator.startMacro(shimmer);
+        ShimmerAnimation.create(message, macroParams).start();
         break;
       case 'START_RANDOM_SPARKLE':
-        const sparkle = new RandomSparkle(
-          'some-id',
-          this.#animator,
-          this.#ledSystem.getSegmentIterator(message.data.segment),
-        );
+        RandomSparkle.create(message, macroParams).start();
+        break;
+      /**
+       * ===========================
+       */
 
-        this.#macroCoordinator.startMacro(sparkle);
+      // Other Misc Commands
+      case 'UPDATE_LIGHT_BY_ID':
+        this.updateLightByID(message.data);
         break;
       case 'STOP_MACRO':
         this.#macroCoordinator.stopMacroByID(message.cueID);

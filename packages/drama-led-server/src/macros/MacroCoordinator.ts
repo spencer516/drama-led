@@ -1,20 +1,20 @@
 import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 import Animator from '../Animator';
 import Broadcaster from '../Broadcaster';
-import AnimationMacroBase from './AnimationMacroBase';
+import MacroBase from './MacroBase';
 
 export default class MacroCoordinator {
   #animator: Animator;
   #broadcaster: Broadcaster;
   #broadcastCallback: (() => void) | null = null;
-  #activeMacros: Map<string, AnimationMacroBase> = new Map();
+  #activeMacros: Map<string, MacroBase> = new Map();
 
   constructor(animator: Animator, broadcaster: Broadcaster) {
     this.#animator = animator;
     this.#broadcaster = broadcaster;
   }
 
-  startMacro(macro: AnimationMacroBase) {
+  macroStarted(macro: MacroBase) {
     const existingMacro = this.#activeMacros.get(macro.cueID);
 
     if (existingMacro != null) {
@@ -32,11 +32,9 @@ export default class MacroCoordinator {
 
       this.#animator.on('tick', this.#broadcastCallback);
     }
-
-    macro.start(() => this.macroStopped(macro));
   }
 
-  macroStopped(macro: AnimationMacroBase) {
+  macroStopped(macro: MacroBase) {
     this.#activeMacros.delete(macro.cueID);
 
     if (this.#activeMacros.size === 0 && this.#broadcastCallback != null) {
@@ -45,15 +43,11 @@ export default class MacroCoordinator {
     }
   }
 
-  stopMacro(macro: AnimationMacroBase) {
-    macro.stop();
-  }
-
   stopMacroByID(id: string) {
     const macro = this.#activeMacros.get(id);
 
     if (macro != null) {
-      this.stopMacro(macro);
+      macro.stop();
     }
 
     this.#broadcaster.broadcast();

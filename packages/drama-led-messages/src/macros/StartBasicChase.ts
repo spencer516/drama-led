@@ -3,9 +3,9 @@ import { NamedLEDSection } from '../NamedLEDSection';
 
 export const StartBasicChase = z.object({
   type: z.literal('START_BASIC_CHASE'),
+  cueID: z.string(),
+  segment: NamedLEDSection,
   data: z.object({
-    id: z.string(),
-    segment: NamedLEDSection,
     spread: z.number().min(0).max(50).optional(),
     gap: z.number().min(0).max(50).optional(),
     maxFPS: z.number().min(0).max(60).optional(),

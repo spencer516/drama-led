@@ -1,21 +1,14 @@
-import Animator from '../Animator';
-import { TGetLightsIterator } from './AnimationMacroBase';
-import SingleShotAnimationMacro from './SingleShotAnimationMacro';
+import { StartRandomSparkle } from '@spencer516/drama-led-messages/src/macros/StartRandomSparkle';
+import SingleShotMacro from './SingleShotMacro';
 
-export default class RandomSparkle extends SingleShotAnimationMacro {
-  constructor(
-    id: string,
-    animator: Animator,
-    getLightsIterator: TGetLightsIterator,
-  ) {
-    super(id, animator, getLightsIterator, {
-      duration: 1000 * 2,
-      maxFPS: 5,
-    });
-  }
+type CustomParams = {};
 
+export default class RandomSparkle extends SingleShotMacro<
+  StartRandomSparkle['data'],
+  CustomParams
+> {
   tick(_percentComplete: number) {
-    for (const [, light] of this.getLightsIterator()) {
+    for (const [, light] of this.lightsIterator()) {
       if (Math.random() > 0.8) {
         light.turnOn();
       } else {

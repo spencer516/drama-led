@@ -57,9 +57,9 @@ export default function MacroActions({}: Props) {
           onClick={() =>
             setCodeObject({
               type: "START_BASIC_CHASE",
+              cueID: "cue1",
+              segment: "ALL_ARCHES_FULL",
               data: {
-                id: "cue1",
-                segment: "ALL_ARCHES_FULL",
                 spread: 5,
                 gap: 15,
                 maxFPS: 20,
@@ -74,9 +74,9 @@ export default function MacroActions({}: Props) {
           onClick={() =>
             setCodeObject({
               type: "START_BASIC_CHASE",
+              cueID: "cue1",
+              segment: "ALL_ARCHES_FULL",
               data: {
-                id: "cue1",
-                segment: "ALL_ARCHES_FULL",
                 spread: 5,
                 gap: 15,
                 maxFPS: 10,
@@ -110,8 +110,10 @@ export default function MacroActions({}: Props) {
           onClick={() =>
             setCodeObject({
               type: "START_RANDOM_SPARKLE",
+              segment: "ALL_ARCHES_INNER",
+              cueID: "cue-1",
               data: {
-                segment: "ALL_ARCHES_INNER",
+                duration: 3000,
               },
             })
           }
