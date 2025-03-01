@@ -1,9 +1,7 @@
-import Broadcaster from '../Broadcaster';
 import { scalePow, ScalePower, scaleSequential } from 'd3-scale';
 import LoopingAnimationMacro from './LoopingAnimationMacro';
 import { interpolateSinebow } from 'd3-scale-chromatic';
 import { color } from 'd3-color';
-import LEDSystem from '../LEDSystem';
 import Animator from '../Animator';
 import { TGetLightsIterator } from './AnimationMacroBase';
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useSendMessage } from "@/utils/LEDServerContext";
+import { makeRGBValue } from "@spencer516/drama-led-messages/src/AddressTypes";
 
 type Props = {};
 
@@ -48,6 +49,28 @@ export default function MacroActions({}: Props) {
         }}
       >
         Single Light Chase
+      </button>
+      <button
+        className="bg-gray-200 px-2 py-1 m-2 rounded"
+        onClick={() => {
+          sendMessage({
+            type: "START_SHIMMER",
+            cueID: "shimmer-1",
+            segment: "FULL_ARCH_STAGE_LEFT",
+
+            data: {
+              speed: 40,
+              density: 20,
+              color: {
+                red: makeRGBValue(255),
+                green: makeRGBValue(251),
+                blue: makeRGBValue(212),
+              },
+            },
+          });
+        }}
+      >
+        Shimmer
       </button>
       <button
         className="bg-gray-200 px-2 py-1 m-2 rounded"

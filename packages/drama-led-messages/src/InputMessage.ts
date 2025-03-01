@@ -83,6 +83,19 @@ export const StartRandomSparkle = z.object({
   }),
 });
 
+export const StartShimmerAnimation = z.object({
+  type: z.literal('START_SHIMMER'),
+  cueID: z.string(),
+  segment: NamedLEDSection,
+  data: z.object({
+    speed: z.number().min(0).max(100),
+    density: z.number().min(0).max(100),
+    color: RGBColor,
+  }),
+});
+
+export type StartShimmerAnimation = z.infer<typeof StartShimmerAnimation>;
+
 export const TurnAllOn = z.object({
   type: z.literal('TURN_ALL_ON'),
   data: z.object({}),
@@ -109,6 +122,7 @@ export const InputMessage = z.discriminatedUnion('type', [
   StartBasicChase,
   StartRadialChase,
   StartRandomSparkle,
+  StartShimmerAnimation,
   EmptyMessage,
   TurnAllOn,
   TurnAllOff,

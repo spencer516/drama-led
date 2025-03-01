@@ -9,6 +9,7 @@ import Animator from './Animator';
 import MacroCoordinator from './macros/MacroCoordinator';
 import RandomSparkle from './macros/RandomSparkle';
 import BasicChase from './macros/BasicChase';
+import ShimmerAnimation from './macros/ShimmerAnimation';
 
 export default class MessageHandler {
   #broadcaster: Broadcaster;
@@ -40,6 +41,14 @@ export default class MessageHandler {
           data,
         );
         this.#macroCoordinator.startMacro(chase);
+        break;
+      case 'START_SHIMMER':
+        const shimmer = ShimmerAnimation.create(
+          this.#ledSystem,
+          this.#animator,
+          message,
+        );
+        this.#macroCoordinator.startMacro(shimmer);
         break;
       case 'START_RADIAL_CHASE':
         break;
