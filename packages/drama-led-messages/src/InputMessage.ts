@@ -7,6 +7,23 @@ export const RGBColor = z.object({
   blue: RGBValue,
 });
 
+export const NamedLEDSection = z.union([
+  z.literal('FULL_ARCH_STAGE_LEFT'),
+  z.literal('FULL_ARCH_CENTER'),
+  z.literal('FULL_ARCH_STAGE_RIGHT'),
+  z.literal('INNER_ARCH_STAGE_LEFT'),
+  z.literal('INNER_ARCH_CENTER'),
+  z.literal('INNER_ARCH_STAGE_RIGHT'),
+  z.literal('OUTER_ARCH_STAGE_LEFT'),
+  z.literal('OUTER_ARCH_CENTER'),
+  z.literal('OUTER_ARCH_STAGE_RIGHT'),
+  z.literal('ALL_ARCHES_FULL'),
+  z.literal('ALL_ARCHES_OUTER'),
+  z.literal('ALL_ARCHES_INNER'),
+]);
+
+export type NamedLEDSection = z.infer<typeof NamedLEDSection>;
+
 export type RGBColor = z.infer<typeof RGBColor>;
 
 export const EmptyMessage = z.object({
@@ -43,7 +60,7 @@ export const StartBasicChase = z.object({
   type: z.literal('START_BASIC_CHASE'),
   data: z.object({
     id: z.string(),
-    controllerID: z.string().optional(),
+    segment: NamedLEDSection,
     spread: z.number().min(0).max(50).optional(),
     gap: z.number().min(0).max(50).optional(),
     maxFPS: z.number().min(0).max(60).optional(),
@@ -62,22 +79,18 @@ export const StartRadialChase = z.object({
 export const StartRandomSparkle = z.object({
   type: z.literal('START_RANDOM_SPARKLE'),
   data: z.object({
-    controllerID: z.string().optional(),
+    segment: NamedLEDSection,
   }),
 });
 
 export const TurnAllOn = z.object({
   type: z.literal('TURN_ALL_ON'),
-  data: z.object({
-    controllerID: z.string().optional(),
-  }),
+  data: z.object({}),
 });
 
 export const TurnAllOff = z.object({
   type: z.literal('TURN_ALL_OFF'),
-  data: z.object({
-    controllerID: z.string().optional(),
-  }),
+  data: z.object({}),
 });
 
 export const UpdateOctoController = z.object({

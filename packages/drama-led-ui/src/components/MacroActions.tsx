@@ -42,7 +42,7 @@ export default function MacroActions({}: Props) {
               maxFPS: 10,
               direction: "forward",
               color: "white",
-              controllerID: "spoonful_of_circuit:1",
+              segment: "FULL_ARCH_STAGE_LEFT",
             },
           });
         }}
@@ -61,7 +61,7 @@ export default function MacroActions({}: Props) {
               maxFPS: 20,
               direction: "reverse",
               color: "red",
-              controllerID: "supercalifragilisticexpealidigital:1",
+              segment: "FULL_ARCH_CENTER",
             },
           });
         }}
@@ -81,7 +81,7 @@ export default function MacroActions({}: Props) {
               maxFPS: 10,
               direction: "forward",
               color: "rainbow",
-              controllerID: "berts_brights:1",
+              segment: "FULL_ARCH_STAGE_RIGHT",
             },
           });
         }}
@@ -95,7 +95,7 @@ export default function MacroActions({}: Props) {
           sendMessage({
             type: "START_RANDOM_SPARKLE",
             data: {
-              // controllerID: "berts_brights",
+              segment: "ALL_ARCHES_INNER",
             },
           });
         }}

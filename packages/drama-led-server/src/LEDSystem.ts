@@ -10,22 +10,31 @@ import GledoptoController from './GledoptoController';
 import QLabReceiver from './QLabReceiver';
 import MessageHandler from './MessageHandler';
 import Broadcaster from './Broadcaster';
+import { NamedLEDSection } from '@spencer516/drama-led-messages/src/InputMessage';
 
 export const SACN_NETWORK_INTERFACE = '192.168.1.199';
+
+type TNamedSegments = Record<
+  NamedLEDSection,
+  (OctoController | GledoptoController)[]
+>;
 
 export default class LEDSystem {
   #octoControllers: Map<string, OctoController>;
   #gledOptoControllers: Map<string, GledoptoController>;
   #qlabReceiver: QLabReceiver;
+  #namedSegments: TNamedSegments;
 
   constructor(
     qlabReceiver: QLabReceiver,
     octoControllers: OctoController[],
     gledOptoControllers: GledoptoController[],
+    namedSegments: TNamedSegments,
   ) {
     this.#octoControllers = new Map();
     this.#gledOptoControllers = new Map();
     this.#qlabReceiver = qlabReceiver;
+    this.#namedSegments = namedSegments;
 
     for (const octoController of octoControllers) {
       this.#octoControllers.set(octoController.id, octoController);
@@ -77,7 +86,22 @@ export default class LEDSystem {
     return lightsArray.length;
   }
 
-  // TODO: CREATE SOME COLLECTIONS OF STRANTS FOR THE LIGHTS ITERATOR!!!
+  getSegmentIterator(
+    segmentName: keyof TNamedSegments,
+  ): () => Generator<[number, Light]> {
+    return () => this.iterateSegment(segmentName);
+  }
+
+  *iterateSegment(
+    segmentName: keyof TNamedSegments,
+  ): Generator<[number, Light]> {
+    let index = 0;
+    for (const controller of this.#namedSegments[segmentName]) {
+      for (const light of controller.lights) {
+        yield [index++, light];
+      }
+    }
+  }
 
   *getLightsIterator(
     controllerID: string | null = null,

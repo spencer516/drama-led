@@ -32,11 +32,11 @@ export default class MessageHandler {
         this.updateLightByID(message.data);
         break;
       case 'START_BASIC_CHASE':
-        const { id, controllerID, ...data } = message.data;
+        const { id, segment, ...data } = message.data;
         const chase = new BasicChase(
           id,
           this.#animator,
-          () => this.#ledSystem.getLightsIterator(controllerID ?? null),
+          this.#ledSystem.getSegmentIterator(segment),
           data,
         );
         this.#macroCoordinator.startMacro(chase);
@@ -44,19 +44,21 @@ export default class MessageHandler {
       case 'START_RADIAL_CHASE':
         break;
       case 'START_RANDOM_SPARKLE':
-        const sparkle = new RandomSparkle('some-id', this.#animator, () =>
-          this.#ledSystem.getLightsIterator(message.data.controllerID ?? null),
+        const sparkle = new RandomSparkle(
+          'some-id',
+          this.#animator,
+          this.#ledSystem.getSegmentIterator(message.data.segment),
         );
 
         this.#macroCoordinator.startMacro(sparkle);
         break;
       case 'TURN_ALL_OFF':
         this.#macroCoordinator.stopAllMacros();
-        this.#ledSystem.turnAllOff(message.data.controllerID ?? null);
+        this.#ledSystem.turnAllOff();
         this.#broadcaster.broadcast();
         break;
       case 'TURN_ALL_ON':
-        this.#ledSystem.turnAllOn(message.data.controllerID ?? null);
+        this.#ledSystem.turnAllOn();
         this.#broadcaster.broadcast();
         break;
       case 'UPDATE_CONTROLLER':
