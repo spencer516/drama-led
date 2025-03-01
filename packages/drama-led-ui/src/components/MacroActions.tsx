@@ -28,7 +28,7 @@ function Button({ onClick, label }: ButtonProps) {
 export default function MacroActions({}: Props) {
   const sendMessage = useSendMessage();
   const [code, setCode] = useState("{}");
-  const setCodeObject = (object: any) => {
+  const setCodeObject = (object: InputMessage) => {
     setCode(JSON.stringify(object, null, 2));
   };
   return (
@@ -49,6 +49,19 @@ export default function MacroActions({}: Props) {
             setCodeObject({
               type: "TURN_ALL_OFF",
               data: {},
+            })
+          }
+        />
+        <Button
+          label="Static Pattern"
+          onClick={() =>
+            setCodeObject({
+              type: "START_STATIC_PATTERN",
+              cueID: "cue-static-1",
+              segment: "ALL_ARCHES_FULL",
+              data: {
+                pattern: "foo",
+              },
             })
           }
         />
@@ -97,9 +110,9 @@ export default function MacroActions({}: Props) {
                 speed: 40,
                 density: 20,
                 color: {
-                  red: 255,
-                  green: 251,
-                  blue: 212,
+                  red: makeRGBValue(255),
+                  green: makeRGBValue(251),
+                  blue: makeRGBValue(212),
                 },
               },
             })

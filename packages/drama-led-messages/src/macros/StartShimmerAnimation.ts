@@ -1,11 +1,9 @@
 import { z } from 'zod';
-import { NamedLEDSection } from '../NamedLEDSection';
 import { RGBColor } from '../RGBColor';
+import { StartBaseMacro } from './StartBaseMacro';
 
-export const StartShimmerAnimation = z.object({
+export const StartShimmerAnimation = StartBaseMacro.extend({
   type: z.literal('START_SHIMMER'),
-  cueID: z.string(),
-  segment: NamedLEDSection,
   data: z.object({
     speed: z.number().min(0).max(100),
     density: z.number().min(0).max(100),

@@ -1,10 +1,8 @@
 import { z } from 'zod';
-import { NamedLEDSection } from '../NamedLEDSection';
+import { StartBaseMacro } from './StartBaseMacro';
 
-export const StartBasicChase = z.object({
+export const StartBasicChase = StartBaseMacro.extend({
   type: z.literal('START_BASIC_CHASE'),
-  cueID: z.string(),
-  segment: NamedLEDSection,
   data: z.object({
     spread: z.number().min(0).max(50).optional(),
     gap: z.number().min(0).max(50).optional(),

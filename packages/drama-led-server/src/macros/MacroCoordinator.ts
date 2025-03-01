@@ -50,6 +50,11 @@ export default class MacroCoordinator {
 
       this.#animator.on('tick', this.#broadcastCallback);
     }
+
+    // Let's at least broadcast one tick to start
+    setImmediate(() => {
+      this.#broadcaster.broadcast();
+    });
   }
 
   macroStopped(macro: MacroBase) {

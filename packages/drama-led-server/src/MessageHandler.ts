@@ -10,6 +10,7 @@ import MacroCoordinator from './macros/MacroCoordinator';
 import RandomSparkle from './macros/RandomSparkle';
 import BasicChase from './macros/BasicChase';
 import ShimmerAnimation from './macros/ShimmerAnimation';
+import StaticPatternMacro from './macros/StaticPatternMacro';
 
 export default class MessageHandler {
   #broadcaster: Broadcaster;
@@ -53,6 +54,9 @@ export default class MessageHandler {
         break;
       case 'START_RANDOM_SPARKLE':
         RandomSparkle.create(message, macroParams).start();
+        break;
+      case 'START_STATIC_PATTERN':
+        StaticPatternMacro.create(message, macroParams).start();
         break;
       /**
        * ===========================
