@@ -1,8 +1,11 @@
 "use client";
 
-import { Canvas, useThree } from "@react-three/fiber";
-import { useEffect, useMemo } from "react";
-import { makeRGBValue } from "@spencer516/drama-led-messages/src/AddressTypes";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useMemo, useRef } from "react";
+import {
+  LightConfig,
+  makeRGBValue,
+} from "@spencer516/drama-led-messages/src/AddressTypes";
 import * as THREE from "three";
 import { useLatestMessage, useSendMessage } from "@/utils/LEDServerContext";
 
@@ -34,41 +37,7 @@ export default function AllLightsSceneRenderer({}: Props) {
           color="white"
         />
 
-        {lights.map((light) => {
-          const {
-            id,
-            red,
-            green,
-            blue,
-            coordinates: { x, y },
-          } = light;
-          const rgbValues = [red.rgbValue, green.rgbValue, blue.rgbValue];
-          const isOff = rgbValues.every((value) => value === 0);
-          const backgroundColor = `rgb(${rgbValues.join(",")})`;
-
-          return (
-            <mesh
-              key={id}
-              position={[x, y, 0]}
-              onClick={() => {
-                sendMessage({
-                  type: "UPDATE_LIGHT_BY_ID",
-                  data: {
-                    id,
-                    rgb: {
-                      red: makeRGBValue(isOff ? 255 : 0),
-                      green: makeRGBValue(isOff ? 255 : 0),
-                      blue: makeRGBValue(isOff ? 255 : 0),
-                    },
-                  },
-                });
-              }}
-            >
-              <circleGeometry args={[0.75, 5]} />
-              <meshStandardMaterial color={backgroundColor} />
-            </mesh>
-          );
-        })}
+        <Lights lights={lights} />
 
         <Panel
           x={-0.5}
@@ -102,6 +71,84 @@ export default function AllLightsSceneRenderer({}: Props) {
       </Canvas>
     </div>
   );
+}
+
+type LightsProps = {
+  lights: LightConfig[];
+};
+
+// const circle = new THREE.CircleGeometry(0.75, 5);
+const circle = new THREE.BoxGeometry(1, 1, 0);
+const material = new THREE.MeshBasicMaterial({ vertexColors: true });
+
+function Lights({ lights }: LightsProps) {
+  const meshRef = useRef<THREE.InstancedMesh | null>(null);
+  const numLights = lights.length;
+
+  const colorsArray = useMemo(() => {
+    const colorData = new Float32Array(lights.length * 3);
+
+    for (let i = 0; i < lights.length; i++) {
+      const light = lights[i];
+      colorData[i * 3] = light.red.rgbValue;
+      colorData[i * 3] = light.green.rgbValue;
+      colorData[i * 3] = light.blue.rgbValue;
+    }
+
+    return colorData;
+  }, [lights]);
+
+  useFrame(() => {
+    const mesh = meshRef.current;
+
+    if (mesh == null) {
+      return;
+    }
+
+    for (const [index, light] of iter(lights)) {
+      const {
+        coordinates: { x, y },
+        red,
+        green,
+        blue,
+      } = light;
+
+      const position = new THREE.Vector3(x, y, 0);
+      const matrix = new THREE.Matrix4();
+      const color = new THREE.Color(
+        red.rgbValue / 256,
+        green.rgbValue / 256,
+        blue.rgbValue / 256,
+      );
+
+      matrix.setPosition(position);
+      mesh.setMatrixAt(index, matrix);
+      mesh.setColorAt(index, color);
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+
+    if (mesh.instanceColor != null) {
+      mesh.instanceColor.needsUpdate = true;
+    }
+  });
+
+  return (
+    <instancedMesh
+      ref={meshRef}
+      args={[circle, material, numLights]}
+    >
+      {/* @ts-ignore */}
+      <meshBasicMaterial vertexColors={THREE.VertexColors} />
+    </instancedMesh>
+  );
+}
+
+function* iter<T>(list: T[]): Iterable<[number, T]> {
+  let index = 0;
+
+  for (const item of list) {
+    yield [++index, item];
+  }
 }
 
 type RectProps = {

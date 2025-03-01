@@ -8,7 +8,7 @@ import QLabReceiver from './src/QLabReceiver';
 import GledoptoController from './src/GledoptoController';
 
 async function startup() {
-  const lightMapping = new LightMapping('FullSystemGenerated.csv');
+  const lightMapping = new LightMapping('FullSystemGeneratedV2.csv');
 
   await lightMapping.populateMap();
 
