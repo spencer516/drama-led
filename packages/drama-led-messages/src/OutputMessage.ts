@@ -57,12 +57,20 @@ export const MainServerStatus = z.object({
 
 export type MainServerStatus = z.infer<typeof MainServerStatus>;
 
+export const MacroStatus = z.object({
+  cueID: z.string(),
+  macroName: z.string(),
+});
+
+export type MacroStatus = z.infer<typeof MacroStatus>;
+
 export const LEDServerData = z.object({
   lights: z.array(LightConfig),
   octos: z.array(OctoControllerStatus),
   gledoptos: z.array(GledoptoControllerStatus),
   mainServer: MainServerStatus,
   qlabStatus: QLabReceiverStatus,
+  activeMacros: z.array(MacroStatus),
 });
 
 export type LEDServerData = z.infer<typeof LEDServerData>;

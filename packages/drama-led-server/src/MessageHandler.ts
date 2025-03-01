@@ -23,6 +23,8 @@ export default class MessageHandler {
     this.#animator = new Animator();
 
     this.#macroCoordinator = new MacroCoordinator(this.#animator, broadcaster);
+
+    broadcaster.macroCoordinator = this.#macroCoordinator;
   }
 
   async onMessage(data: string) {
@@ -60,6 +62,9 @@ export default class MessageHandler {
         );
 
         this.#macroCoordinator.startMacro(sparkle);
+        break;
+      case 'STOP_MACRO':
+        this.#macroCoordinator.stopMacroByID(message.cueID);
         break;
       case 'TURN_ALL_OFF':
         this.#macroCoordinator.stopAllMacros();

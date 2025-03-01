@@ -114,6 +114,11 @@ export const UpdateOctoController = z.object({
   }),
 });
 
+export const StopMacro = z.object({
+  type: z.literal('STOP_MACRO'),
+  cueID: z.string(),
+});
+
 export type StartBasicChase = z.infer<typeof StartBasicChase>;
 
 export const InputMessage = z.discriminatedUnion('type', [
@@ -128,6 +133,7 @@ export const InputMessage = z.discriminatedUnion('type', [
   TurnAllOff,
   UpdateOctoController,
   UpdateQLabReceiver,
+  StopMacro,
 ]);
 
 export type InputMessage = z.infer<typeof InputMessage>;

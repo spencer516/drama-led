@@ -34,6 +34,7 @@ const DEFAULT_SERVER_CONTENT = LEDServerData.parse({
     status: "stopped",
     connectionError: null,
   },
+  activeMacros: [],
 });
 
 const LEDServerContext = createContext<LEDServerContextType>({

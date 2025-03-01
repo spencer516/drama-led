@@ -4,23 +4,23 @@ import Light from '../Light';
 export type TGetLightsIterator = () => Iterable<[number, Light]>;
 
 export default class AnimationMacroBase {
-  #id: string;
+  #cueID: string;
   animator: Animator;
   getLightsIterator: TGetLightsIterator;
   onComplete: (() => void) | null = null;
 
   constructor(
-    id: string,
+    cueID: string,
     animator: Animator,
     getLightsIterator: TGetLightsIterator,
   ) {
     this.animator = animator;
-    this.#id = id;
+    this.#cueID = cueID;
     this.getLightsIterator = getLightsIterator;
   }
 
-  get id() {
-    return this.#id;
+  get cueID() {
+    return this.#cueID;
   }
 
   get isFinished(): boolean {

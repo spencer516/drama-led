@@ -4,6 +4,7 @@ import { Nunito, Roboto_Mono } from "next/font/google";
 import "tailwindcss/tailwind.css";
 import { CubeTransparentIcon } from "@heroicons/react/24/outline";
 import { LEDServerContextProvider } from "@/utils/LEDServerContext";
+import ActiveMacroActions from "@/components/ActiveMacros";
 
 const nunitoSans = Nunito({
   variable: "--font-geist-sans",
@@ -50,7 +51,10 @@ export default function RootLayout({
                 </div>
               </div>
             </nav>
-            <main className="bg-gray-100 grow">{children}</main>
+            <main className="bg-gray-100 grow flex flex-nowrap flex-row">
+              <ActiveMacroActions />
+              <div className="grow">{children}</div>
+            </main>
           </div>
         </body>
       </html>
