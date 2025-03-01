@@ -37,7 +37,19 @@ export default function ActiveMacroActions({}: Props) {
         <div className="text-gray-500 block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center">
           No Active Macros
         </div>
-      ) : null}
+      ) : (
+        <button
+          type="button"
+          className="rounded-md bg-white px-2 py-1 text-xs font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
+          onClick={() => {
+            sendMessage({
+              type: "STOP_ALL_MACROS",
+            });
+          }}
+        >
+          Stop All Macros
+        </button>
+      )}
     </div>
   );
 }

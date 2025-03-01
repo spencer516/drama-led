@@ -66,6 +66,9 @@ export default class MessageHandler {
       case 'STOP_MACRO':
         this.#macroCoordinator.stopMacroByID(message.cueID);
         break;
+      case 'STOP_ALL_MACROS':
+        this.#macroCoordinator.stopAllMacros();
+        break;
       case 'TURN_ALL_OFF':
         this.#macroCoordinator.stopAllMacros();
         this.#ledSystem.turnAllOff();
