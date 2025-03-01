@@ -45,136 +45,161 @@ type LightsForOpeningArgs = {
   octoName: OctoName;
   channel: Channel;
   startCoordinate: Coordinate;
-  spacing: number;
   width: number;
   height: number;
+  direction: 'right-to-left' | 'left-to-right';
+  lightCounts: [number, number, number];
 };
 
 type Light = {
   light_id: string;
-  x_coordinate: number;
-  y_coordinate: number;
+  x_coordinate: string;
+  y_coordinate: string;
 };
 
 function generateAllLights(): Light[] {
-  const supercali1 = generateLightsForOpening({
-    octoName: 'supercalifragilisticexpealidigital',
-    channel: 1,
-    startCoordinate: [21.5, 0],
-    spacing: SPACING,
-    width: 43.5,
-    height: 96,
-  });
-
-  const supercali2 = generateLightsForOpening({
-    octoName: 'supercalifragilisticexpealidigital',
-    channel: 2,
-    startCoordinate: [0, 0],
-    spacing: SPACING,
-    width: 86.5,
-    height: 127,
-  });
-
-  const bertsBrights1 = generateLightsForOpening({
-    octoName: 'berts_brights',
-    channel: 1,
-    startCoordinate: [148.75, 0],
-    spacing: SPACING,
-    width: 58.5,
-    height: 140,
-  });
-
-  const bertsBrights2 = generateLightsForOpening({
-    octoName: 'berts_brights',
-    channel: 2,
-    startCoordinate: [114.5, 0],
-    spacing: SPACING,
-    width: 127,
-    height: 180,
-  });
-
   const spoonful1 = generateLightsForOpening({
+    // INNER
     octoName: 'spoonful_of_circuit',
     channel: 1,
-    startCoordinate: [294, 0],
-    spacing: SPACING,
+    startCoordinate: [21.5, 0],
     width: 43.5,
     height: 96,
+    direction: 'right-to-left',
+    lightCounts: [97, 45, 97],
   });
 
   const spoonful2 = generateLightsForOpening({
+    // OUTER
     octoName: 'spoonful_of_circuit',
     channel: 2,
-    startCoordinate: [272.5, 0],
-    spacing: SPACING,
+    startCoordinate: [0, 0],
     width: 86.5,
     height: 127,
+    direction: 'right-to-left',
+    lightCounts: [125, 84, 125],
+  });
+
+  const bertsBrights1 = generateLightsForOpening({
+    // INNER
+    octoName: 'berts_brights',
+    channel: 1,
+    startCoordinate: [148.75, 0],
+    width: 58.5,
+    height: 140,
+    direction: 'left-to-right',
+    lightCounts: [141, 61, 141],
+  });
+
+  const bertsBrights2 = generateLightsForOpening({
+    // OUTER
+    octoName: 'berts_brights',
+    channel: 2,
+    startCoordinate: [114.5, 0],
+    width: 127,
+    height: 180,
+    direction: 'left-to-right',
+    lightCounts: [179, 124, 179],
+  });
+
+  const supercali1 = generateLightsForOpening({
+    // INNER
+    octoName: 'supercalifragilisticexpealidigital',
+    channel: 1,
+    startCoordinate: [294, 0],
+    width: 43.5,
+    height: 96,
+    direction: 'left-to-right',
+    lightCounts: [97, 45, 96],
+  });
+
+  const supercali2 = generateLightsForOpening({
+    // OUTER
+    octoName: 'supercalifragilisticexpealidigital',
+    channel: 2,
+    startCoordinate: [272.5, 0],
+    width: 86.5,
+    height: 127,
+    direction: 'left-to-right',
+    lightCounts: [125, 84, 125],
   });
 
   return [
-    ...supercali1,
-    ...supercali2,
-    ...bertsBrights1,
-    ...bertsBrights2,
     ...spoonful1,
     ...spoonful2,
+    ...bertsBrights1,
+    ...bertsBrights2,
+    ...supercali1,
+    ...supercali2,
   ];
+}
+
+function fx(num: number): string {
+  return num.toFixed(4);
 }
 
 function generateLightsForOpening({
   octoName,
   channel,
   startCoordinate,
-  spacing,
   width,
   height,
+  direction,
+  lightCounts,
 }: LightsForOpeningArgs): Light[] {
   let sequence = 1;
   let [xPos, yPos] = startCoordinate;
 
   const lights: Light[] = [];
-  const maxHeight = height + yPos;
-  const maxWidth = width + xPos;
 
-  // Do left vertical first
-  while (yPos < maxHeight) {
+  const [firstSegmentCount, secondSegmentCount, thirdSegmentCount] =
+    lightCounts;
+
+  const isLTR = direction === 'left-to-right';
+
+  const firstSegmentXPos = isLTR ? xPos : xPos + width;
+  const firstSegmentYPosStart = yPos;
+  const firstSegmentSpacing = height / firstSegmentCount;
+
+  for (let i = 0; i < firstSegmentCount; i++) {
     lights.push({
       light_id: `${octoName}:${channel}-${sequence}`,
-      x_coordinate: xPos,
-      y_coordinate: yPos,
+      x_coordinate: fx(firstSegmentXPos),
+      y_coordinate: fx(firstSegmentYPosStart + firstSegmentSpacing * i),
     });
 
-    yPos += spacing;
     sequence++;
   }
 
-  // Reset the yPos to be the max height
-  yPos = maxHeight;
+  const secondSegmentXPosStart = isLTR ? xPos : xPos + width;
+  const secondSegmentYPos = yPos + height;
+  const secondSegmentSpacing = width / secondSegmentCount;
 
-  // Then accross the top
-  while (xPos < maxWidth) {
+  for (let i = 0; i < secondSegmentCount; i++) {
     lights.push({
       light_id: `${octoName}:${channel}-${sequence}`,
-      x_coordinate: xPos,
-      y_coordinate: yPos,
+      x_coordinate: fx(
+        isLTR
+          ? secondSegmentXPosStart + secondSegmentSpacing * i
+          : secondSegmentXPosStart - secondSegmentSpacing * i,
+      ),
+      y_coordinate: fx(secondSegmentYPos),
     });
 
-    xPos += spacing;
     sequence++;
   }
 
-  // Reset the xPos to be the max width
-  xPos = maxWidth;
+  const thirdSegmentXPos = isLTR ? xPos + width : xPos;
+  const thirdSegmentYPostStart = yPos + height;
+  const thirdSegmentSpacing = height / thirdSegmentCount;
 
-  // Then down the right side
-  while (yPos > startCoordinate[1]) {
+  for (let i = 0; i < thirdSegmentCount; i++) {
     lights.push({
       light_id: `${octoName}:${channel}-${sequence}`,
-      x_coordinate: xPos,
-      y_coordinate: yPos,
+      x_coordinate: fx(thirdSegmentXPos),
+      y_coordinate: fx(thirdSegmentYPostStart - thirdSegmentSpacing * i),
     });
 
-    yPos -= spacing;
     sequence++;
   }
 

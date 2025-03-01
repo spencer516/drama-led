@@ -15,15 +15,18 @@ function Camera() {
   const { camera } = useThree();
 
   useEffect(() => {
-    camera.position.set(175, 75, 200);
-    camera.lookAt(175, 75, 0);
+    // camera.position.set(175, 75, 200);
+    // camera.lookAt(175, 75, 0);
+    const x = 175;
+    const y = 75;
+    camera.position.set(x, y, 200);
+    camera.lookAt(x, y, 0);
   }, [camera]);
 
   return <></>;
 }
 
 export default function AllLightsSceneRenderer({}: Props) {
-  const sendMessage = useSendMessage();
   const message = useLatestMessage();
   const lights = message.lights;
 

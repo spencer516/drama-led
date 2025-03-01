@@ -26,9 +26,9 @@ type OctoConfig = {
   ipAddress: string;
   outputNumber: OutputNumber;
   startUniverse: number;
-  numberOfLights: number; // Max 680
   lightMapping: LightMapping;
   sacnNetworkInterface: string;
+  isReversedDirection: boolean;
 };
 
 export default class OctoController {
@@ -46,9 +46,9 @@ export default class OctoController {
     ipAddress,
     outputNumber,
     startUniverse,
-    numberOfLights,
     lightMapping,
     sacnNetworkInterface,
+    isReversedDirection,
   }: OctoConfig) {
     this.#id = id;
     this.#outputNumber = outputNumber;
@@ -57,7 +57,12 @@ export default class OctoController {
 
     const universe = makeUniverse(startUniverse);
 
-    this.#lights = range(0, MaxLights.parse(numberOfLights)).map(
+    const countLights = lightMapping.getCountOfLightsForPrefix(
+      `${id}:${outputNumber}`,
+    );
+
+    // Make sure there's at least one light.
+    const lights = range(0, MaxLights.parse(Math.max(countLights, 1))).map(
       (sequenceNumber) => {
         const makeChannelByOffset = getUniverseChannelMaker(
           universe,
@@ -78,6 +83,8 @@ export default class OctoController {
         return light;
       },
     );
+
+    this.#lights = isReversedDirection ? lights.reverse() : lights;
   }
 
   makeLightID(sequenceNumber: number): LightID {

@@ -56,4 +56,15 @@ export default class LightMapping {
     // }
     return this.#map.get(id) ?? this.#defaultCoordinates;
   }
+
+  getCountOfLightsForPrefix(prefix: string): number {
+    let count = 0;
+    for (const key of this.#map.keys()) {
+      if (key.startsWith(prefix)) {
+        count++;
+      }
+    }
+
+    return count;
+  }
 }

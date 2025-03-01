@@ -12,7 +12,7 @@ function set<T>(items: T[]): Set<T> {
 }
 
 async function startup() {
-  const lightMapping = new LightMapping('FullSystemGeneratedV2.csv');
+  const lightMapping = new LightMapping('FullSystemGeneratedV3.csv');
 
   await lightMapping.populateMap();
 
@@ -23,9 +23,9 @@ async function startup() {
     ipAddress: '192.168.1.200',
     outputNumber: '1',
     startUniverse: 1000,
-    numberOfLights: 236, // TODO: Auto-detect the lights from the generated map
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     lightMapping,
+    isReversedDirection: false,
   });
 
   const CONTROLLER_SUPERCALI_2 = new OctoController({
@@ -33,9 +33,9 @@ async function startup() {
     ipAddress: '192.168.1.200',
     outputNumber: '2',
     startUniverse: 1100,
-    numberOfLights: 341,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
     lightMapping,
+    isReversedDirection: false,
   });
 
   const CONTROLLER_BERTS_BRIGHTS_1 = new OctoController({
@@ -44,8 +44,8 @@ async function startup() {
     outputNumber: '1',
     startUniverse: 1200,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    numberOfLights: 339,
     lightMapping,
+    isReversedDirection: false,
   });
 
   const CONTROLLER_BERTS_BRIGHTS_2 = new OctoController({
@@ -54,8 +54,8 @@ async function startup() {
     outputNumber: '2',
     startUniverse: 1300,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    numberOfLights: 487,
     lightMapping,
+    isReversedDirection: false,
   });
 
   const CONTROLLER_SPOONFUL_1 = new OctoController({
@@ -64,8 +64,8 @@ async function startup() {
     outputNumber: '1',
     startUniverse: 1400,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    numberOfLights: 236,
     lightMapping,
+    isReversedDirection: true,
   });
 
   const CONTROLLER_SPOONFUL_2 = new OctoController({
@@ -74,8 +74,8 @@ async function startup() {
     outputNumber: '2',
     startUniverse: 1500,
     sacnNetworkInterface: SACN_NETWORK_INTERFACE,
-    numberOfLights: 341,
     lightMapping,
+    isReversedDirection: true,
   });
 
   const GLED_CONTROLLER_1 = new GledoptoController({
