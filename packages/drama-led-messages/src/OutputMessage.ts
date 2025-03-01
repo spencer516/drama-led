@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { LightConfig, Universe } from './AddressTypes';
+import { NamedLEDSection } from './NamedLEDSection';
 
 export const QLabReceiverConnectionStatus = z.enum([
   'starting',
@@ -60,6 +61,7 @@ export type MainServerStatus = z.infer<typeof MainServerStatus>;
 export const MacroStatus = z.object({
   cueID: z.string(),
   macroName: z.string(),
+  segment: NamedLEDSection,
   percentComplete: z.number().optional(),
 });
 

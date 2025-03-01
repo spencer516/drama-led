@@ -22,7 +22,11 @@ export default class MessageHandler {
     this.#ledSystem = ledSystem;
     this.#animator = new Animator();
 
-    this.#macroCoordinator = new MacroCoordinator(this.#animator, broadcaster);
+    this.#macroCoordinator = new MacroCoordinator(
+      this.#animator,
+      broadcaster,
+      ledSystem,
+    );
 
     broadcaster.macroCoordinator = this.#macroCoordinator;
   }

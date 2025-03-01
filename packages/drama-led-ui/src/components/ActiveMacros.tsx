@@ -5,6 +5,11 @@ import Card from "./ui/StatusCard";
 import IconButton from "./ui/IconButton";
 import { MacroStatus } from "@spencer516/drama-led-messages/src/OutputMessage";
 import { ReactNode } from "react";
+import {
+  BuildingOfficeIcon,
+  ClockIcon,
+  IdentificationIcon,
+} from "@heroicons/react/24/outline";
 
 type Props = {};
 
@@ -20,7 +25,6 @@ export default function ActiveMacroActions({}: Props) {
           key={macro.cueID}
           className="grow-0 w-auto"
           title={macro.macroName}
-          subtitle={macro.cueID}
           actions={
             <IconButton
               label="Stop Macro"
@@ -32,17 +36,33 @@ export default function ActiveMacroActions({}: Props) {
               }}
             />
           }
-          children={
-            macro.percentComplete == null ? null : (
-              <div className="overflow-hidden rounded-full bg-gray-200">
-                <div
-                  style={{ width: `${macro.percentComplete * 100}%` }}
-                  className="h-2 rounded-full bg-indigo-600 transition-[width]"
-                />
+        >
+          <div className="flex flex-col gap-1">
+            <div className="flex gap-2 items-center">
+              <IdentificationIcon className="size-4 text-gray-400" />
+              <dd className="text-sm/6 text-gray-900 font-mono">
+                {macro.cueID}
+              </dd>
+            </div>
+            <div className="flex gap-2 items-center">
+              <BuildingOfficeIcon className="size-4 text-gray-400" />
+              <dd className="text-sm/6 text-gray-900 font-mono">
+                {macro.segment}
+              </dd>
+            </div>
+            {macro.percentComplete == null ? null : (
+              <div className="flex gap-2 items-center">
+                <ClockIcon className="size-4 text-gray-400" />
+                <div className="overflow-hidden rounded-full bg-gray-200 grow shrink-0 h-2">
+                  <div
+                    style={{ width: `${macro.percentComplete * 100}%` }}
+                    className="h-2 rounded-full bg-indigo-600 transition-[width]"
+                  />
+                </div>
               </div>
-            )
-          }
-        />
+            )}
+          </div>
+        </Card>
       ))}
 
       {activeMacros.length === 0 ? (

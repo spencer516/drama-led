@@ -3,16 +3,23 @@ import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 import Animator from '../Animator';
 import Broadcaster from '../Broadcaster';
 import MacroBase from './MacroBase';
+import LEDSystem from '../LEDSystem';
 
 export default class MacroCoordinator {
   #animator: Animator;
   #broadcaster: Broadcaster;
   #broadcastCallback: (() => void) | null = null;
   #activeMacros: Map<string, MacroBase> = new Map();
+  #ledSystem: LEDSystem;
 
-  constructor(animator: Animator, broadcaster: Broadcaster) {
+  constructor(
+    animator: Animator,
+    broadcaster: Broadcaster,
+    ledSystem: LEDSystem,
+  ) {
     this.#animator = animator;
     this.#broadcaster = broadcaster;
+    this.#ledSystem = ledSystem;
   }
 
   macroStarted(macro: MacroBase) {
@@ -24,7 +31,9 @@ export default class MacroCoordinator {
     }
 
     // If there is a macro with the same segment, cancel it
-    const existingSegmentMacro = this.#findMacroInSegment(macro.segment);
+    const existingSegmentMacro = this.#findMacroOverlappingSegment(
+      macro.segment,
+    );
 
     if (existingSegmentMacro) {
       existingSegmentMacro.stop();
@@ -80,9 +89,10 @@ export default class MacroCoordinator {
     return status;
   }
 
-  #findMacroInSegment(segment: NamedLEDSection): MacroBase | null {
+  #findMacroOverlappingSegment(segment: NamedLEDSection): MacroBase | null {
+    // Find the controllers for the segment.
     for (const macro of this.#activeMacros.values()) {
-      if (macro.segment === segment) {
+      if (this.#ledSystem.doSegmentsOverlap(macro.segment, segment)) {
         return macro;
       }
     }

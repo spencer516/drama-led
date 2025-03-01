@@ -7,6 +7,10 @@ import LightMapping from './src/LightMapping';
 import QLabReceiver from './src/QLabReceiver';
 import GledoptoController from './src/GledoptoController';
 
+function set<T>(items: T[]): Set<T> {
+  return new Set(items);
+}
+
 async function startup() {
   const lightMapping = new LightMapping('FullSystemGeneratedV2.csv');
 
@@ -97,36 +101,42 @@ async function startup() {
     ],
     [GLED_CONTROLLER_1],
     {
-      FULL_ARCH_STAGE_LEFT: [CONTROLLER_SUPERCALI_1, CONTROLLER_SUPERCALI_2],
-      FULL_ARCH_CENTER: [
+      FULL_ARCH_STAGE_LEFT: set([
+        CONTROLLER_SUPERCALI_1,
+        CONTROLLER_SUPERCALI_2,
+      ]),
+      FULL_ARCH_CENTER: set([
         CONTROLLER_BERTS_BRIGHTS_1,
         CONTROLLER_BERTS_BRIGHTS_2,
-      ],
-      FULL_ARCH_STAGE_RIGHT: [CONTROLLER_SPOONFUL_1, CONTROLLER_SPOONFUL_2],
-      INNER_ARCH_STAGE_LEFT: [CONTROLLER_SUPERCALI_1],
-      INNER_ARCH_CENTER: [CONTROLLER_BERTS_BRIGHTS_1],
-      INNER_ARCH_STAGE_RIGHT: [CONTROLLER_SPOONFUL_1],
-      OUTER_ARCH_STAGE_LEFT: [CONTROLLER_SUPERCALI_2],
-      OUTER_ARCH_CENTER: [CONTROLLER_BERTS_BRIGHTS_2],
-      OUTER_ARCH_STAGE_RIGHT: [CONTROLLER_SPOONFUL_2],
-      ALL_ARCHES_FULL: [
+      ]),
+      FULL_ARCH_STAGE_RIGHT: set([
+        CONTROLLER_SPOONFUL_1,
+        CONTROLLER_SPOONFUL_2,
+      ]),
+      INNER_ARCH_STAGE_LEFT: set([CONTROLLER_SUPERCALI_1]),
+      INNER_ARCH_CENTER: set([CONTROLLER_BERTS_BRIGHTS_1]),
+      INNER_ARCH_STAGE_RIGHT: set([CONTROLLER_SPOONFUL_1]),
+      OUTER_ARCH_STAGE_LEFT: set([CONTROLLER_SUPERCALI_2]),
+      OUTER_ARCH_CENTER: set([CONTROLLER_BERTS_BRIGHTS_2]),
+      OUTER_ARCH_STAGE_RIGHT: set([CONTROLLER_SPOONFUL_2]),
+      ALL_ARCHES_FULL: set([
         CONTROLLER_SUPERCALI_1,
         CONTROLLER_SUPERCALI_2,
         CONTROLLER_BERTS_BRIGHTS_1,
         CONTROLLER_BERTS_BRIGHTS_2,
         CONTROLLER_SPOONFUL_1,
         CONTROLLER_SPOONFUL_2,
-      ],
-      ALL_ARCHES_OUTER: [
+      ]),
+      ALL_ARCHES_OUTER: set([
         CONTROLLER_SUPERCALI_2,
         CONTROLLER_SPOONFUL_2,
         CONTROLLER_BERTS_BRIGHTS_2,
-      ],
-      ALL_ARCHES_INNER: [
+      ]),
+      ALL_ARCHES_INNER: set([
         CONTROLLER_SUPERCALI_1,
         CONTROLLER_SPOONFUL_1,
         CONTROLLER_BERTS_BRIGHTS_1,
-      ],
+      ]),
     },
   );
 

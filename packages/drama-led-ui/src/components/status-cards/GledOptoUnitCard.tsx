@@ -72,7 +72,14 @@ export default function GledOptoUnitCard({ gledoptoStatus }: Params) {
         <div className="flex gap-2 items-center">
           <GlobeAltIcon className="size-4 text-gray-400" />
           <dd className="text-sm/6 text-gray-900 font-mono">
-            {gledoptoStatus.host}&nbsp;({gledoptoStatus.universe})
+            <a
+              href={`http://${gledoptoStatus.host}`}
+              target="_blank"
+              className="text-blue-600"
+            >
+              {gledoptoStatus.host}
+            </a>
+            &nbsp;({gledoptoStatus.universe})
           </dd>
         </div>
         <div className="flex gap-2 items-center">

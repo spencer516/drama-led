@@ -2,7 +2,7 @@ type Params = Readonly<{
   children?: React.ReactNode | null;
   actions?: React.ReactNode | null;
   footer?: React.ReactNode | null;
-  title: string;
+  title: React.ReactNode | string;
   subtitle?: string;
   className?: string | null;
 }>;
@@ -26,7 +26,7 @@ export default function Card({
           <div className="mt-2 ml-4">
             <h3 className="text-base font-semibold text-gray-900">{title}</h3>
             {subtitle == null ? null : (
-              <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+              <p className="text-sm text-gray-500">{subtitle}</p>
             )}
           </div>
           {actions == null ? null : (

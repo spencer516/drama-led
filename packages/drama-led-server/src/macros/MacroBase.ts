@@ -60,6 +60,7 @@ export default class MacroBase<
     return {
       cueID: this.cueID,
       macroName: this.constructor.name,
+      segment: this.segment,
     };
   }
 

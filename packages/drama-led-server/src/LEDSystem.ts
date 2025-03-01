@@ -16,7 +16,7 @@ export const SACN_NETWORK_INTERFACE = '192.168.1.199';
 
 type TNamedSegments = Record<
   NamedLEDSection,
-  (OctoController | GledoptoController)[]
+  Set<OctoController | GledoptoController>
 >;
 
 export default class LEDSystem {
@@ -87,14 +87,38 @@ export default class LEDSystem {
   }
 
   getSegmentIterator(
-    segmentName: keyof TNamedSegments,
+    segmentName: NamedLEDSection,
   ): () => Generator<[number, Light]> {
     return () => this.iterateSegment(segmentName);
   }
 
-  *iterateSegment(
-    segmentName: keyof TNamedSegments,
-  ): Generator<[number, Light]> {
+  doSegmentsOverlap(
+    segmentA: NamedLEDSection,
+    segmentB: NamedLEDSection,
+  ): boolean {
+    if (segmentA === segmentB) {
+      return true;
+    }
+
+    const controllersA = this.#namedSegments[segmentA];
+    const controllersB = this.#namedSegments[segmentB];
+
+    for (const controllerA of controllersA) {
+      if (controllersB.has(controllerA)) {
+        return true;
+      }
+    }
+
+    for (const controllerB of controllersB) {
+      if (controllersA.has(controllerB)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  *iterateSegment(segmentName: NamedLEDSection): Generator<[number, Light]> {
     let index = 0;
     for (const controller of this.#namedSegments[segmentName]) {
       for (const light of controller.lights) {

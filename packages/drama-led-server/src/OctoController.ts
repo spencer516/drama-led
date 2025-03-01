@@ -13,7 +13,6 @@ import { checkSACNSocket, getUniverseChannelMaker, range } from './utils';
 import { Sender } from 'sacn';
 import { LightChannel } from './LightChannel';
 import LightMapping from './LightMapping';
-import MessageHandler from './MessageHandler';
 import Broadcaster from './Broadcaster';
 
 const IPAddress = z.string().ip({ version: 'v4' }).brand('IPAddress');

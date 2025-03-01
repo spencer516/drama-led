@@ -42,7 +42,14 @@ export default function OctoUnitCard({ octoStatus }: Params) {
         <div className="flex gap-2 items-center">
           <GlobeAltIcon className="size-4 text-gray-400" />
           <dd className="text-sm/6 text-gray-900 font-mono">
-            {octoStatus.ipAddress}&nbsp;
+            <a
+              href={`http://${octoStatus.ipAddress}`}
+              target="_blank"
+              className="text-blue-600"
+            >
+              {octoStatus.ipAddress}
+            </a>
+            &nbsp;
             {startUniverse === endUniverse
               ? `(${startUniverse})`
               : `(${startUniverse}-${endUniverse})`}
