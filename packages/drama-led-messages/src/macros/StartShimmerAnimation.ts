@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { RGBColor } from '../RGBColor';
 import { StartBaseMacro } from './StartBaseMacro';
+import { makeRGBValue } from '../AddressTypes';
 
 export const StartShimmerAnimation = StartBaseMacro.extend({
   type: z.literal('START_SHIMMER'),
@@ -12,3 +13,20 @@ export const StartShimmerAnimation = StartBaseMacro.extend({
 });
 
 export type StartShimmerAnimation = z.infer<typeof StartShimmerAnimation>;
+
+export const EXAMPLES: Record<string, StartShimmerAnimation> = {
+  Shimmer: {
+    type: 'START_SHIMMER',
+    cueID: 'shimmer-1',
+    segment: 'FULL_ARCH_STAGE_LEFT',
+    data: {
+      speed: 40,
+      density: 20,
+      color: {
+        red: makeRGBValue(255),
+        green: makeRGBValue(251),
+        blue: makeRGBValue(212),
+      },
+    },
+  },
+};

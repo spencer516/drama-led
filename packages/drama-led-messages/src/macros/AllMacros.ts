@@ -1,11 +1,30 @@
-import { StartRandomSparkle } from './StartRandomSparkle';
-import { StartBasicChase } from './StartBasicChase';
-import { StartShimmerAnimation } from './StartShimmerAnimation';
-import { StartStaticPattern } from './StartStaticPattern';
+import {
+  StartRandomSparkle,
+  EXAMPLES as RandomSparkleExamples,
+} from './StartRandomSparkle';
+import {
+  StartBasicChase,
+  EXAMPLES as BasicChaseExamples,
+} from './StartBasicChase';
+import {
+  StartShimmerAnimation,
+  EXAMPLES as ShimmerAnimationExamples,
+} from './StartShimmerAnimation';
+import {
+  StartStaticPattern,
+  EXAMPLES as StaticPatternExamples,
+} from './StartStaticPattern';
 
-export default [
+export const AllMacros = [
   StartRandomSparkle,
   StartBasicChase,
   StartShimmerAnimation,
   StartStaticPattern,
 ];
+
+export const MACRO_EXAMPLES = {
+  ...RandomSparkleExamples,
+  ...BasicChaseExamples,
+  ...ShimmerAnimationExamples,
+  ...StaticPatternExamples,
+};

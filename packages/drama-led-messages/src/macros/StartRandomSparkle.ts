@@ -10,3 +10,14 @@ export const StartRandomSparkle = StartBaseMacro.extend({
 });
 
 export type StartRandomSparkle = z.infer<typeof StartRandomSparkle>;
+
+export const EXAMPLES: Record<string, StartRandomSparkle> = {
+  Sparkle: {
+    type: 'START_RANDOM_SPARKLE',
+    segment: 'ALL_ARCHES_INNER',
+    cueID: 'sparkle-1',
+    data: {
+      duration: 3000,
+    },
+  },
+};

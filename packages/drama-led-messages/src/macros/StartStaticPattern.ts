@@ -9,3 +9,14 @@ export const StartStaticPattern = StartBaseMacro.extend({
 });
 
 export type StartStaticPattern = z.infer<typeof StartStaticPattern>;
+
+export const EXAMPLES: Record<string, StartStaticPattern> = {
+  'Pink/White Stripes': {
+    type: 'START_STATIC_PATTERN',
+    cueID: 'cue-static-1',
+    segment: 'ALL_ARCHES_FULL',
+    data: {
+      pattern: 'foo',
+    },
+  },
+};

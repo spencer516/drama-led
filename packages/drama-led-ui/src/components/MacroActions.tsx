@@ -5,6 +5,7 @@ import { makeRGBValue } from "@spencer516/drama-led-messages/src/AddressTypes";
 import { useState } from "react";
 import JSONEditor from "./ui/JSONEditor";
 import { InputMessage } from "@spencer516/drama-led-messages/src/InputMessage";
+import { MACRO_EXAMPLES } from "@spencer516/drama-led-messages/src/macros/AllMacros";
 
 type Props = {};
 
@@ -52,85 +53,13 @@ export default function MacroActions({}: Props) {
             })
           }
         />
-        <Button
-          label="Static Pattern"
-          onClick={() =>
-            setCodeObject({
-              type: "START_STATIC_PATTERN",
-              cueID: "cue-static-1",
-              segment: "ALL_ARCHES_FULL",
-              data: {
-                pattern: "foo",
-              },
-            })
-          }
-        />
-        <Button
-          label="Basic Chase"
-          onClick={() =>
-            setCodeObject({
-              type: "START_BASIC_CHASE",
-              cueID: "cue1",
-              segment: "ALL_ARCHES_FULL",
-              data: {
-                spread: 5,
-                gap: 15,
-                maxFPS: 20,
-                direction: "reverse",
-                color: "red",
-              },
-            })
-          }
-        />
-        <Button
-          label="Rainbow Chase"
-          onClick={() =>
-            setCodeObject({
-              type: "START_BASIC_CHASE",
-              cueID: "cue1",
-              segment: "ALL_ARCHES_FULL",
-              data: {
-                spread: 5,
-                gap: 15,
-                maxFPS: 10,
-                direction: "reverse",
-                color: "rainbow",
-              },
-            })
-          }
-        />
-        <Button
-          label="Shimmer"
-          onClick={() =>
-            setCodeObject({
-              type: "START_SHIMMER",
-              cueID: "shimmer-1",
-              segment: "FULL_ARCH_STAGE_LEFT",
-              data: {
-                speed: 40,
-                density: 20,
-                color: {
-                  red: makeRGBValue(255),
-                  green: makeRGBValue(251),
-                  blue: makeRGBValue(212),
-                },
-              },
-            })
-          }
-        />
-        <Button
-          label="Sparkle"
-          onClick={() =>
-            setCodeObject({
-              type: "START_RANDOM_SPARKLE",
-              segment: "ALL_ARCHES_INNER",
-              cueID: "cue-1",
-              data: {
-                duration: 3000,
-              },
-            })
-          }
-        />
+        {Object.entries(MACRO_EXAMPLES).map(([label, example]) => (
+          <Button
+            key={label}
+            label={label}
+            onClick={() => setCodeObject(example)}
+          />
+        ))}
       </div>
       <div className="border-slate-300 border grow h-[400px]">
         <JSONEditor

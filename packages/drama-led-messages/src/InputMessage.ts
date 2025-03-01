@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { LightID } from './AddressTypes';
-import AllMacros from './macros/AllMacros';
+import { AllMacros } from './macros/AllMacros';
 import { RGBColor } from './RGBColor';
 
 export const EmptyMessage = z.object({
