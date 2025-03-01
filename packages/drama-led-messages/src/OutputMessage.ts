@@ -60,6 +60,7 @@ export type MainServerStatus = z.infer<typeof MainServerStatus>;
 export const MacroStatus = z.object({
   cueID: z.string(),
   macroName: z.string(),
+  percentComplete: z.number().optional(),
 });
 
 export type MacroStatus = z.infer<typeof MacroStatus>;

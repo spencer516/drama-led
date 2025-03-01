@@ -65,10 +65,7 @@ export default class MacroCoordinator {
     const status = [];
 
     for (const macro of this.#activeMacros.values()) {
-      status.push({
-        cueID: macro.cueID,
-        macroName: macro.constructor.name,
-      });
+      status.push(macro.getMacroStatus());
     }
 
     return status;

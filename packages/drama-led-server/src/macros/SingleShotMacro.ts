@@ -1,3 +1,4 @@
+import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 import MacroBase from './MacroBase';
 
 export type MinimumDataType = {
@@ -16,6 +17,7 @@ export default class SingleShotMacro<
 > extends MacroBase<TMessageData> {
   #currentAnimation: (() => void) | null = null;
   #hasRun: boolean = false;
+  #percentComplete: number = 0;
 
   startImpl() {
     this.#hasRun = true;
@@ -24,10 +26,9 @@ export default class SingleShotMacro<
       this.stop();
     }
 
-    console.log('STARTING!!', this.type);
-
     this.#currentAnimation = this.animator.animate(
       (percentComplete) => {
+        this.#percentComplete = percentComplete;
         this.tick(percentComplete);
       },
       {
@@ -36,6 +37,15 @@ export default class SingleShotMacro<
         durationInMs: this.data.duration,
       },
     );
+  }
+
+  getMacroStatus(): MacroStatus {
+    const parent = super.getMacroStatus();
+
+    return {
+      ...parent,
+      percentComplete: this.#percentComplete,
+    };
   }
 
   getCustomParams(): TCustomParams {

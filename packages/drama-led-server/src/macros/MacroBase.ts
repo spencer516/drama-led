@@ -3,6 +3,7 @@ import LEDSystem from '../LEDSystem';
 import Animator from '../Animator';
 import MacroCoordinator from './MacroCoordinator';
 import { InputMessage } from '@spencer516/drama-led-messages/src/InputMessage';
+import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 
 export type MinimumDataType = {
   [key: string]: unknown;
@@ -49,6 +50,13 @@ export default class MacroBase<
 
   get type() {
     return this.message.type;
+  }
+
+  getMacroStatus(): MacroStatus {
+    return {
+      cueID: this.cueID,
+      macroName: this.constructor.name,
+    };
   }
 
   static create<TMessageType extends MinimumDataType>(

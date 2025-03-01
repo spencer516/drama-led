@@ -3,6 +3,8 @@
 import { useLatestMessage, useSendMessage } from "@/utils/LEDServerContext";
 import Card from "./ui/StatusCard";
 import IconButton from "./ui/IconButton";
+import { MacroStatus } from "@spencer516/drama-led-messages/src/OutputMessage";
+import { ReactNode } from "react";
 
 type Props = {};
 
@@ -29,6 +31,16 @@ export default function ActiveMacroActions({}: Props) {
                 });
               }}
             />
+          }
+          children={
+            macro.percentComplete == null ? null : (
+              <div className="overflow-hidden rounded-full bg-gray-200">
+                <div
+                  style={{ width: `${macro.percentComplete * 100}%` }}
+                  className="h-2 rounded-full bg-indigo-600 transition-[width]"
+                />
+              </div>
+            )
           }
         />
       ))}
