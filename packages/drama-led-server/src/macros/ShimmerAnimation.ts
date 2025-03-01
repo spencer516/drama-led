@@ -1,11 +1,9 @@
-import {
-  RGBColor,
-  StartShimmerAnimation,
-} from '@spencer516/drama-led-messages/src/InputMessage';
+import { RGBColor } from '@spencer516/drama-led-messages/src/RGBColor';
 import Animator from '../Animator';
 import LEDSystem from '../LEDSystem';
 import { TGetLightsIterator } from './AnimationMacroBase';
 import LoopingAnimationMacro from './LoopingAnimationMacro';
+import { StartShimmerAnimation } from '@spencer516/drama-led-messages/src/macros/StartShimmerAnimation';
 
 export default class ShimmerAnimation extends LoopingAnimationMacro {
   speed: number;

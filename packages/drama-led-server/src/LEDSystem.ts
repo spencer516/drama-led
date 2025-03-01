@@ -10,7 +10,7 @@ import GledoptoController from './GledoptoController';
 import QLabReceiver from './QLabReceiver';
 import MessageHandler from './MessageHandler';
 import Broadcaster from './Broadcaster';
-import { NamedLEDSection } from '@spencer516/drama-led-messages/src/InputMessage';
+import { NamedLEDSection } from '@spencer516/drama-led-messages/src/NamedLEDSection';
 
 export const SACN_NETWORK_INTERFACE = '192.168.1.199';
 

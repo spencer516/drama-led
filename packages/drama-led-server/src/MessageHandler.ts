@@ -52,8 +52,6 @@ export default class MessageHandler {
         );
         this.#macroCoordinator.startMacro(shimmer);
         break;
-      case 'START_RADIAL_CHASE':
-        break;
       case 'START_RANDOM_SPARKLE':
         const sparkle = new RandomSparkle(
           'some-id',

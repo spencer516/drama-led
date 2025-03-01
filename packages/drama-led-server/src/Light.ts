@@ -13,7 +13,7 @@ import {
 } from 'd3-color';
 import { LightChannel } from './LightChannel';
 import { invariant } from './utils';
-import { RGBColor } from '@spencer516/drama-led-messages/src/InputMessage';
+import { RGBColor } from '@spencer516/drama-led-messages/src/RGBColor';
 
 const LIGHT_STORE = new Map<LightID, Light>();
 
