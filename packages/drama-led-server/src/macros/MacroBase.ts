@@ -44,6 +44,10 @@ export default class MacroBase<
     return this.message.data;
   }
 
+  get segment() {
+    return this.message.segment;
+  }
+
   get cueID() {
     return this.message.cueID;
   }

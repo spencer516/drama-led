@@ -1,3 +1,4 @@
+import { NamedLEDSection } from '@spencer516/drama-led-messages/src/NamedLEDSection';
 import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 import Animator from '../Animator';
 import Broadcaster from '../Broadcaster';
@@ -15,10 +16,18 @@ export default class MacroCoordinator {
   }
 
   macroStarted(macro: MacroBase) {
+    // If there is a macro with this cue number, cancel it.
     const existingMacro = this.#activeMacros.get(macro.cueID);
 
     if (existingMacro != null) {
       existingMacro.stop();
+    }
+
+    // If there is a macro with the same segment, cancel it
+    const existingSegmentMacro = this.#findMacroInSegment(macro.segment);
+
+    if (existingSegmentMacro) {
+      existingSegmentMacro.stop();
     }
 
     this.#activeMacros.set(macro.cueID, macro);
@@ -69,5 +78,15 @@ export default class MacroCoordinator {
     }
 
     return status;
+  }
+
+  #findMacroInSegment(segment: NamedLEDSection): MacroBase | null {
+    for (const macro of this.#activeMacros.values()) {
+      if (macro.segment === segment) {
+        return macro;
+      }
+    }
+
+    return null;
   }
 }
