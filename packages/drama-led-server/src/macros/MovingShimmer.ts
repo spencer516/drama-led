@@ -3,36 +3,51 @@ import SingleShotMacro from './SingleShotMacro';
 import { scaleLinear, ScaleLinear, scalePow, ScalePower } from 'd3-scale';
 
 type CustomParams = {
-  animationScale: ScaleLinear<number, number>;
+  verticalAnimation: ScaleLinear<number, number>;
   spreadScale: ScalePower<number, number>;
   decayScale: ScaleLinear<number, number>;
+  horizontalCenter: number;
 };
 
 export default class MovingShimmer extends SingleShotMacro<
   StartMovingShimmer['data'],
   CustomParams
 > {
-  getRange() {
+  getBoundingBox() {
     let bottom = Infinity;
     let top = -1 * Infinity;
+    let left = Infinity;
+    let right = -1 * Infinity;
 
-    for (const [, { coordinates }] of this.lightsIterator()) {
-      bottom = Math.min(coordinates.y, bottom);
-      top = Math.max(coordinates.y, top);
+    for (const [, light] of this.lightsIterator()) {
+      const {
+        coordinates: { x, y },
+      } = light;
+
+      bottom = Math.min(y, bottom);
+      top = Math.max(y, top);
+      left = Math.min(x, left);
+      right = Math.max(x, right);
     }
 
-    const spread = this.data.spread;
+    const extraBuffer = ((right - left) / 2) * (this.data.slopeEffect / 100);
 
-    // Add extra space for the spread.
-    bottom = bottom - spread;
-    top = top + spread;
+    bottom = bottom;
+    top = top + this.data.spread + extraBuffer;
+    left = left;
+    right = right;
 
-    return this.data.direction === 'UP' ? [bottom, top] : [top, bottom];
+    return { bottom, top, left, right };
   }
 
   getCustomParams(): CustomParams {
+    const { bottom, top, left, right } = this.getBoundingBox();
+
+    const range = this.data.direction === 'UP' ? [bottom, top] : [top, bottom];
+
     return {
-      animationScale: scaleLinear().domain([0, 1]).range(this.getRange()),
+      verticalAnimation: scaleLinear().domain([0, 1]).range(range),
+      horizontalCenter: (left + right) / 2 + left,
       decayScale: scaleLinear()
         .domain([0, 1])
         .range([
@@ -48,12 +63,20 @@ export default class MovingShimmer extends SingleShotMacro<
   }
 
   tick(percentComplete: number, params: CustomParams) {
-    const verticalPosition = params.animationScale(percentComplete);
+    const verticalPosition = params.verticalAnimation(percentComplete);
     const decayedDensity = params.decayScale(percentComplete);
 
     for (const [, light] of this.lightsIterator()) {
+      const distanceFromCenter = Math.abs(
+        light.coordinates.x - params.horizontalCenter,
+      );
+
+      // This is to create a upside-down V effect
+      const offsetVerticalPosition =
+        verticalPosition - distanceFromCenter * (this.data.slopeEffect / 100);
+
       const distanceFromVertical = Math.abs(
-        light.coordinates.y - verticalPosition,
+        light.coordinates.y - offsetVerticalPosition,
       );
 
       const percent = params.spreadScale(distanceFromVertical);

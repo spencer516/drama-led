@@ -23,7 +23,7 @@ export default class AnimatedPattern extends ContinuousMacro<
 
   tick(
     timeElapsed: number,
-    frameNumber: number,
+    _: number,
     { indexedColors, speedScale }: CustomParams,
   ) {
     const combinedLength = indexedColors.length;
