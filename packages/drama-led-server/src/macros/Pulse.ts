@@ -4,6 +4,7 @@ import ContinuousMacro from './ContinuousMacro';
 import { StartPulse } from '@spencer516/drama-led-messages/src/macros/StartPulse';
 import { interpolateRgb } from 'd3-interpolate';
 import { clamp } from '../utils';
+import { randomUniform } from 'd3-random';
 
 type ActiveLightState = {
   finishTime: number;
@@ -12,9 +13,12 @@ type ActiveLightState = {
 
 type CustomParams = {
   maxVisibleScale: ScaleLinear<number, number>;
+  getRandomColor: () => string;
   inactiveLights: Set<Light>;
   activeLightStates: Map<Light, ActiveLightState>;
 };
+
+const randomZeroToOne = randomUniform(1);
 
 export default class Pulse extends ContinuousMacro<
   StartPulse['data'],
@@ -26,6 +30,9 @@ export default class Pulse extends ContinuousMacro<
     const density = this.data.density / 100;
     const maxVisibleLights = Math.floor(count * density);
 
+    const [startColor, endColor] = this.data.colorRange;
+    const colorInterpolator = interpolateRgb(startColor, endColor);
+
     const maxVisibleScale = scaleLinear()
       .domain([0, this.data.durationPerLight])
       .range([0, maxVisibleLights])
@@ -34,6 +41,9 @@ export default class Pulse extends ContinuousMacro<
     return {
       activeLightStates: new Map(),
       inactiveLights: new Set(lightsArray),
+      getRandomColor: () => {
+        return colorInterpolator(randomZeroToOne());
+      },
       maxVisibleScale,
     };
   }
@@ -60,26 +70,34 @@ export default class Pulse extends ContinuousMacro<
 
   createAnimatorForTime(
     currentTime: number,
+    color: string,
   ): [number, ScaleLinear<string, string>] {
     const duration = this.data.durationPerLight;
     const finishTime = currentTime + duration;
 
     const fadeAnimator = scaleLinear<string>()
       .domain([currentTime, currentTime + duration / 2, finishTime])
-      .range(['rgb(0,0,0)', this.data.color, 'rgb(0,0,0)'])
+      .range(['rgb(0,0,0)', color, 'rgb(0,0,0)'])
       .interpolate(interpolateRgb);
 
     return [finishTime, fadeAnimator];
   }
 
   tick(timeElapsed: number, _: number, params: CustomParams) {
-    const { activeLightStates, maxVisibleScale, inactiveLights } = params;
+    const {
+      activeLightStates,
+      maxVisibleScale,
+      inactiveLights,
+      getRandomColor,
+    } = params;
     const maxVisibleLights = maxVisibleScale(timeElapsed);
 
-    while (activeLightStates.size < maxVisibleLights) {
-      const [finishTime, fadeAnimator] =
-        this.createAnimatorForTime(timeElapsed);
+    const [finishTime, fadeAnimator] = this.createAnimatorForTime(
+      timeElapsed,
+      getRandomColor(),
+    );
 
+    while (activeLightStates.size < maxVisibleLights) {
       const randomLight = this.getRandomLight(inactiveLights);
 
       if (randomLight != null) {

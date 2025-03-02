@@ -6,7 +6,7 @@ export const StartPulse = StartBaseMacro.extend({
   data: z.object({
     durationPerLight: z.number().min(0),
     rampUpDuration: z.number().min(0),
-    color: z.string(),
+    colorRange: z.tuple([z.string(), z.string()]),
     density: z.number().min(0).max(100),
   }),
 });
@@ -21,7 +21,7 @@ export const EXAMPLES: Record<string, StartPulse> = {
     data: {
       durationPerLight: 2000,
       rampUpDuration: 5000,
-      color: 'rgb(255,255,255)',
+      colorRange: ['rgb(255,255,255)', 'rgb(255,255,0)'],
       density: 10,
     },
   },
