@@ -20,7 +20,7 @@ function Button({ onClick, label }: ButtonProps) {
   return (
     <button
       type="button"
-      className="rounded-md bg-white px-2 py-1 text-xs font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
+      className="rounded-lg bg-white px-2 py-1 text-xs font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
       onClick={onClick}
     >
       {label}
@@ -79,24 +79,6 @@ export default function MacroActions({}: Props) {
     <>
       <div className="flex gap-4 p-4 box-border">
         <div className="grow-0 flex flex-col gap-2">
-          <Button
-            label="All On"
-            onClick={() =>
-              setCodeObject({
-                type: "TURN_ALL_ON",
-                data: {},
-              })
-            }
-          />
-          <Button
-            label="All Off"
-            onClick={() =>
-              setCodeObject({
-                type: "TURN_ALL_OFF",
-                data: {},
-              })
-            }
-          />
           {Object.entries(MACRO_EXAMPLES).map(([label, example]) => (
             <Button
               key={label}
@@ -121,18 +103,32 @@ export default function MacroActions({}: Props) {
           >
             Submit
           </button>
-          <button
-            type="button"
-            className="rounded-md bg-red-600 px-2 py-1 text-xs font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-            onClick={() => {
-              sendMessage({
-                type: "TURN_ALL_OFF",
-                data: {},
-              });
-            }}
-          >
-            All Off
-          </button>
+          <span className="isolate inline-flex rounded-md shadow-xs">
+            <button
+              type="button"
+              className="rounded-l-md grow bg-green-600 px-2 py-1 text-xs font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              onClick={() => {
+                sendMessage({
+                  type: "TURN_ALL_ON",
+                  data: {},
+                });
+              }}
+            >
+              All On
+            </button>
+            <button
+              type="button"
+              className="rounded-r-md grow bg-red-600 px-2 py-1 text-xs font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+              onClick={() => {
+                sendMessage({
+                  type: "TURN_ALL_OFF",
+                  data: {},
+                });
+              }}
+            >
+              All Off
+            </button>
+          </span>
         </div>
       </div>
       <ErrorModal

@@ -13,7 +13,6 @@ export default function JSONEditor({ code, onChange }: Props) {
     editor.updateOptions({
       tabSize: 2,
       selectionClipboard: false,
-      renderValidationDecorations: "on",
     });
   };
 
