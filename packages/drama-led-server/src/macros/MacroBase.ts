@@ -22,7 +22,7 @@ export type MacroParams = {
   macroCoordinator: MacroCoordinator;
 };
 
-export default class MacroBase<
+export default abstract class MacroBase<
   TMessageType extends MinimumDataType = MinimumDataType,
 > {
   ledSystem: LEDSystem;
@@ -88,9 +88,7 @@ export default class MacroBase<
     this.startImpl();
   }
 
-  startImpl() {
-    throw new Error('Not Implemented');
-  }
+  abstract startImpl(): void;
 
   stop() {
     this.macroCoordinator.macroStopped(this);
@@ -102,7 +100,5 @@ export default class MacroBase<
     this.stopImpl();
   }
 
-  stopImpl() {
-    throw new Error('Not Implemented');
-  }
+  abstract stopImpl(): void;
 }

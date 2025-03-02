@@ -48,6 +48,10 @@ export default class Light {
     );
   }
 
+  get coordinates() {
+    return this.#coordinates;
+  }
+
   get universe() {
     return this.#redChannel.universe;
   }

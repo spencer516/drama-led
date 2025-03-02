@@ -11,6 +11,7 @@ import RandomSparkle from './macros/RandomSparkle';
 import BasicChase from './macros/BasicChase';
 import ShimmerAnimation from './macros/ShimmerAnimation';
 import StaticPatternMacro from './macros/StaticPatternMacro';
+import MovingShimmer from './macros/MovingShimmer';
 
 export default class MessageHandler {
   #broadcaster: Broadcaster;
@@ -58,6 +59,9 @@ export default class MessageHandler {
       case 'START_STATIC_PATTERN':
         StaticPatternMacro.create(message, macroParams).start();
         break;
+      case 'START_MOVING_SHIMMER':
+        MovingShimmer.create(message, macroParams).start();
+        break;
       /**
        * ===========================
        */
@@ -103,6 +107,8 @@ export default class MessageHandler {
       case 'UPDATE_ALL_LIGHTS':
         // TODO
         break;
+      default:
+        console.log(`Did not handle Message: ${message.type}`);
     }
   }
 

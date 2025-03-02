@@ -15,11 +15,17 @@ import {
   EXAMPLES as StaticPatternExamples,
 } from './StartStaticPattern';
 
+import {
+  StartMovingShimmer,
+  EXAMPLES as MovingShimmerExamples,
+} from './StartMovingShimmer';
+
 export const AllMacros = [
   StartRandomSparkle,
   StartBasicChase,
   StartShimmerAnimation,
   StartStaticPattern,
+  StartMovingShimmer,
 ];
 
 export const MACRO_EXAMPLES = {
@@ -27,4 +33,5 @@ export const MACRO_EXAMPLES = {
   ...BasicChaseExamples,
   ...ShimmerAnimationExamples,
   ...StaticPatternExamples,
+  ...MovingShimmerExamples,
 };

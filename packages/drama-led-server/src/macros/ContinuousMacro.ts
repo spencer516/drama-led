@@ -9,7 +9,7 @@ type CustomParams = {
   [key: string]: unknown;
 };
 
-export default class ContinuousMacro<
+export default abstract class ContinuousMacro<
   TMessageData extends MinimumDataType,
   TCustomParams extends CustomParams,
 > extends MacroBase<TMessageData> {
@@ -31,20 +31,16 @@ export default class ContinuousMacro<
     }, this.maxFPS);
   }
 
-  getCustomParams(): TCustomParams {
-    throw new Error('Not Implemented');
-  }
+  abstract getCustomParams(): TCustomParams;
 
   stopImpl() {
     this.cancelAnimation?.();
     this.cancelAnimation = null;
   }
 
-  tick(
+  abstract tick(
     _timeElapsed: number,
     _frameNumber: number,
     _customParams: TCustomParams,
-  ) {
-    throw new Error('Not Implemented');
-  }
+  ): void;
 }

@@ -11,7 +11,7 @@ type CustomParams = {
   [key: string]: unknown;
 };
 
-export default class SingleShotMacro<
+export default abstract class SingleShotMacro<
   TMessageData extends MinimumDataType,
   TCustomParams extends CustomParams,
 > extends MacroBase<TMessageData> {
@@ -26,10 +26,12 @@ export default class SingleShotMacro<
       this.stop();
     }
 
+    const params = this.getCustomParams();
+
     this.#currentAnimation = this.animator.animate(
       (percentComplete) => {
         this.#percentComplete = percentComplete;
-        this.tick(percentComplete);
+        this.tick(percentComplete, params);
       },
       {
         maxFPS: this.data.maxFPS ?? 60,
@@ -48,9 +50,7 @@ export default class SingleShotMacro<
     };
   }
 
-  getCustomParams(): TCustomParams {
-    throw new Error('Not Implemented');
-  }
+  abstract getCustomParams(): TCustomParams;
 
   get isFinished() {
     return this.#hasRun && this.#currentAnimation == null;
@@ -61,7 +61,5 @@ export default class SingleShotMacro<
     this.#currentAnimation = null;
   }
 
-  tick(_percentComplete: number) {
-    throw new Error('not implemented');
-  }
+  abstract tick(_percentComplete: number, _params: TCustomParams): void;
 }

@@ -1,6 +1,6 @@
 import MacroBase, { MinimumDataType } from './MacroBase';
 
-export default class StaticMacro<
+export default abstract class StaticMacro<
   TMessageData extends MinimumDataType,
 > extends MacroBase<TMessageData> {
   startImpl() {
@@ -11,7 +11,5 @@ export default class StaticMacro<
     return;
   }
 
-  setupLights() {
-    throw new Error('Not Implemented');
-  }
+  abstract setupLights(): void;
 }
