@@ -4,7 +4,7 @@ import { scaleLinear, ScaleLinear, scalePow, ScalePower } from 'd3-scale';
 
 type CustomParams = {
   verticalAnimation: ScaleLinear<number, number>;
-  spreadScale: ScalePower<number, number>;
+  spreadScale: ScaleLinear<number, number>;
   decayScale: ScaleLinear<number, number>;
   horizontalCenter: number;
 };
@@ -54,11 +54,9 @@ export default class MovingShimmer extends SingleShotMacro<
           this.data.density,
           this.data.density * ((100 - this.data.decay) / 100),
         ]),
-      spreadScale: scalePow()
+      spreadScale: scaleLinear()
         .domain([0, this.data.spread])
-        .rangeRound([100, 0])
-        .exponent(3)
-        .clamp(true),
+        .rangeRound([100, 0]),
     };
   }
 
