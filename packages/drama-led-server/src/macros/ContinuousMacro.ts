@@ -11,7 +11,7 @@ type CustomParams = {
 
 export default abstract class ContinuousMacro<
   TMessageData extends MinimumDataType,
-  TCustomParams extends CustomParams,
+  TCustomParams extends CustomParams = {},
 > extends MacroBase<TMessageData> {
   cancelAnimation: (() => void) | null = null;
 
@@ -39,8 +39,8 @@ export default abstract class ContinuousMacro<
   }
 
   abstract tick(
-    _timeElapsed: number,
-    _frameNumber: number,
-    _customParams: TCustomParams,
+    timeElapsed: number,
+    frameNumber: number,
+    customParams: TCustomParams,
   ): void;
 }

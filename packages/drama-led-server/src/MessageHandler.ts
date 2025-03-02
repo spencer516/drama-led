@@ -13,6 +13,7 @@ import ShimmerAnimation from './macros/ShimmerAnimation';
 import StaticPatternMacro from './macros/StaticPatternMacro';
 import MovingShimmer from './macros/MovingShimmer';
 import AnimatedPattern from './macros/AnimatedPattern';
+import Pulse from './macros/Pulse';
 
 export default class MessageHandler {
   #broadcaster: Broadcaster;
@@ -65,6 +66,9 @@ export default class MessageHandler {
         break;
       case 'START_ANIMATED_PATTERN':
         AnimatedPattern.create(message, macroParams).start();
+        break;
+      case 'START_PULSE_PATTERN':
+        Pulse.create(message, macroParams).start();
         break;
       /**
        * ===========================

@@ -4,6 +4,7 @@ import Animator from '../Animator';
 import MacroCoordinator from './MacroCoordinator';
 import { InputMessage } from '@spencer516/drama-led-messages/src/InputMessage';
 import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
+import Light from '../Light';
 
 export type MinimumDataType = {
   [key: string]: unknown;
@@ -77,6 +78,16 @@ export default abstract class MacroBase<
 
   *lightsIterator(segmentOptions: SegmentIteratorOptions = {}) {
     yield* this.ledSystem.iterateSegment(this.message.segment, segmentOptions);
+  }
+
+  get lightsArray(): Light[] {
+    const lights: Light[] = [];
+
+    for (const [, light] of this.lightsIterator()) {
+      lights.push(light);
+    }
+
+    return lights;
   }
 
   get lightsCount() {
