@@ -1,5 +1,5 @@
 import { NamedLEDSection } from '@spencer516/drama-led-messages/src/NamedLEDSection';
-import LEDSystem from '../LEDSystem';
+import LEDSystem, { SegmentIteratorOptions } from '../LEDSystem';
 import Animator from '../Animator';
 import MacroCoordinator from './MacroCoordinator';
 import { InputMessage } from '@spencer516/drama-led-messages/src/InputMessage';
@@ -75,8 +75,8 @@ export default abstract class MacroBase<
     return new this(params, message);
   }
 
-  *lightsIterator() {
-    yield* this.ledSystem.iterateSegment(this.message.segment);
+  *lightsIterator(segmentOptions: SegmentIteratorOptions = {}) {
+    yield* this.ledSystem.iterateSegment(this.message.segment, segmentOptions);
   }
 
   get lightsCount() {

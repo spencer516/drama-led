@@ -11,6 +11,7 @@ import QLabReceiver from './QLabReceiver';
 import MessageHandler from './MessageHandler';
 import Broadcaster from './Broadcaster';
 import { NamedLEDSection } from '@spencer516/drama-led-messages/src/NamedLEDSection';
+import { SeriesDirection } from '@spencer516/drama-led-messages/src/macros/utils/SeriesDirection';
 
 export const SACN_NETWORK_INTERFACE = '192.168.1.199';
 
@@ -18,6 +19,11 @@ type TNamedSegments = Record<
   NamedLEDSection,
   Set<OctoController | GledoptoController>
 >;
+
+export type SegmentIteratorOptions = {
+  seriesDirection?: SeriesDirection;
+  resetIndex?: boolean;
+};
 
 export default class LEDSystem {
   #octoControllers: Map<string, OctoController>;
@@ -118,11 +124,77 @@ export default class LEDSystem {
     return false;
   }
 
-  *iterateSegment(segmentName: NamedLEDSection): Generator<[number, Light]> {
+  *iterateSegment(
+    segmentName: NamedLEDSection,
+    segmentOptions: SegmentIteratorOptions = {},
+  ): Generator<[number, Light]> {
+    const { seriesDirection = 'left-to-right', resetIndex = false } =
+      segmentOptions;
+
     let index = 0;
     for (const controller of this.#namedSegments[segmentName]) {
-      for (const light of controller.lights) {
-        yield [index++, light];
+      if (resetIndex) {
+        index = 0;
+      }
+
+      const lightsArray = controller.lights;
+      const lightsLength = lightsArray.length;
+      const middleLight = Math.round(lightsLength / 2);
+
+      switch (seriesDirection) {
+        case 'left-to-right':
+          for (const light of controller.lights) {
+            yield [index++, light];
+          }
+          break;
+        case 'right-to-left':
+          for (
+            let innerIndex = lightsLength - 1;
+            innerIndex >= 0;
+            innerIndex--
+          ) {
+            yield [index++, lightsArray[innerIndex]];
+          }
+          break;
+        case 'bottom-to-top':
+          // Go Up the left side first:
+          // 0 => Middle Light
+          for (let innerIndex = 0; innerIndex <= middleLight; innerIndex++) {
+            yield [index++, lightsArray[innerIndex]];
+          }
+
+          // Go Up the right side
+          // End => Middle Light
+          for (
+            let innerIndex = lightsLength - 1;
+            innerIndex > middleLight;
+            innerIndex--
+          ) {
+            yield [index++, lightsArray[innerIndex]];
+          }
+
+          break;
+        case 'top-to-bottom':
+          // Go to the right first:
+          // Middle Light => End
+          for (
+            let innerIndex = middleLight;
+            innerIndex < lightsLength;
+            innerIndex++
+          ) {
+            yield [index++, lightsArray[innerIndex]];
+          }
+
+          // Then to the left
+          // Middle Light => 0
+          for (
+            let innerIndex = middleLight - 1;
+            innerIndex >= 0;
+            innerIndex--
+          ) {
+            yield [index++, lightsArray[innerIndex]];
+          }
+          break;
       }
     }
   }

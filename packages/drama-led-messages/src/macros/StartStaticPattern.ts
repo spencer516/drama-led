@@ -1,10 +1,13 @@
 import { z } from 'zod';
 import { StartBaseMacro } from './StartBaseMacro';
 import PatternSegment from './utils/PatternSegment';
+import { SeriesDirection } from './utils/SeriesDirection';
 
 export const StartStaticPattern = StartBaseMacro.extend({
   type: z.literal('START_STATIC_PATTERN'),
   data: z.object({
+    seriesDirection: SeriesDirection,
+    offset: z.number().optional(),
     pattern: z.array(PatternSegment),
   }),
 });
@@ -17,6 +20,8 @@ export const EXAMPLES: Record<string, StartStaticPattern> = {
     cueID: 'cue-static-1',
     segment: 'ALL_ARCHES_FULL',
     data: {
+      offset: 0,
+      seriesDirection: 'left-to-right',
       pattern: [
         {
           type: 'solid',
@@ -36,6 +41,8 @@ export const EXAMPLES: Record<string, StartStaticPattern> = {
     cueID: 'cue-static-1',
     segment: 'ALL_ARCHES_FULL',
     data: {
+      offset: 0,
+      seriesDirection: 'left-to-right',
       pattern: [
         {
           type: 'gradient',

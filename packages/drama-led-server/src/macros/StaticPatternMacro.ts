@@ -32,10 +32,14 @@ export default class StaticPatternMacro extends StaticMacro<
     }
 
     const combinedLength = indexedColors.length;
+    const offset = this.data.offset ?? 0;
 
-    for (const [index, light] of this.lightsIterator()) {
-      const offset = index % combinedLength;
-      const color = indexedColors.at(offset);
+    for (const [index, light] of this.lightsIterator({
+      seriesDirection: this.data.seriesDirection,
+      resetIndex: true,
+    })) {
+      const patternOffset = (index + offset) % combinedLength;
+      const color = indexedColors.at(patternOffset);
 
       if (color != null) {
         light.setColor(color);
