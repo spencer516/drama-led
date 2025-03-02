@@ -142,12 +142,12 @@ export default class LEDSystem {
       const middleLight = Math.round(lightsLength / 2);
 
       switch (seriesDirection) {
-        case 'left-to-right':
+        case 'right-to-left':
           for (const light of controller.lights) {
             yield [index++, light];
           }
           break;
-        case 'right-to-left':
+        case 'left-to-right':
           for (
             let innerIndex = lightsLength - 1;
             innerIndex >= 0;
@@ -157,24 +157,6 @@ export default class LEDSystem {
           }
           break;
         case 'bottom-to-top':
-          // Go Up the left side first:
-          // 0 => Middle Light
-          for (let innerIndex = 0; innerIndex <= middleLight; innerIndex++) {
-            yield [index++, lightsArray[innerIndex]];
-          }
-
-          // Go Up the right side
-          // End => Middle Light
-          for (
-            let innerIndex = lightsLength - 1;
-            innerIndex > middleLight;
-            innerIndex--
-          ) {
-            yield [index++, lightsArray[innerIndex]];
-          }
-
-          break;
-        case 'top-to-bottom':
           // Go to the right first:
           // Middle Light => End
           for (
@@ -194,6 +176,24 @@ export default class LEDSystem {
           ) {
             yield [index++, lightsArray[innerIndex]];
           }
+          break;
+        case 'top-to-bottom':
+          // Go Up the left side first:
+          // 0 => Middle Light
+          for (let innerIndex = 0; innerIndex <= middleLight; innerIndex++) {
+            yield [index++, lightsArray[innerIndex]];
+          }
+
+          // Go Up the right side
+          // End => Middle Light
+          for (
+            let innerIndex = lightsLength - 1;
+            innerIndex > middleLight;
+            innerIndex--
+          ) {
+            yield [index++, lightsArray[innerIndex]];
+          }
+
           break;
       }
     }

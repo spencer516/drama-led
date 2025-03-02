@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { StartBaseMacro } from './StartBaseMacro';
-import PatternSegment from './utils/PatternSegment';
+import { PatternSegment } from './utils/PatternSegment';
 import { SeriesDirection } from './utils/SeriesDirection';
 
 export const StartStaticPattern = StartBaseMacro.extend({
@@ -38,7 +38,7 @@ export const EXAMPLES: Record<string, StartStaticPattern> = {
   },
   'Gradient Stripes': {
     type: 'START_STATIC_PATTERN',
-    cueID: 'cue-static-1',
+    cueID: 'cue-static-2',
     segment: 'ALL_ARCHES_FULL',
     data: {
       offset: 0,

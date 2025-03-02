@@ -13,9 +13,9 @@ const GradientSegment = z.object({
   endColor: z.string(),
 });
 
-const PatternSegment = z.discriminatedUnion('type', [
+export const PatternSegment = z.discriminatedUnion('type', [
   SolidSegment,
   GradientSegment,
 ]);
 
-export default PatternSegment;
+export type PatternSegment = z.infer<typeof PatternSegment>;

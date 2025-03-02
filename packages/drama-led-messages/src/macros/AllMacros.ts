@@ -2,18 +2,26 @@ import {
   StartRandomSparkle,
   EXAMPLES as RandomSparkleExamples,
 } from './StartRandomSparkle';
+
 import {
   StartBasicChase,
   EXAMPLES as BasicChaseExamples,
 } from './StartBasicChase';
+
 import {
   StartShimmerAnimation,
   EXAMPLES as ShimmerAnimationExamples,
 } from './StartShimmerAnimation';
+
 import {
   StartStaticPattern,
   EXAMPLES as StaticPatternExamples,
 } from './StartStaticPattern';
+
+import {
+  StartAnimatedPattern,
+  EXAMPLES as AnimatedPatternExamples,
+} from './StartAnimatedPattern';
 
 import {
   StartMovingShimmer,
@@ -26,6 +34,7 @@ export const AllMacros = [
   StartShimmerAnimation,
   StartStaticPattern,
   StartMovingShimmer,
+  StartAnimatedPattern,
 ];
 
 export const MACRO_EXAMPLES = {
@@ -34,4 +43,5 @@ export const MACRO_EXAMPLES = {
   ...ShimmerAnimationExamples,
   ...StaticPatternExamples,
   ...MovingShimmerExamples,
+  ...AnimatedPatternExamples,
 };

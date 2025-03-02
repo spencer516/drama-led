@@ -12,6 +12,7 @@ import BasicChase from './macros/BasicChase';
 import ShimmerAnimation from './macros/ShimmerAnimation';
 import StaticPatternMacro from './macros/StaticPatternMacro';
 import MovingShimmer from './macros/MovingShimmer';
+import AnimatedPattern from './macros/AnimatedPattern';
 
 export default class MessageHandler {
   #broadcaster: Broadcaster;
@@ -61,6 +62,9 @@ export default class MessageHandler {
         break;
       case 'START_MOVING_SHIMMER':
         MovingShimmer.create(message, macroParams).start();
+        break;
+      case 'START_ANIMATED_PATTERN':
+        AnimatedPattern.create(message, macroParams).start();
         break;
       /**
        * ===========================
