@@ -61,7 +61,7 @@ export default function MacroActions({}: Props) {
           />
         ))}
       </div>
-      <div className="border-slate-300 border grow h-[400px]">
+      <div className="border-slate-300 border grow h-[400px] overflow-auto">
         <JSONEditor
           code={code}
           onChange={setCode}
