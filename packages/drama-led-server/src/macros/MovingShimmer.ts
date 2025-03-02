@@ -5,6 +5,7 @@ import { scaleLinear, ScaleLinear, scalePow, ScalePower } from 'd3-scale';
 type CustomParams = {
   animationScale: ScaleLinear<number, number>;
   spreadScale: ScalePower<number, number>;
+  decayScale: ScaleLinear<number, number>;
 };
 
 export default class MovingShimmer extends SingleShotMacro<
@@ -32,6 +33,12 @@ export default class MovingShimmer extends SingleShotMacro<
   getCustomParams(): CustomParams {
     return {
       animationScale: scaleLinear().domain([0, 1]).range(this.getRange()),
+      decayScale: scaleLinear()
+        .domain([0, 1])
+        .range([
+          this.data.density,
+          this.data.density * ((100 - this.data.decay) / 100),
+        ]),
       spreadScale: scalePow()
         .domain([0, this.data.spread])
         .rangeRound([100, 0])
@@ -42,6 +49,7 @@ export default class MovingShimmer extends SingleShotMacro<
 
   tick(percentComplete: number, params: CustomParams) {
     const verticalPosition = params.animationScale(percentComplete);
+    const decayedDensity = params.decayScale(percentComplete);
 
     for (const [, light] of this.lightsIterator()) {
       const distanceFromVertical = Math.abs(
@@ -49,7 +57,7 @@ export default class MovingShimmer extends SingleShotMacro<
       );
 
       const percent = params.spreadScale(distanceFromVertical);
-      const threshold = 1 - this.data.density / 100;
+      const threshold = 1 - decayedDensity / 100;
 
       if (Math.random() >= threshold) {
         light.setColorString(`rgba(255,255,255,${percent / 100})`);

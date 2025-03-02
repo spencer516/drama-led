@@ -8,6 +8,7 @@ export const StartMovingShimmer = StartBaseMacro.extend({
     density: z.number().min(0).max(100),
     direction: z.enum(['UP', 'DOWN']),
     spread: z.number().min(0).max(100),
+    decay: z.number().min(0).max(100),
   }),
 });
 
@@ -23,6 +24,7 @@ export const EXAMPLES: Record<string, StartMovingShimmer> = {
       density: 10,
       direction: 'UP',
       spread: 20,
+      decay: 80,
     },
   },
 };
