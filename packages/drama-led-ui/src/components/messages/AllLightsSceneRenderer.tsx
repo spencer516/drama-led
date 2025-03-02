@@ -2,12 +2,9 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import {
-  LightConfig,
-  makeRGBValue,
-} from "@spencer516/drama-led-messages/src/AddressTypes";
+import { LightConfig } from "@spencer516/drama-led-messages/src/AddressTypes";
 import * as THREE from "three";
-import { useLatestMessage, useSendMessage } from "@/utils/LEDServerContext";
+import { useLatestMessage } from "@/utils/LEDServerContext";
 
 type Props = {};
 
@@ -15,8 +12,6 @@ function Camera() {
   const { camera } = useThree();
 
   useEffect(() => {
-    // camera.position.set(175, 75, 200);
-    // camera.lookAt(175, 75, 0);
     const x = 175;
     const y = 75;
     camera.position.set(x, y, 200);
@@ -118,6 +113,7 @@ function Lights({ lights }: LightsProps) {
 
       const position = new THREE.Vector3(x, y, 0);
       const matrix = new THREE.Matrix4();
+
       const color = new THREE.Color(
         red.rgbValue / 256,
         green.rgbValue / 256,
@@ -141,7 +137,7 @@ function Lights({ lights }: LightsProps) {
       args={[circle, material, numLights]}
     >
       {/* @ts-ignore */}
-      <meshBasicMaterial vertexColors={THREE.VertexColors} />
+      <meshBasicMaterial vertexColors={false} />
     </instancedMesh>
   );
 }
