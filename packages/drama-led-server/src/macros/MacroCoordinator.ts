@@ -4,7 +4,8 @@ import Animator from '../Animator';
 import Broadcaster from '../Broadcaster';
 import MacroBase from './MacroBase';
 import LEDSystem from '../LEDSystem';
-import { LightBlendInterpolator } from '../Light';
+import { DEFAULT_INTERPOLATOR, LightBlendInterpolator } from '../Light';
+import FadeIn from '../transitions/FadeIn';
 
 export default class MacroCoordinator {
   #animator: Animator;
@@ -36,15 +37,24 @@ export default class MacroCoordinator {
       macro.segment,
     );
 
+    const fadeInTransition = new FadeIn(this.#animator, {
+      duration: 5000,
+    });
+
+    // If there is a TRANSITION provided, however, let's run the transition before we
+    // stop the existing Macro.
     if (existingSegmentMacro) {
       existingSegmentMacro.stop();
     }
 
     this.#activeMacros.set(macro.cueID, macro);
 
-    const interpolator: LightBlendInterpolator = (queuedColors) => {
-      return queuedColors.at(-1);
-    };
+    // const interpolator = DEFAULT_INTERPOLATOR;
+    let interpolator = fadeInTransition.getInterpolator();
+
+    fadeInTransition.start(() => {
+      interpolator = DEFAULT_INTERPOLATOR;
+    });
 
     if (this.#broadcastCallback == null) {
       this.#broadcastCallback = () => {

@@ -21,7 +21,12 @@ export type LightColor = d3RGBColor | d3HSLColor;
 export type LightBlendInterpolator = (
   queuedColors: LightColor[],
   light: Light,
-) => LightColor | undefined;
+) => string | undefined;
+
+export const DEFAULT_INTERPOLATOR: LightBlendInterpolator = (colors) => {
+  const lastColor = colors.at(-1);
+  return lastColor != null ? lastColor.formatRgb() : undefined;
+};
 
 export default class Light {
   #id: LightID;
@@ -105,12 +110,12 @@ export default class Light {
   }
 
   flushQueuedColors(
-    interpolator: LightBlendInterpolator = (colors) => colors.at(-1),
+    interpolator: LightBlendInterpolator = DEFAULT_INTERPOLATOR,
   ) {
     const iterpolatedColor = interpolator(this.#enqueuedColors, this);
 
     if (iterpolatedColor != null) {
-      const rgbColor = iterpolatedColor.rgb().clamp();
+      const rgbColor = color(iterpolatedColor)?.rgb().clamp() ?? rgb(0, 0, 0);
 
       this.#redChannel.setRGBValue(rgbColor.r, rgbColor.opacity);
       this.#greenChannel.setRGBValue(rgbColor.g, rgbColor.opacity);
