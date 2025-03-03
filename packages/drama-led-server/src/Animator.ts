@@ -7,7 +7,6 @@ export const ONE_SECOND = 1000;
 type AnimateParams = {
   durationInMs: number;
   onComplete: (() => void) | undefined;
-  maxFPS: number;
 };
 
 export default class Animator extends EventEmitter {
@@ -62,32 +61,19 @@ export default class Animator extends EventEmitter {
     }
   }
 
-  loop(
-    tickCallback: (timeElapsed: number, frameNumber: number) => void,
-    maxFPS: number,
-  ): () => void {
+  loop(tickCallback: (timeElapsed: number) => void): () => void {
     this.startIfNotRunning();
 
     let start: number | null = null;
-    let lastFrameTime: number | null = null;
-    let frameNumber = 0;
 
     const callback = (currentTime: number) => {
+      tickCallback(0);
       if (start == null) {
         start = currentTime;
       }
 
-      if (lastFrameTime == null) {
-        lastFrameTime = currentTime;
-        tickCallback(0, ++frameNumber);
-        return;
-      }
-
-      if (currentTime - lastFrameTime > ONE_SECOND / maxFPS) {
-        const timeElapsed = currentTime - start;
-        tickCallback(timeElapsed, ++frameNumber);
-        lastFrameTime = currentTime;
-      }
+      const timeElapsed = currentTime - start;
+      tickCallback(timeElapsed);
     };
 
     this.on('tick', callback);
@@ -97,12 +83,11 @@ export default class Animator extends EventEmitter {
 
   animate(
     frameCallback: (pct: number) => void,
-    { durationInMs, onComplete, maxFPS }: AnimateParams,
+    { durationInMs, onComplete }: AnimateParams,
   ): () => void {
     this.startIfNotRunning();
 
     let start: number | null = null;
-    let lastFrameTime: number | null = null;
 
     const callback = (currentTime: number) => {
       if (start == null) {
@@ -115,13 +100,7 @@ export default class Animator extends EventEmitter {
         max: 1,
       });
 
-      if (lastFrameTime == null) {
-        lastFrameTime = currentTime;
-        frameCallback(0);
-      } else if (currentTime - lastFrameTime > ONE_SECOND / maxFPS) {
-        frameCallback(percentComplete);
-        lastFrameTime = currentTime;
-      }
+      frameCallback(percentComplete);
 
       if (percentComplete >= 1) {
         this.off('tick', callback);

@@ -83,7 +83,7 @@ export default class Pulse extends ContinuousMacro<
     return [finishTime, fadeAnimator];
   }
 
-  tick(timeElapsed: number, _: number, params: CustomParams) {
+  tick(timeElapsed: number, params: CustomParams) {
     const {
       activeLightStates,
       maxVisibleScale,

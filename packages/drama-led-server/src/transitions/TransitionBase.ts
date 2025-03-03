@@ -31,7 +31,6 @@ export default abstract class TransitionBase<TParams extends MinimumParams> {
         this.percentComplete = percentComplete;
       },
       {
-        maxFPS: 60,
         onComplete,
         durationInMs: this.params.duration,
       },

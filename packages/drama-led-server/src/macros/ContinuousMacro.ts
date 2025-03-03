@@ -1,7 +1,6 @@
 import MacroBase from './MacroBase';
 
 export type MinimumDataType = {
-  maxFPS?: number;
   [key: string]: unknown;
 };
 
@@ -15,10 +14,6 @@ export default abstract class ContinuousMacro<
 > extends MacroBase<TMessageData> {
   cancelAnimation: (() => void) | null = null;
 
-  get maxFPS() {
-    return this.data.maxFPS ?? 60;
-  }
-
   startImpl() {
     if (this.cancelAnimation != null) {
       this.cancelAnimation();
@@ -26,9 +21,9 @@ export default abstract class ContinuousMacro<
 
     const customParams = this.getCustomParams();
 
-    this.cancelAnimation = this.animator.loop((timeElapsed, frameNumber) => {
-      this.tick(timeElapsed, frameNumber, customParams);
-    }, this.maxFPS);
+    this.cancelAnimation = this.animator.loop((timeElapsed) => {
+      this.tick(timeElapsed, customParams);
+    });
   }
 
   abstract getCustomParams(): TCustomParams;
@@ -38,9 +33,5 @@ export default abstract class ContinuousMacro<
     this.cancelAnimation = null;
   }
 
-  abstract tick(
-    timeElapsed: number,
-    frameNumber: number,
-    customParams: TCustomParams,
-  ): void;
+  abstract tick(timeElapsed: number, customParams: TCustomParams): void;
 }

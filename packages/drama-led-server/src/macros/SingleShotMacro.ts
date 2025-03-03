@@ -2,7 +2,6 @@ import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 import MacroBase from './MacroBase';
 
 export type MinimumDataType = {
-  maxFPS?: number;
   duration: number;
   [key: string]: unknown;
 };
@@ -34,7 +33,6 @@ export default abstract class SingleShotMacro<
         this.tick(percentComplete, params);
       },
       {
-        maxFPS: this.data.maxFPS ?? 60,
         onComplete: () => this.stop(),
         durationInMs: this.data.duration,
       },

@@ -11,7 +11,8 @@ export default class ShimmerAnimation extends ContinuousMacro<
     return {};
   }
 
-  tick(_timeElapsed: number, frameNumber: number) {
+  tick(timeElapsed: number) {
+    const frameNumber = Math.floor(timeElapsed / 30);
     const interval = Math.floor(100 / this.data.speed);
 
     if (frameNumber % interval !== 0) {

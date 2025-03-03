@@ -6,7 +6,7 @@ export const StartBasicChase = StartBaseMacro.extend({
   data: z.object({
     spread: z.number().min(0).max(50).optional(),
     gap: z.number().min(0).max(50).optional(),
-    maxFPS: z.number().min(0).max(60).optional(),
+    speed: z.number().min(0),
     direction: z.enum(['forward', 'reverse']).optional(),
     color: z
       .enum(['rainbow', 'white', 'red', 'green', 'blue', 'yellow'])
@@ -24,9 +24,9 @@ export const EXAMPLES: Record<string, StartBasicChase> = {
     data: {
       spread: 5,
       gap: 15,
-      maxFPS: 20,
       direction: 'reverse',
       color: 'red',
+      speed: 10,
     },
   },
   'Rainbow Chase': {
@@ -36,9 +36,9 @@ export const EXAMPLES: Record<string, StartBasicChase> = {
     data: {
       spread: 5,
       gap: 15,
-      maxFPS: 10,
       direction: 'reverse',
       color: 'rainbow',
+      speed: 10,
     },
   },
 };

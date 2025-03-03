@@ -21,11 +21,7 @@ export default class AnimatedPattern extends ContinuousMacro<
     };
   }
 
-  tick(
-    timeElapsed: number,
-    _: number,
-    { indexedColors, speedScale }: CustomParams,
-  ) {
+  tick(timeElapsed: number, { indexedColors, speedScale }: CustomParams) {
     const combinedLength = indexedColors.length;
     const offset = speedScale(timeElapsed);
 
