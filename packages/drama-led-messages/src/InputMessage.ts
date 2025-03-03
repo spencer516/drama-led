@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { LightID } from './AddressTypes';
 import { AllMacros } from './macros/AllMacros';
-import { RGBColor } from './RGBColor';
 
 export const EmptyMessage = z.object({
   type: z.literal('EMPTY_MESSAGE'),
@@ -18,7 +17,7 @@ export const UpdateLightByID = z.object({
   type: z.literal('UPDATE_LIGHT_BY_ID'),
   data: z.object({
     id: LightID,
-    rgb: RGBColor,
+    color: z.string(),
   }),
 });
 
@@ -27,7 +26,7 @@ export type UpdateLightByID = z.infer<typeof UpdateLightByID>;
 export const UpdateAllLights = z.object({
   type: z.literal('UPDATE_ALL_LIGHTS'),
   data: z.object({
-    rgb: RGBColor,
+    color: z.string(),
   }),
 });
 

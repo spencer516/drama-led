@@ -1,14 +1,12 @@
 import { z } from 'zod';
-import { RGBColor } from '../RGBColor';
 import { StartBaseMacro } from './StartBaseMacro';
-import { makeRGBValue } from '../AddressTypes';
 
 export const StartShimmerAnimation = StartBaseMacro.extend({
   type: z.literal('START_SHIMMER'),
   data: z.object({
     speed: z.number().min(0).max(100),
     density: z.number().min(0).max(100),
-    color: RGBColor,
+    color: z.string(),
   }),
 });
 
@@ -22,11 +20,7 @@ export const EXAMPLES: Record<string, StartShimmerAnimation> = {
     data: {
       speed: 40,
       density: 20,
-      color: {
-        red: makeRGBValue(255),
-        green: makeRGBValue(251),
-        blue: makeRGBValue(212),
-      },
+      color: `rgb(255,251,212)`,
     },
   },
 };

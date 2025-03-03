@@ -120,10 +120,10 @@ export default class MessageHandler {
     }
   }
 
-  updateLightByID({ id, rgb }: UpdateLightByID['data']): void {
+  updateLightByID({ id, color }: UpdateLightByID['data']): void {
     const light = Light.getLightByID(id);
 
-    light.setRGB(rgb);
+    light.setColorString(color);
 
     this.#broadcaster.broadcast();
   }

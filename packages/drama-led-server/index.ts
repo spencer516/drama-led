@@ -166,10 +166,6 @@ async function startup() {
   wss.on('error', function error(error) {
     console.error(error);
   });
-
-  process.on('exit', () => {
-    broadcaster.cancelBroadcastLoop();
-  });
 }
 
 startup();

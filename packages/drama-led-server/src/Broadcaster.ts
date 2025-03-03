@@ -1,5 +1,4 @@
 import { WebSocketServer, WebSocket } from 'ws';
-import { startEventLoop } from './utils';
 import { OutputMessage } from '@spencer516/drama-led-messages/src/OutputMessage';
 import LEDSystem from './LEDSystem';
 import MacroCoordinator from './macros/MacroCoordinator';
@@ -7,7 +6,6 @@ import MacroCoordinator from './macros/MacroCoordinator';
 export default class Broadcaster {
   #wss: WebSocketServer;
   #ledSystem: LEDSystem;
-  #cancelEventLoop: (() => void) | null = null;
   #macroCoordinator: MacroCoordinator | null = null;
 
   constructor(wss: WebSocketServer, lightSequence: LEDSystem) {
@@ -17,27 +15,6 @@ export default class Broadcaster {
 
   set macroCoordinator(coordinator: MacroCoordinator) {
     this.#macroCoordinator = coordinator;
-  }
-
-  /**
-   * Start loop
-   */
-  startBroadcastLoop(frequency: number): this {
-    if (this.#cancelEventLoop !== null) {
-      this.#cancelEventLoop();
-    }
-
-    this.#cancelEventLoop = startEventLoop(() => this.broadcast(), frequency);
-
-    return this;
-  }
-
-  /**
-   * Cancel Loop
-   */
-  cancelBroadcastLoop(): this {
-    this.#cancelEventLoop?.();
-    return this;
   }
 
   broadcastGledoptosStatus(): this {

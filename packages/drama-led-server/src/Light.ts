@@ -13,7 +13,6 @@ import {
 } from 'd3-color';
 import { LightChannel } from './LightChannel';
 import { invariant } from './utils';
-import { RGBColor } from '@spencer516/drama-led-messages/src/RGBColor';
 
 const LIGHT_STORE = new Map<LightID, Light>();
 
@@ -86,17 +85,12 @@ export default class Light {
     };
   }
 
-  setRGB(rgbColor: RGBColor) {
-    this.#redChannel.setRGBValue(rgbColor.red);
-    this.#greenChannel.setRGBValue(rgbColor.green);
-    this.#blueChannel.setRGBValue(rgbColor.blue);
-  }
-
   setColorString(colorString: string): void {
     const colorValue = color(colorString)?.rgb().clamp() ?? rgb(0, 0, 0);
     this.setColor(colorValue);
   }
 
+  // TODO: queue up the color being set.
   setColor(color: d3RGBColor | d3HSLColor | null): void {
     const rgbColor = color?.rgb().clamp() ?? rgb(0, 0, 0);
     this.#redChannel.setRGBValue(rgbColor.r, rgbColor.opacity);

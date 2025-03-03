@@ -21,24 +21,6 @@ export function invariant(
   throw new Error(`Invariant failed: ${message}`);
 }
 
-export function startEventLoop(
-  callback: () => void,
-  frequency: number,
-): () => void {
-  console.log('Starting event loop: %d', performance.now());
-  const intervalID = setInterval(tick, frequency);
-
-  function tick() {
-    console.log('Tick: %d', performance.now());
-    callback();
-  }
-
-  return () => {
-    console.log('Canceling event loop!: %d', performance.now());
-    clearInterval(intervalID);
-  };
-}
-
 const LIGHTS_PER_UNIVERSE = Math.floor(512 / 3);
 
 export function getUniverseChannelMaker(

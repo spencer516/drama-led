@@ -22,7 +22,7 @@ export default class ShimmerAnimation extends ContinuousMacro<
 
     for (const [, light] of this.lightsIterator()) {
       if (Math.random() >= threshold) {
-        light.setRGB(this.data.color);
+        light.setColorString(this.data.color);
       } else {
         light.turnOff();
       }
