@@ -13,6 +13,7 @@ import {
 } from 'd3-color';
 import { LightChannel } from './LightChannel';
 import { invariant } from './utils';
+import TransitionBase from './transitions/TransitionBase';
 
 const LIGHT_STORE = new Map<LightID, Light>();
 
@@ -34,6 +35,7 @@ export default class Light {
   #redChannel: LightChannel;
   #greenChannel: LightChannel;
   #blueChannel: LightChannel;
+  #currentTransition: TransitionBase | null = null;
 
   #enqueuedColors: LightColor[] = [];
 
@@ -67,6 +69,10 @@ export default class Light {
 
   get universe() {
     return this.#redChannel.universe;
+  }
+
+  setTransition(transition: TransitionBase | null) {
+    this.#currentTransition = transition;
   }
 
   static getLightByID(id: LightID): Light {
@@ -109,13 +115,14 @@ export default class Light {
     this.#enqueuedColors.push(rgbColor);
   }
 
-  flushQueuedColors(
-    interpolator: LightBlendInterpolator = DEFAULT_INTERPOLATOR,
-  ) {
-    const iterpolatedColor = interpolator(this.#enqueuedColors, this);
+  flushQueuedColors() {
+    const interpolator =
+      this.#currentTransition?.getInterpolator() ?? DEFAULT_INTERPOLATOR;
 
-    if (iterpolatedColor != null) {
-      const rgbColor = color(iterpolatedColor)?.rgb().clamp() ?? rgb(0, 0, 0);
+    const interpolatedColor = interpolator(this.#enqueuedColors, this);
+
+    if (interpolatedColor != null) {
+      const rgbColor = color(interpolatedColor)?.rgb().clamp() ?? rgb(0, 0, 0);
 
       this.#redChannel.setRGBValue(rgbColor.r, rgbColor.opacity);
       this.#greenChannel.setRGBValue(rgbColor.g, rgbColor.opacity);

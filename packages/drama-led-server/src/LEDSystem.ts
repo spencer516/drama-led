@@ -65,11 +65,9 @@ export default class LEDSystem {
     return SACN_NETWORK_INTERFACE;
   }
 
-  flushLightColors(
-    interpolator: LightBlendInterpolator | undefined = undefined,
-  ): void {
+  flushLightColors(): void {
     for (const [_, light] of this.getLightsIterator()) {
-      light.flushQueuedColors(interpolator);
+      light.flushQueuedColors();
     }
   }
 

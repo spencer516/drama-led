@@ -22,6 +22,10 @@ export default abstract class ContinuousMacro<
     const customParams = this.getCustomParams();
 
     this.cancelAnimation = this.animator.loop((timeElapsed) => {
+      for (const [, light] of this.lightsIterator()) {
+        light.setTransition(this.currentTransition);
+      }
+
       this.tick(timeElapsed, customParams);
     });
   }

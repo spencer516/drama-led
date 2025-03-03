@@ -38,47 +38,38 @@ export default class MacroCoordinator {
     );
 
     const fadeInTransition = new FadeIn(this.#animator, {
-      duration: 5000,
+      duration: macro.fadeInDuration,
     });
 
-    // If there is a TRANSITION provided, however, let's run the transition before we
-    // stop the existing Macro.
-    if (existingSegmentMacro) {
-      existingSegmentMacro.stop();
-    }
+    macro.setTransition(fadeInTransition);
 
     this.#activeMacros.set(macro.cueID, macro);
 
-    // const interpolator = DEFAULT_INTERPOLATOR;
-    let interpolator = fadeInTransition.getInterpolator();
-
     fadeInTransition.start(() => {
-      interpolator = DEFAULT_INTERPOLATOR;
+      if (existingSegmentMacro) {
+        existingSegmentMacro.stop();
+      }
     });
 
     if (this.#broadcastCallback == null) {
       this.#broadcastCallback = () => {
-        setImmediate(() => {
-          this.#ledSystem.flushLightColors(interpolator);
-          this.#broadcaster.broadcast();
-        });
+        this.#ledSystem.flushLightColors();
+        this.#broadcaster.broadcast();
       };
 
-      this.#animator.on('tick', this.#broadcastCallback);
+      this.#animator.on('afterTick', this.#broadcastCallback);
     }
 
     // Let's at least broadcast one tick to start
-    setImmediate(() => {
-      this.#ledSystem.flushLightColors(interpolator);
-      this.#broadcaster.broadcast();
-    });
+    this.#ledSystem.flushLightColors();
+    this.#broadcaster.broadcast();
   }
 
   macroStopped(macro: MacroBase) {
     this.#activeMacros.delete(macro.cueID);
 
     if (this.#activeMacros.size === 0 && this.#broadcastCallback != null) {
-      this.#animator.off('tick', this.#broadcastCallback);
+      this.#animator.off('afterTick', this.#broadcastCallback);
       this.#broadcastCallback = null;
     }
   }

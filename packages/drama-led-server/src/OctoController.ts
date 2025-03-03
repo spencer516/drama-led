@@ -85,15 +85,6 @@ export default class OctoController {
     );
 
     this.#lights = isReversedDirection ? lights.reverse() : lights;
-
-    // console.log('=============');
-    // console.log(`Controller: ${id}:${outputNumber}`);
-    // for (const [universe, channels] of this.#universes.entries()) {
-    //   console.log(`Universe: ${universe} (${channels.length / 3} lights)`);
-    // }
-    // console.log('=============');
-    // console.log('');
-    // console.log('');
   }
 
   makeLightID(sequenceNumber: number): LightID {

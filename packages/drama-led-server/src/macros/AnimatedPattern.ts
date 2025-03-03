@@ -15,9 +15,7 @@ export default class AnimatedPattern extends ContinuousMacro<
   getCustomParams(): CustomParams {
     return {
       indexedColors: makeIndexedColors(this.data.pattern),
-      speedScale: scaleLinear()
-        .range([0, this.data.speed]) // output (lights/second)
-        .domain([0, 1000]), // input (timeElapse)
+      speedScale: scaleLinear().range([0, this.data.speed]).domain([0, 1000]),
     };
   }
 

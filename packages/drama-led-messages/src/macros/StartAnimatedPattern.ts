@@ -19,6 +19,9 @@ export const EXAMPLES: Record<string, StartAnimatedPattern> = {
     type: 'START_ANIMATED_PATTERN',
     cueID: 'cut-animated-pattern-1',
     segment: 'ALL_ARCHES_FULL',
+    fadeIn: {
+      duration: 2000,
+    },
     data: {
       seriesDirection: 'top-to-bottom',
       speed: 10,
@@ -29,21 +32,28 @@ export const EXAMPLES: Record<string, StartAnimatedPattern> = {
           color: 'rgb(0,255,0)',
         },
         {
-          type: 'gradient',
-          length: 6,
-          startColor: 'rgb(0,255,0)',
-          endColor: 'rgb(0,0,255)',
+          type: 'solid',
+          length: 2,
+          color: 'rgb(255,0,0)',
         },
+      ],
+    },
+  },
+  'Solid Red': {
+    type: 'START_ANIMATED_PATTERN',
+    cueID: 'cut-animated-pattern-1',
+    segment: 'ALL_ARCHES_FULL',
+    fadeIn: {
+      duration: 2000,
+    },
+    data: {
+      seriesDirection: 'top-to-bottom',
+      speed: 10,
+      pattern: [
         {
           type: 'solid',
           length: 2,
-          color: 'rgb(0,0,255)',
-        },
-        {
-          type: 'gradient',
-          length: 6,
-          startColor: 'rgb(0,0,255)',
-          endColor: 'rgb(0,255,0)',
+          color: 'rgb(255,0,0)',
         },
       ],
     },

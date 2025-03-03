@@ -9,6 +9,8 @@ type AnimateParams = {
   onComplete: (() => void) | undefined;
 };
 
+type TickCallback = () => void;
+
 export default class Animator extends EventEmitter {
   #fps: number = 30;
   #currentTimer: Timer | null = null;
@@ -21,6 +23,7 @@ export default class Animator extends EventEmitter {
     this.#currentTimer = interval(
       (currentTime) => {
         this.emit('tick', currentTime);
+        this.emit('afterTick');
       },
       ONE_SECOND / this.#fps,
       now(),
@@ -67,7 +70,6 @@ export default class Animator extends EventEmitter {
     let start: number | null = null;
 
     const callback = (currentTime: number) => {
-      tickCallback(0);
       if (start == null) {
         start = currentTime;
       }

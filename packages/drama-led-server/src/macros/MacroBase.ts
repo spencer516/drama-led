@@ -5,15 +5,22 @@ import MacroCoordinator from './MacroCoordinator';
 import { InputMessage } from '@spencer516/drama-led-messages/src/InputMessage';
 import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 import Light from '../Light';
+import TransitionBase from '../transitions/TransitionBase';
 
 export type MinimumDataType = {
   [key: string]: unknown;
+};
+
+type FadeParam = {
+  duration: number;
 };
 
 export type MessageShape<T extends MinimumDataType = {}> = {
   type: InputMessage['type'];
   cueID: string;
   segment: NamedLEDSection;
+  fadeIn?: FadeParam | undefined;
+  fadeOut?: FadeParam | undefined;
   data: T;
 };
 
@@ -30,6 +37,7 @@ export default abstract class MacroBase<
   animator: Animator;
   macroCoordinator: MacroCoordinator;
   message: MessageShape<TMessageType>;
+  currentTransition: TransitionBase | null = null;
 
   constructor(
     { ledSystem, animator, macroCoordinator }: MacroParams,
@@ -55,6 +63,21 @@ export default abstract class MacroBase<
 
   get type() {
     return this.message.type;
+  }
+
+  get fadeInDuration(): number {
+    return this.message.fadeIn?.duration ?? 0;
+  }
+
+  setTransition(transition: TransitionBase) {
+    this.currentTransition = transition;
+
+    const clearTransition = () => {
+      this.currentTransition = null;
+      transition.off('done', clearTransition);
+    };
+
+    transition.on('done', clearTransition);
   }
 
   getMacroStatus(): MacroStatus {

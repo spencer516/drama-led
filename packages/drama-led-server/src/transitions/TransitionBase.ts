@@ -1,3 +1,4 @@
+import { EventEmitter } from 'stream';
 import Animator from '../Animator';
 import { LightBlendInterpolator } from '../Light';
 
@@ -7,7 +8,9 @@ type MinimumParams = {
 
 export type TReturnInterpolate = ReturnType<LightBlendInterpolator>;
 
-export default abstract class TransitionBase<TParams extends MinimumParams> {
+export default abstract class TransitionBase<
+  TParams extends MinimumParams = MinimumParams,
+> extends EventEmitter {
   percentComplete: number = 0;
   animator: Animator;
   params: TParams;
@@ -15,6 +18,7 @@ export default abstract class TransitionBase<TParams extends MinimumParams> {
   #currentAnimation: (() => void) | null = null;
 
   constructor(animator: Animator, params: TParams) {
+    super();
     this.animator = animator;
     this.params = params;
   }
@@ -31,7 +35,11 @@ export default abstract class TransitionBase<TParams extends MinimumParams> {
         this.percentComplete = percentComplete;
       },
       {
-        onComplete,
+        onComplete: () => {
+          onComplete();
+          this.stop();
+          this.emit('done');
+        },
         durationInMs: this.params.duration,
       },
     );
