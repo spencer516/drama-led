@@ -3,8 +3,6 @@
 import { useLatestMessage, useSendMessage } from "@/utils/LEDServerContext";
 import Card from "./ui/StatusCard";
 import IconButton from "./ui/IconButton";
-import { MacroStatus } from "@spencer516/drama-led-messages/src/OutputMessage";
-import { ReactNode } from "react";
 import {
   BuildingOfficeIcon,
   ClockIcon,
@@ -26,15 +24,30 @@ export default function ActiveMacroActions({}: Props) {
           className="grow-0 w-auto"
           title={macro.macroName}
           actions={
-            <IconButton
-              label="Stop Macro"
-              onClick={() => {
-                sendMessage({
-                  type: "STOP_MACRO",
-                  cueID: macro.cueID,
-                });
-              }}
-            />
+            <div className="flex gap-1">
+              {macro.hasFadeOut ? (
+                <IconButton
+                  label="Fade Out Macro"
+                  iconName="ArrowTrendingDown"
+                  onClick={() => {
+                    sendMessage({
+                      type: "FADE_OUT_MACRO",
+                      cueID: macro.cueID,
+                    });
+                  }}
+                />
+              ) : null}
+              <IconButton
+                label="Stop Macro"
+                iconName="XMark"
+                onClick={() => {
+                  sendMessage({
+                    type: "STOP_MACRO",
+                    cueID: macro.cueID,
+                  });
+                }}
+              />
+            </div>
           }
         >
           <div className="flex flex-col gap-1">

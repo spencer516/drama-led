@@ -4,8 +4,8 @@ import Animator from '../Animator';
 import Broadcaster from '../Broadcaster';
 import MacroBase from './MacroBase';
 import LEDSystem from '../LEDSystem';
-import { DEFAULT_INTERPOLATOR, LightBlendInterpolator } from '../Light';
 import FadeIn from '../transitions/FadeIn';
+import FadeOut from '../transitions/FadeOut';
 
 export default class MacroCoordinator {
   #animator: Animator;
@@ -72,6 +72,25 @@ export default class MacroCoordinator {
       this.#animator.off('afterTick', this.#broadcastCallback);
       this.#broadcastCallback = null;
     }
+  }
+
+  fadeOutMacroByID(id: string) {
+    const macro = this.#activeMacros.get(id);
+
+    if (macro == null) {
+      return;
+    }
+
+    const fadeOut = new FadeOut(this.#animator, {
+      duration: macro.fadeOutDuration,
+    });
+
+    macro.setTransition(fadeOut);
+
+    fadeOut.start(() => {
+      macro.stop();
+      this.#broadcaster.flushLightsWithDefaultAndBroadcast();
+    });
   }
 
   stopMacroByID(id: string) {

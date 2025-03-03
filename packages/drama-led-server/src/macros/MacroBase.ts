@@ -69,6 +69,10 @@ export default abstract class MacroBase<
     return this.message.fadeIn?.duration ?? 0;
   }
 
+  get fadeOutDuration(): number {
+    return this.message.fadeOut?.duration ?? 0;
+  }
+
   setTransition(transition: TransitionBase) {
     this.currentTransition = transition;
 
@@ -85,6 +89,7 @@ export default abstract class MacroBase<
       cueID: this.cueID,
       macroName: this.constructor.name,
       segment: this.segment,
+      hasFadeOut: this.fadeOutDuration > 0,
     };
   }
 

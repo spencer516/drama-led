@@ -22,6 +22,9 @@ export const EXAMPLES: Record<string, StartAnimatedPattern> = {
     fadeIn: {
       duration: 2000,
     },
+    fadeOut: {
+      duration: 2000,
+    },
     data: {
       seriesDirection: 'top-to-bottom',
       speed: 10,

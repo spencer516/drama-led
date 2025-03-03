@@ -62,6 +62,7 @@ export const MacroStatus = z.object({
   cueID: z.string(),
   macroName: z.string(),
   segment: NamedLEDSection,
+  hasFadeOut: z.boolean(),
   percentComplete: z.number().optional(),
 });
 

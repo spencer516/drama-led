@@ -8,18 +8,15 @@ type Params = {
 
 const BLACK = `rgb(0,0,0)`;
 
-export default class FadeIn extends TransitionBase<Params> {
+export default class FadeOut extends TransitionBase<Params> {
+  QUEUE_COUNTS: Record<string, number> = {};
   interpolate(queuedColors: LightColor[], light: Light): TReturnInterpolate {
     const lastColor = queuedColors.at(-1);
-    const secondToLastColor = queuedColors.at(-2);
 
     if (lastColor == null) {
       return BLACK;
     }
 
-    return interpolateRgb(
-      secondToLastColor ?? BLACK,
-      lastColor,
-    )(this.percentComplete);
+    return interpolateRgb(lastColor, BLACK)(this.percentComplete);
   }
 }

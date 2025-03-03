@@ -55,6 +55,11 @@ export const StopMacro = z.object({
   cueID: z.string(),
 });
 
+export const FadeOutMacro = z.object({
+  type: z.literal('FADE_OUT_MACRO'),
+  cueID: z.string(),
+});
+
 export const StopAllMacros = z.object({
   type: z.literal('STOP_ALL_MACROS'),
 });
@@ -69,6 +74,7 @@ export const InputMessage = z.discriminatedUnion('type', [
   UpdateQLabReceiver,
   StopMacro,
   StopAllMacros,
+  FadeOutMacro,
   ...AllMacros,
 ]);
 

@@ -81,6 +81,9 @@ export default class MessageHandler {
       case 'STOP_MACRO':
         this.#macroCoordinator.stopMacroByID(message.cueID);
         break;
+      case 'FADE_OUT_MACRO':
+        this.#macroCoordinator.fadeOutMacroByID(message.cueID);
+        break;
       case 'STOP_ALL_MACROS':
         this.#macroCoordinator.stopAllMacros();
         break;
