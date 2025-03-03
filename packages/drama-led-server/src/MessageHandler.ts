@@ -87,11 +87,11 @@ export default class MessageHandler {
       case 'TURN_ALL_OFF':
         this.#macroCoordinator.stopAllMacros();
         this.#ledSystem.turnAllOff();
-        this.#broadcaster.broadcast();
+        this.#broadcaster.flushLightsWithDefaultAndBroadcast();
         break;
       case 'TURN_ALL_ON':
         this.#ledSystem.turnAllOn();
-        this.#broadcaster.broadcast();
+        this.#broadcaster.flushLightsWithDefaultAndBroadcast();
         break;
       case 'UPDATE_CONTROLLER':
         if (message.data.isSACNEnabled) {
@@ -102,7 +102,7 @@ export default class MessageHandler {
         } else {
           this.#ledSystem.disableSacnOutput(message.data.id);
         }
-        this.#broadcaster.broadcast();
+        this.#broadcaster.broadcastToWebClients();
         break;
       case 'UPDATE_QLAB_RECEIVER':
         if (message.data.isEnabled) {
@@ -110,7 +110,7 @@ export default class MessageHandler {
         } else {
           this.#ledSystem.stopQLabReceiver();
         }
-        this.#broadcaster.broadcast();
+        this.#broadcaster.broadcastToWebClients();
         break;
       case 'UPDATE_ALL_LIGHTS':
         // TODO
@@ -125,6 +125,6 @@ export default class MessageHandler {
 
     light.setColorString(color);
 
-    this.#broadcaster.broadcast();
+    this.#broadcaster.flushLightsWithDefaultAndBroadcast();
   }
 }

@@ -16,12 +16,21 @@ import { invariant } from './utils';
 
 const LIGHT_STORE = new Map<LightID, Light>();
 
+export type LightColor = d3RGBColor | d3HSLColor;
+
+export type LightBlendInterpolator = (
+  queuedColors: LightColor[],
+  light: Light,
+) => LightColor | undefined;
+
 export default class Light {
   #id: LightID;
   #coordinates: LightCoordinates;
   #redChannel: LightChannel;
   #greenChannel: LightChannel;
   #blueChannel: LightChannel;
+
+  #enqueuedColors: LightColor[] = [];
 
   constructor(
     id: LightID,
@@ -90,12 +99,26 @@ export default class Light {
     this.setColor(colorValue);
   }
 
-  // TODO: queue up the color being set.
-  setColor(color: d3RGBColor | d3HSLColor | null): void {
+  setColor(color: LightColor | null): void {
     const rgbColor = color?.rgb().clamp() ?? rgb(0, 0, 0);
-    this.#redChannel.setRGBValue(rgbColor.r, rgbColor.opacity);
-    this.#greenChannel.setRGBValue(rgbColor.g, rgbColor.opacity);
-    this.#blueChannel.setRGBValue(rgbColor.b, rgbColor.opacity);
+    this.#enqueuedColors.push(rgbColor);
+  }
+
+  flushQueuedColors(
+    interpolator: LightBlendInterpolator = (colors) => colors.at(-1),
+  ) {
+    const iterpolatedColor = interpolator(this.#enqueuedColors, this);
+
+    if (iterpolatedColor != null) {
+      const rgbColor = iterpolatedColor.rgb().clamp();
+
+      this.#redChannel.setRGBValue(rgbColor.r, rgbColor.opacity);
+      this.#greenChannel.setRGBValue(rgbColor.g, rgbColor.opacity);
+      this.#blueChannel.setRGBValue(rgbColor.b, rgbColor.opacity);
+
+      // Reset the enqueued color to a black base.
+      this.#enqueuedColors = [];
+    }
   }
 
   turnOff() {

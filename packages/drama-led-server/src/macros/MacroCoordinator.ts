@@ -4,6 +4,7 @@ import Animator from '../Animator';
 import Broadcaster from '../Broadcaster';
 import MacroBase from './MacroBase';
 import LEDSystem from '../LEDSystem';
+import { LightBlendInterpolator } from '../Light';
 
 export default class MacroCoordinator {
   #animator: Animator;
@@ -41,9 +42,14 @@ export default class MacroCoordinator {
 
     this.#activeMacros.set(macro.cueID, macro);
 
+    const interpolator: LightBlendInterpolator = (queuedColors) => {
+      return queuedColors.at(-1);
+    };
+
     if (this.#broadcastCallback == null) {
       this.#broadcastCallback = () => {
         setImmediate(() => {
+          this.#ledSystem.flushLightColors(interpolator);
           this.#broadcaster.broadcast();
         });
       };
@@ -53,6 +59,7 @@ export default class MacroCoordinator {
 
     // Let's at least broadcast one tick to start
     setImmediate(() => {
+      this.#ledSystem.flushLightColors(interpolator);
       this.#broadcaster.broadcast();
     });
   }
@@ -73,7 +80,7 @@ export default class MacroCoordinator {
       macro.stop();
     }
 
-    this.#broadcaster.broadcast();
+    this.#broadcaster.flushLightsWithDefaultAndBroadcast();
   }
 
   stopAllMacros() {
@@ -81,7 +88,7 @@ export default class MacroCoordinator {
       macro.stop();
     }
 
-    this.#broadcaster.broadcast();
+    this.#broadcaster.flushLightsWithDefaultAndBroadcast();
   }
 
   toMacroStatus(): MacroStatus[] {

@@ -1,6 +1,6 @@
 import { LightConfig } from '@spencer516/drama-led-messages/src/AddressTypes';
 import OctoController from './OctoController';
-import Light from './Light';
+import Light, { LightBlendInterpolator } from './Light';
 import {
   GledoptoControllerStatus,
   OctoControllerStatus,
@@ -63,6 +63,14 @@ export default class LEDSystem {
 
   getNetworkInterface(): string {
     return SACN_NETWORK_INTERFACE;
+  }
+
+  flushLightColors(
+    interpolator: LightBlendInterpolator | undefined = undefined,
+  ): void {
+    for (const [_, light] of this.getLightsIterator()) {
+      light.flushQueuedColors(interpolator);
+    }
   }
 
   toLightConfigs(): LightConfig[] {

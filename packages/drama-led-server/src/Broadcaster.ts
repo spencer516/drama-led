@@ -41,10 +41,12 @@ export default class Broadcaster {
     return this;
   }
 
-  /**
-   * Send a message to all clients about the update.
-   */
-  broadcast(client?: WebSocket): this {
+  flushLightsWithDefaultAndBroadcast() {
+    this.#ledSystem.flushLightColors();
+    this.broadcast();
+  }
+
+  broadcastToWebClients() {
     const lights = this.#ledSystem.toLightConfigs();
     const octos = this.#ledSystem.toOctoControllerStatus();
     const gledoptos = this.#ledSystem.toGledOptoControllerStatus();
@@ -62,14 +64,16 @@ export default class Broadcaster {
 
     const stringifiedMessage = JSON.stringify(message);
 
-    if (client != null) {
+    for (const client of this.#wss.clients) {
       client.send(stringifiedMessage);
-    } else {
-      for (const client of this.#wss.clients) {
-        client.send(stringifiedMessage);
-      }
     }
+  }
 
+  /**
+   * Send a message to all clients about the update.
+   */
+  broadcast(): this {
+    this.broadcastToWebClients();
     this.#ledSystem.broadcast();
 
     return this;

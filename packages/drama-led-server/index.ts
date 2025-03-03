@@ -155,7 +155,7 @@ async function startup() {
     });
 
     // Send the initial state on connect!
-    broadcaster.broadcast(ws);
+    broadcaster.broadcastToWebClients();
   });
 
   wss.on('listening', function listening() {
