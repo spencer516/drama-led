@@ -9,7 +9,7 @@ type Params = {
 const BLACK = `rgb(0,0,0)`;
 
 export default class FadeIn extends TransitionBase<Params> {
-  interpolate(queuedColors: LightColor[], light: Light): TReturnInterpolate {
+  interpolate(queuedColors: LightColor[], _light: Light): TReturnInterpolate {
     const lastColor = queuedColors.at(-1);
     const secondToLastColor = queuedColors.at(-2);
 

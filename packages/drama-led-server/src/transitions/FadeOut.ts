@@ -9,7 +9,6 @@ type Params = {
 const BLACK = `rgb(0,0,0)`;
 
 export default class FadeOut extends TransitionBase<Params> {
-  QUEUE_COUNTS: Record<string, number> = {};
   interpolate(queuedColors: LightColor[], light: Light): TReturnInterpolate {
     const lastColor = queuedColors.at(-1);
 
