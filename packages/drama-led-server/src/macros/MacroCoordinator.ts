@@ -52,6 +52,8 @@ export default class MacroCoordinator {
           existingSegmentMacro.stop();
         }
       });
+    } else if (existingSegmentMacro) {
+      existingSegmentMacro.stop();
     }
 
     this.#activeMacros.set(macro.cueID, macro);

@@ -30,6 +30,11 @@ export default abstract class SingleShotMacro<
     this.#currentAnimation = this.animator.animate(
       (percentComplete) => {
         this.#percentComplete = percentComplete;
+
+        for (const [, light] of this.lightsIterator()) {
+          light.setTransition(this.currentTransition);
+        }
+
         this.tick(percentComplete, params);
       },
       {
