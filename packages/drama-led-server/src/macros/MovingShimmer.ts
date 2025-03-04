@@ -65,6 +65,11 @@ export default class MovingShimmer extends SingleShotMacro<
     const decayedDensity = params.decayScale(percentComplete);
 
     for (const [, light] of this.lightsIterator()) {
+      if (percentComplete >= 1) {
+        light.turnOff();
+        continue;
+      }
+
       const distanceFromCenter = Math.abs(
         light.coordinates.x - params.horizontalCenter,
       );

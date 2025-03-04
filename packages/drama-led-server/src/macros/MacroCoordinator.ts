@@ -37,19 +37,24 @@ export default class MacroCoordinator {
       macro.segment,
     );
 
-    const fadeInTransition = new FadeIn(this.#animator, {
-      duration: macro.fadeInDuration,
-    });
+    const fadeInTransition =
+      macro.fadeInDuration > 0
+        ? new FadeIn(this.#animator, {
+            duration: macro.fadeInDuration,
+          })
+        : null;
 
-    macro.setTransition(fadeInTransition);
+    if (fadeInTransition != null) {
+      macro.setTransition(fadeInTransition);
+
+      fadeInTransition.start(() => {
+        if (existingSegmentMacro) {
+          existingSegmentMacro.stop();
+        }
+      });
+    }
 
     this.#activeMacros.set(macro.cueID, macro);
-
-    fadeInTransition.start(() => {
-      if (existingSegmentMacro) {
-        existingSegmentMacro.stop();
-      }
-    });
 
     if (this.#broadcastCallback == null) {
       this.#broadcastCallback = () => {
@@ -71,6 +76,8 @@ export default class MacroCoordinator {
     if (this.#activeMacros.size === 0 && this.#broadcastCallback != null) {
       this.#animator.off('afterTick', this.#broadcastCallback);
       this.#broadcastCallback = null;
+      this.#ledSystem.flushLightColors();
+      this.#broadcaster.broadcast();
     }
   }
 

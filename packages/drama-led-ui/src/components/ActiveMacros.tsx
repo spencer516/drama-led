@@ -1,6 +1,8 @@
 "use client";
 
 import { useLatestMessage, useSendMessage } from "@/utils/LEDServerContext";
+import { ArrowTrendingDownIcon } from "@heroicons/react/20/solid";
+import { ArrowTrendingUpIcon } from "@heroicons/react/20/solid";
 import Card from "./ui/StatusCard";
 import IconButton from "./ui/IconButton";
 import {
@@ -70,6 +72,27 @@ export default function ActiveMacroActions({}: Props) {
                   <div
                     style={{ width: `${macro.percentComplete * 100}%` }}
                     className="h-2 rounded-full bg-indigo-600 transition-[width]"
+                  />
+                </div>
+              </div>
+            )}
+            {macro.activeTransition == null ? null : (
+              <div className="flex gap-2 items-center">
+                {macro.activeTransition.transitionName === "FadeIn" ? (
+                  <ArrowTrendingUpIcon className="size-4 text-gray-400" />
+                ) : (
+                  <ArrowTrendingDownIcon className="size-4 text-gray-400" />
+                )}
+                <div className="overflow-hidden rounded-full bg-gray-200 grow shrink-0 h-2">
+                  <div
+                    style={{
+                      width: `${macro.activeTransition.percentComplete * 100}%`,
+                      opacity:
+                        macro.activeTransition.transitionName === "FadeIn"
+                          ? macro.activeTransition.percentComplete
+                          : 1 - macro.activeTransition.percentComplete,
+                    }}
+                    className="h-2 rounded-full bg-green-600 transition-[width]"
                   />
                 </div>
               </div>

@@ -64,6 +64,12 @@ export const MacroStatus = z.object({
   segment: NamedLEDSection,
   hasFadeOut: z.boolean(),
   percentComplete: z.number().optional(),
+  activeTransition: z
+    .object({
+      percentComplete: z.number().min(0).max(1),
+      transitionName: z.string(),
+    })
+    .optional(),
 });
 
 export type MacroStatus = z.infer<typeof MacroStatus>;

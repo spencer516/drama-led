@@ -85,12 +85,20 @@ export default abstract class MacroBase<
   }
 
   getMacroStatus(): MacroStatus {
-    return {
+    const status: MacroStatus = {
       cueID: this.cueID,
       macroName: this.constructor.name,
       segment: this.segment,
       hasFadeOut: this.fadeOutDuration > 0,
     };
+
+    if (this.currentTransition != null) {
+      status.activeTransition = {
+        percentComplete: this.currentTransition.percentComplete,
+        transitionName: this.currentTransition.constructor.name,
+      };
+    }
+    return status;
   }
 
   static create<TMessageType extends MinimumDataType>(
