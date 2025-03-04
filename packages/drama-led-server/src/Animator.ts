@@ -97,7 +97,7 @@ export default class Animator extends EventEmitter {
       }
 
       const percentComplete = clamp({
-        value: (currentTime - start) / durationInMs,
+        value: durationInMs === 0 ? 1 : (currentTime - start) / durationInMs,
         min: 0,
         max: 1,
       });

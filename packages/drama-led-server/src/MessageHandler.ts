@@ -1,5 +1,6 @@
 import Broadcaster from './Broadcaster';
 import {
+  InputMessage,
   parseMessage,
   UpdateLightByID,
 } from '@spencer516/drama-led-messages/src/InputMessage';
@@ -36,7 +37,28 @@ export default class MessageHandler {
   }
 
   async onMessage(data: string) {
-    const message = parseMessage(data);
+    let message: InputMessage | null = null;
+
+    try {
+      const result = InputMessage.safeParse(JSON.parse(data));
+
+      if (result.success) {
+        message = result.data;
+      } else {
+        console.error('Error parsing the message');
+        console.error(result.error);
+      }
+    } catch (e) {
+      console.error(`Error parsing the message:`);
+      console.error(e);
+      console.error(data);
+    }
+
+    if (message == null) {
+      return;
+    }
+
+    // const message = parseMessage(data);
     const macroParams = {
       ledSystem: this.#ledSystem,
       animator: this.#animator,
