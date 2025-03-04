@@ -1,14 +1,15 @@
-import MacroBase, { MinimumDataType } from './MacroBase';
+import ContinuousMacro from './ContinuousMacro';
+import { MinimumDataType } from './MacroBase';
 
 export default abstract class StaticMacro<
   TMessageData extends MinimumDataType,
-> extends MacroBase<TMessageData> {
-  startImpl() {
+> extends ContinuousMacro<TMessageData> {
+  tick() {
     this.setupLights();
   }
 
-  stopImpl() {
-    return;
+  getCustomParams() {
+    return {};
   }
 
   abstract setupLights(): void;

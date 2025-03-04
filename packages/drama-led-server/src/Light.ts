@@ -115,6 +115,14 @@ export default class Light {
     this.#enqueuedColors.push(rgbColor);
   }
 
+  setColorToCurrent() {
+    const red = this.#redChannel.value;
+    const green = this.#greenChannel.value;
+    const blue = this.#blueChannel.value;
+
+    this.setColor(rgb(red, green, blue));
+  }
+
   flushQueuedColors() {
     const interpolator =
       this.#currentTransition?.getInterpolator() ?? DEFAULT_INTERPOLATOR;

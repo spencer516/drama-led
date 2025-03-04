@@ -14,15 +14,14 @@ export default class ShimmerAnimation extends ContinuousMacro<
   tick(timeElapsed: number) {
     const frameNumber = Math.floor(timeElapsed / 30);
     const interval = Math.floor(100 / this.data.speed);
-
-    if (frameNumber % interval !== 0) {
-      return;
-    }
+    const isSkippedFrame = frameNumber % interval !== 0;
 
     const threshold = 1 - this.data.density / 100;
 
     for (const [, light] of this.lightsIterator()) {
-      if (Math.random() >= threshold) {
+      if (isSkippedFrame) {
+        light.setColorToCurrent();
+      } else if (Math.random() >= threshold) {
         light.setColorString(this.data.color);
       } else {
         light.turnOff();
