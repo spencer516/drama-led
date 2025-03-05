@@ -28,6 +28,11 @@ import {
   EXAMPLES as MovingShimmerExamples,
 } from './StartMovingShimmer';
 
+import {
+  StartAlternatingPattern,
+  EXAMPLES as StartAlternatingExamples,
+} from './StartAlternatingPattern';
+
 import { StartPulse, EXAMPLES as PulseExamples } from './StartPulse';
 
 export const AllMacros = [
@@ -38,6 +43,7 @@ export const AllMacros = [
   StartMovingShimmer,
   StartAnimatedPattern,
   StartPulse,
+  StartAlternatingPattern,
 ];
 
 export const MACRO_EXAMPLES = {
@@ -48,4 +54,5 @@ export const MACRO_EXAMPLES = {
   ...MovingShimmerExamples,
   ...AnimatedPatternExamples,
   ...PulseExamples,
+  ...StartAlternatingExamples,
 };
