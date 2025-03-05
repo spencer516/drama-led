@@ -1,9 +1,8 @@
 import Broadcaster from './Broadcaster';
 import {
   InputMessage,
-  parseMessage,
   UpdateLightByID,
-} from '@spencer516/drama-led-messages/src/InputMessage';
+} from '@spencer516/drama-led-messages';
 import Light from './Light';
 import LEDSystem from './LEDSystem';
 import Animator from './Animator';

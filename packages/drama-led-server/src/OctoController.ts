@@ -5,8 +5,8 @@ import {
   makeLightID,
   makeUniverse,
   Universe,
-} from '@spencer516/drama-led-messages/src/AddressTypes';
-import { OctoControllerStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
+  OctoControllerStatus
+} from '@spencer516/drama-led-messages';
 import { z } from 'zod';
 import Light from './Light';
 import { checkSACNSocket, getUniverseChannelMaker, range } from './utils';

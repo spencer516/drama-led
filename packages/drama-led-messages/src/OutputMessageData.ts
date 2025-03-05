@@ -89,12 +89,12 @@ export const OutputMessage = LEDServerData.partial();
 
 export type OutputMessage = z.infer<typeof OutputMessage>;
 
-export function parseMessage(data: string): OutputMessage {
+export function parseOutputMessage(data: string): OutputMessage {
   const obj = JSON.parse(data);
   return OutputMessage.parse(obj);
 }
 
-export function safeParseMessage(data: string): OutputMessage {
+export function safeParseOutputMessage(data: string): OutputMessage {
   const obj = JSON.parse(data);
   const result = OutputMessage.safeParse(obj);
 

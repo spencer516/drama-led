@@ -3,7 +3,7 @@ import {
   makeUniverse,
   Universe,
   UniverseChannel,
-} from '@spencer516/drama-led-messages/src/AddressTypes';
+} from '@spencer516/drama-led-messages';
 import { createSocket } from 'dgram';
 
 export function range(start: number, length: number): number[] {

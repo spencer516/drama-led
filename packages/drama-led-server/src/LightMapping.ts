@@ -2,7 +2,7 @@ import {
   LightCoordinates,
   LightID,
   makeLightID,
-} from '@spencer516/drama-led-messages/src/AddressTypes';
+} from '@spencer516/drama-led-messages';
 import { z } from 'zod';
 import { promises as fs } from 'fs';
 import { parse } from 'csv-parse/sync';

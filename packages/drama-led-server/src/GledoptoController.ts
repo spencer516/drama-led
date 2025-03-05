@@ -3,15 +3,13 @@ import {
   makeLightID,
   makeUniverse,
   Universe,
-} from '@spencer516/drama-led-messages/src/AddressTypes';
+  GledoptoControllerStatus,
+  GledoptoSACNStatus,
+} from '@spencer516/drama-led-messages';
 import Light from './Light';
 import { checkSACNSocket, getUniverseChannelMaker, range } from './utils';
 
 import { Sender } from 'sacn';
-import {
-  GledoptoControllerStatus,
-  GledoptoSACNStatus,
-} from '@spencer516/drama-led-messages/src/OutputMessage';
 import { getIPForInterface, getIPAddressForHost } from './network';
 import Broadcaster from './Broadcaster';
 
@@ -21,8 +19,6 @@ type GledoptoControllerConfig = {
   startUniverse: number;
   numberOfLights: number;
 };
-
-const WIFI_INTERFACE = getIPForInterface('en1');
 
 export default class GledoptoController {
   #host: string;
@@ -75,12 +71,13 @@ export default class GledoptoController {
 
       broadcaster.broadcastGledoptosStatus();
 
-      await checkSACNSocket(WIFI_INTERFACE);
+      const iface = getIPForInterface('en1');
+      await checkSACNSocket(iface);
       const ipAddress = await getIPAddressForHost(this.#host);
 
       this.#sacnSender = new Sender({
         universe: this.#universe,
-        iface: WIFI_INTERFACE,
+        iface,
         reuseAddr: true,
         useUnicastDestination: ipAddress,
       });

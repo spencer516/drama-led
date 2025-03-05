@@ -1,4 +1,4 @@
-import { StartShimmerAnimation } from '@spencer516/drama-led-messages/src/macros/StartShimmerAnimation';
+import { StartShimmerAnimation } from '@spencer516/drama-led-messages';
 import ContinuousMacro from './ContinuousMacro';
 
 type CustomParams = {};

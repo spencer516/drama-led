@@ -1,4 +1,4 @@
-import { PatternSegment } from '@spencer516/drama-led-messages/src/macros/utils/PatternSegment';
+import { PatternSegment } from '@spencer516/drama-led-messages';
 import { color as d3Color, RGBColor } from 'd3-color';
 import { interpolateRgb } from 'd3-interpolate';
 import { scaleLinear } from 'd3-scale';

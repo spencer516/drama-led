@@ -1,4 +1,4 @@
-import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
+import { MacroStatus } from '@spencer516/drama-led-messages';
 import MacroBase from './MacroBase';
 
 export type MinimumDataType = {

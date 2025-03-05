@@ -1,4 +1,4 @@
-import { StartAnimatedPattern } from '@spencer516/drama-led-messages/src/macros/StartAnimatedPattern';
+import { StartAnimatedPattern } from '@spencer516/drama-led-messages';
 import ContinuousMacro from './ContinuousMacro';
 import { IndexedColors, makeIndexedColors } from './utils/pattern-utils';
 import { scaleLinear, ScaleLinear } from 'd3-scale';

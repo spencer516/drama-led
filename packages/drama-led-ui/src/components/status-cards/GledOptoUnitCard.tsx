@@ -1,4 +1,4 @@
-import { GledoptoControllerStatus } from "@spencer516/drama-led-messages/src/OutputMessage";
+import { GledoptoControllerStatus } from "@spencer516/drama-led-messages";
 import Card from "../ui/StatusCard";
 import { useSendMessage } from "@/utils/LEDServerContext";
 import ToggleSwitch from "../ui/ToggleSwitch";

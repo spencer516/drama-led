@@ -8,7 +8,7 @@ import {
 import { interpolateSinebow } from 'd3-scale-chromatic';
 import { color } from 'd3-color';
 import ContinuousMacro from './ContinuousMacro';
-import { StartBasicChase } from '@spencer516/drama-led-messages/src/macros/StartBasicChase';
+import { StartBasicChase } from '@spencer516/drama-led-messages';
 
 type CustomParams = {
   scale: ScalePower<number, number>;
@@ -35,9 +35,9 @@ export default class BasicChase extends ContinuousMacro<
       colorScale:
         color === 'rainbow'
           ? scaleSequential(interpolateSinebow).domain([
-              0,
-              this.lightsCount - 1,
-            ])
+            0,
+            this.lightsCount - 1,
+          ])
           : () => color ?? 'white',
     };
   }

@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket } from 'ws';
-import { OutputMessage } from '@spencer516/drama-led-messages/src/OutputMessage';
+import { OutputMessage } from '@spencer516/drama-led-messages';
 import LEDSystem from './LEDSystem';
 import MacroCoordinator from './macros/MacroCoordinator';
 

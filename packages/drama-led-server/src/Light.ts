@@ -4,7 +4,7 @@ import {
   LightCoordinates,
   LightID,
   UniverseChannel,
-} from '@spencer516/drama-led-messages/src/AddressTypes';
+} from '@spencer516/drama-led-messages';
 import {
   color,
   HSLColor as d3HSLColor,

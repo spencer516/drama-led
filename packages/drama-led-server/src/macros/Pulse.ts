@@ -1,7 +1,7 @@
 import { scaleLinear, ScaleLinear } from 'd3-scale';
 import Light from '../Light';
 import ContinuousMacro from './ContinuousMacro';
-import { StartPulse } from '@spencer516/drama-led-messages/src/macros/StartPulse';
+import { StartPulse } from '@spencer516/drama-led-messages';
 import { interpolateRgb } from 'd3-interpolate';
 import { clamp } from '../utils';
 import { randomUniform } from 'd3-random';

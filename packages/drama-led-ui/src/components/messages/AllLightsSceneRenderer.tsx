@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import { LightConfig } from "@spencer516/drama-led-messages/src/AddressTypes";
+import { LightConfig } from "@spencer516/drama-led-messages";
 import * as THREE from "three";
 import { useLatestMessage } from "@/utils/LEDServerContext";
 
@@ -21,7 +21,7 @@ function Camera() {
   return <></>;
 }
 
-export default function AllLightsSceneRenderer({}: Props) {
+export default function AllLightsSceneRenderer({ }: Props) {
   const message = useLatestMessage();
   const lights = message.lights;
 

@@ -1,7 +1,7 @@
-import { QLabReceiverStatus } from "@spencer516/drama-led-messages/src/OutputMessage";
+import { QLabReceiverStatus } from "@spencer516/drama-led-messages";
 import Card from "../ui/StatusCard";
 import ToggleSwitch from "../ui/ToggleSwitch";
-import { GlobeAltIcon, LightBulbIcon } from "@heroicons/react/24/outline";
+import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { useSendMessage } from "@/utils/LEDServerContext";
 import { XCircleIcon } from "@heroicons/react/16/solid";
 

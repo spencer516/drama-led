@@ -1,10 +1,10 @@
 "use client";
 
-import { InputMessage } from "@spencer516/drama-led-messages/src/InputMessage";
 import {
-  safeParseMessage,
+  safeParseOutputMessage,
   LEDServerData,
-} from "@spencer516/drama-led-messages/src/OutputMessage";
+  InputMessage
+} from "@spencer516/drama-led-messages";
 import {
   createContext,
   useCallback,
@@ -40,7 +40,7 @@ const DEFAULT_SERVER_CONTENT = LEDServerData.parse({
 const LEDServerContext = createContext<LEDServerContextType>({
   lastMessage: DEFAULT_SERVER_CONTENT,
   readyState: ReadyState.UNINSTANTIATED,
-  sendMessage: () => {},
+  sendMessage: () => { },
 });
 
 export function LEDServerContextProvider({
@@ -56,7 +56,7 @@ export function LEDServerContextProvider({
     shouldReconnect: () => true,
     reconnectInterval: 1000,
     onMessage: (event) => {
-      const message = safeParseMessage(event.data);
+      const message = safeParseOutputMessage(event.data);
       setLastMessage((prevMessage) => {
         return {
           ...prevMessage,

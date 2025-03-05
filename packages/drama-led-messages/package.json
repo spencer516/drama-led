@@ -8,7 +8,7 @@
     "pretest": "npm run compile",
     "posttest": "npm run lint"
   },
-  "main": "index.ts",
+  "main": "build/index.js",
   "dependencies": {
     "@types/node": "^22.7.5",
     "nodemon": "^3.1.9",
@@ -16,10 +16,25 @@
     "typescript": "^5.7.2",
     "zod": "^3.24.1"
   },
+  "files": [
+    "build"
+  ],
   "version": "1.0.0",
   "workspaces": {
     "nohoist": [
       "**"
     ]
+  },
+  "exports": {
+    ".": "./build/index.js",
+    "./safeParseOutputMessage": "./build/src/safeParseOutputMessage.js",
+    "./LEDServerData": "./build/src/LEDServerData.js",
+    "./InputMessage": "./build/src/InputMessage.js",
+    "./OutputMessage": "./build/src/OutputMessage.js",
+    "./OctoControllerStatus": "./build/src/OctoControllerStatus.js",
+    "./QLabReceiverStatus": "./build/src/QLabReceiverStatus.js",
+    "./OctoUnitCard": "./build/src/OctoUnitCard.js",
+    "./MACRO_EXAMPLES": "./build/src/MACRO_EXAMPLES.js",
+    "./LightConfig": "./build/src/LightConfig.js"
   }
 }

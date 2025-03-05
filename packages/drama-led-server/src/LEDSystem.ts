@@ -1,17 +1,17 @@
-import { LightConfig } from '@spencer516/drama-led-messages/src/AddressTypes';
 import OctoController from './OctoController';
-import Light, { LightBlendInterpolator } from './Light';
+import Light from './Light';
 import {
   GledoptoControllerStatus,
   OctoControllerStatus,
   QLabReceiverStatus,
-} from '@spencer516/drama-led-messages/src/OutputMessage';
+  LightConfig,
+  NamedLEDSection,
+  SeriesDirection
+} from '@spencer516/drama-led-messages';
 import GledoptoController from './GledoptoController';
 import QLabReceiver from './QLabReceiver';
 import MessageHandler from './MessageHandler';
 import Broadcaster from './Broadcaster';
-import { NamedLEDSection } from '@spencer516/drama-led-messages/src/NamedLEDSection';
-import { SeriesDirection } from '@spencer516/drama-led-messages/src/macros/utils/SeriesDirection';
 
 export const SACN_NETWORK_INTERFACE = '192.168.1.199';
 

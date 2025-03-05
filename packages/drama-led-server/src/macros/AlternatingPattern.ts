@@ -1,8 +1,7 @@
-import { StartAlternatingPattern } from '@spencer516/drama-led-messages/src/macros/StartAlternatingPattern';
+import { StartAlternatingPattern, SeriesDirection } from '@spencer516/drama-led-messages';
 import ContinuousMacro from './ContinuousMacro';
 import { IndexedColors, makeIndexedColors } from './utils/pattern-utils';
 import { scaleLinear, ScaleLinear } from 'd3-scale';
-import { SeriesDirection } from '@spencer516/drama-led-messages/src/macros/utils/SeriesDirection';
 
 type SeriesDefinition = {
   indexedColors: IndexedColors;

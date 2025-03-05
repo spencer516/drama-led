@@ -1,5 +1,5 @@
-import { NamedLEDSection } from '@spencer516/drama-led-messages/src/NamedLEDSection';
-import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
+import { NamedLEDSection } from '@spencer516/drama-led-messages';
+import { MacroStatus } from '@spencer516/drama-led-messages';
 import Animator from '../Animator';
 import Broadcaster from '../Broadcaster';
 import MacroBase from './MacroBase';
@@ -40,8 +40,8 @@ export default class MacroCoordinator {
     const fadeInTransition =
       macro.fadeInDuration > 0
         ? new FadeIn(this.#animator, {
-            duration: macro.fadeInDuration,
-          })
+          duration: macro.fadeInDuration,
+        })
         : null;
 
     if (fadeInTransition != null) {

@@ -46,6 +46,17 @@ export const AllMacros = [
   StartAlternatingPattern,
 ];
 
+export {
+  StartRandomSparkle,
+  StartBasicChase,
+  StartShimmerAnimation,
+  StartStaticPattern,
+  StartMovingShimmer,
+  StartAnimatedPattern,
+  StartPulse,
+  StartAlternatingPattern,
+};
+
 export const MACRO_EXAMPLES = {
   ...RandomSparkleExamples,
   ...BasicChaseExamples,

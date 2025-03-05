@@ -1,4 +1,4 @@
-import { StartStaticPattern } from '@spencer516/drama-led-messages/src/macros/StartStaticPattern';
+import { StartStaticPattern } from '@spencer516/drama-led-messages';
 import StaticMacro from './StaticMacro';
 import { makeIndexedColors } from './utils/pattern-utils';
 

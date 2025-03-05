@@ -1,8 +1,8 @@
-import { InputMessage } from "@spencer516/drama-led-messages/src/InputMessage";
 import {
-  safeParseMessage,
+  safeParseOutputMessage,
   OutputMessage,
-} from "@spencer516/drama-led-messages/src/OutputMessage";
+  InputMessage
+} from "@spencer516/drama-led-messages";
 import { useCallback, useMemo } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
@@ -32,7 +32,7 @@ export default function useLEDServerWebSocket(): ReturnType {
   );
 
   const lastMessage = useMemo(() => {
-    return safeParseMessage(lastMessageEvent?.data ?? "{}");
+    return safeParseOutputMessage(lastMessageEvent?.data ?? "{}");
   }, [lastMessageEvent]);
 
   return {

@@ -3,7 +3,7 @@ import MessageHandler from './MessageHandler';
 import {
   QLabReceiverConnectionStatus,
   QLabReceiverStatus,
-} from '@spencer516/drama-led-messages/src/OutputMessage';
+} from '@spencer516/drama-led-messages';
 import Broadcaster from './Broadcaster';
 
 type Props = {

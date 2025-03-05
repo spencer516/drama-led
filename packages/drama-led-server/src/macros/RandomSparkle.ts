@@ -1,4 +1,4 @@
-import { StartRandomSparkle } from '@spencer516/drama-led-messages/src/macros/StartRandomSparkle';
+import { StartRandomSparkle } from '@spencer516/drama-led-messages';
 import SingleShotMacro from './SingleShotMacro';
 
 type CustomParams = {};

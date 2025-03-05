@@ -1,9 +1,7 @@
-import { NamedLEDSection } from '@spencer516/drama-led-messages/src/NamedLEDSection';
+import { NamedLEDSection, InputMessage, MacroStatus } from '@spencer516/drama-led-messages';
 import LEDSystem, { SegmentIteratorOptions } from '../LEDSystem';
 import Animator from '../Animator';
 import MacroCoordinator from './MacroCoordinator';
-import { InputMessage } from '@spencer516/drama-led-messages/src/InputMessage';
-import { MacroStatus } from '@spencer516/drama-led-messages/src/OutputMessage';
 import Light from '../Light';
 import TransitionBase from '../transitions/TransitionBase';
 

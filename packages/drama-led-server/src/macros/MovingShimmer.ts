@@ -1,4 +1,4 @@
-import { StartMovingShimmer } from '@spencer516/drama-led-messages/src/macros/StartMovingShimmer';
+import { StartMovingShimmer } from '@spencer516/drama-led-messages';
 import SingleShotMacro from './SingleShotMacro';
 import { scaleLinear, ScaleLinear, scalePow, ScalePower } from 'd3-scale';
 

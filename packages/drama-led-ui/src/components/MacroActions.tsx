@@ -3,8 +3,7 @@
 import dynamic from "next/dynamic";
 import { useSendMessage } from "@/utils/LEDServerContext";
 import { useState } from "react";
-import { InputMessage } from "@spencer516/drama-led-messages/src/InputMessage";
-import { MACRO_EXAMPLES } from "@spencer516/drama-led-messages/src/macros/AllMacros";
+import { InputMessage, MACRO_EXAMPLES } from "@spencer516/drama-led-messages";
 import ErrorModal from "./ui/ErrorModal";
 
 const JSONEditor = dynamic(() => import("./ui/JSONEditor"), { ssr: false });
@@ -49,7 +48,7 @@ function simplifyError(errorObject: unknown): unknown {
   }
 }
 
-export default function MacroActions({}: Props) {
+export default function MacroActions({ }: Props) {
   const sendMessage = useSendMessage();
   const [code, setCode] = useState("{}");
   const [error, setError] = useState<string | null>(null);

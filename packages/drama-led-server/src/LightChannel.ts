@@ -8,7 +8,7 @@ import {
   RGBValue,
   Universe,
   UniverseChannel,
-} from '@spencer516/drama-led-messages/src/AddressTypes';
+} from '@spencer516/drama-led-messages';
 
 function makeRGBValueFromChannelValue(value: ChannelValue): RGBValue {
   return makeRGBValue(Math.round((value / 100) * 255));
