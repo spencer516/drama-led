@@ -1,12 +1,15 @@
 import { StartMovingShimmer } from '@spencer516/drama-led-messages';
 import SingleShotMacro from './SingleShotMacro';
 import { scaleLinear, ScaleLinear, scalePow, ScalePower } from 'd3-scale';
+import { interpolateRgb } from 'd3-interpolate';
 
 type CustomParams = {
   verticalAnimation: ScaleLinear<number, number>;
   spreadScale: ScaleLinear<number, number>;
   decayScale: ScaleLinear<number, number>;
   horizontalCenter: number;
+  colorInterpolator: (p: number) => string;
+  backgroundColor: string;
 };
 
 export default class MovingShimmer extends SingleShotMacro<
@@ -45,6 +48,11 @@ export default class MovingShimmer extends SingleShotMacro<
 
     const range = this.data.direction === 'UP' ? [bottom, top] : [top, bottom];
 
+    const backgroundColor = this.data.backgroundColor ?? 'rgb(0,0,0)';
+    const color = this.data.color ?? 'rgb(255,255,255)';
+
+    const colorInterpolator = interpolateRgb(backgroundColor, color);
+
     return {
       verticalAnimation: scaleLinear().domain([0, 1]).range(range),
       horizontalCenter: (left + right) / 2 + left,
@@ -57,6 +65,8 @@ export default class MovingShimmer extends SingleShotMacro<
       spreadScale: scaleLinear()
         .domain([0, this.data.spread])
         .rangeRound([100, 0]),
+      colorInterpolator,
+      backgroundColor
     };
   }
 
@@ -66,7 +76,7 @@ export default class MovingShimmer extends SingleShotMacro<
 
     for (const [, light] of this.lightsIterator()) {
       if (percentComplete >= 1) {
-        light.turnOff();
+        light.setColorString(params.backgroundColor);
         continue;
       }
 
@@ -86,9 +96,10 @@ export default class MovingShimmer extends SingleShotMacro<
       const threshold = 1 - decayedDensity / 100;
 
       if (Math.random() >= threshold) {
-        light.setColorString(`rgba(255,255,255,${percent / 100})`);
+        const color = params.colorInterpolator(percent);
+        light.setColorString(color);
       } else {
-        light.turnOff();
+        light.setColorString(params.backgroundColor);
       }
     }
   }

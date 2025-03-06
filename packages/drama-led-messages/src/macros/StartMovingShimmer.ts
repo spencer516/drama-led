@@ -10,6 +10,8 @@ export const StartMovingShimmer = StartBaseMacro.extend({
     spread: z.number().min(0).max(100),
     decay: z.number().min(0).max(100),
     slopeEffect: z.number().min(0).max(100),
+    color: z.string().optional(),
+    backgroundColor: z.string().optional()
   }),
 });
 
@@ -27,6 +29,8 @@ export const EXAMPLES: Record<string, StartMovingShimmer> = {
       spread: 20,
       decay: 80,
       slopeEffect: 60,
+      color: 'yellow',
+      backgroundColor: 'green'
     },
   },
 };

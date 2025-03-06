@@ -24,7 +24,8 @@ export default class ShimmerAnimation extends ContinuousMacro<
       } else if (Math.random() >= threshold) {
         light.setColorString(this.data.color);
       } else {
-        light.turnOff();
+        const background = this.data.backgroundColor ?? 'rgb(0,0,0)';
+        light.setColorString(background);
       }
     }
   }

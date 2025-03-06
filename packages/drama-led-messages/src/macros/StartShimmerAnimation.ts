@@ -7,6 +7,7 @@ export const StartShimmerAnimation = StartBaseMacro.extend({
     speed: z.number().min(0).max(100),
     density: z.number().min(0).max(100),
     color: z.string(),
+    backgroundColor: z.string().optional(),
   }),
 });
 
@@ -21,6 +22,7 @@ export const EXAMPLES: Record<string, StartShimmerAnimation> = {
       speed: 40,
       density: 20,
       color: `rgb(255,251,212)`,
+      backgroundColor: `rgb(255,0,0)`,
     },
   },
 };
