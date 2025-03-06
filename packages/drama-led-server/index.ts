@@ -12,7 +12,7 @@ function set<T>(items: T[]): Set<T> {
 }
 
 async function startup() {
-  const lightMapping = new LightMapping('FullSystemGeneratedV3.csv');
+  const lightMapping = new LightMapping('FullSystemGeneratedV4-Gledopto.csv');
 
   await lightMapping.populateMap();
 
@@ -83,6 +83,7 @@ async function startup() {
     host: 'gledopto-1-wireless.local',
     startUniverse: 1600,
     numberOfLights: 50,
+    lightMapping
   });
 
   const qlab = new QLabReceiver({
@@ -137,6 +138,9 @@ async function startup() {
         CONTROLLER_SPOONFUL_1,
         CONTROLLER_BERTS_BRIGHTS_1,
       ]),
+      HOUSE: set([
+        GLED_CONTROLLER_1
+      ])
     },
   );
 

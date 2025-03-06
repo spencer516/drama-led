@@ -124,6 +124,12 @@ function generateAllLights(): Light[] {
     lightCounts: [125, 84, 125],
   });
 
+  // const gledopto = generateForGledopto(
+  //   370,
+  //   30,
+  //   40
+  // );
+
   return [
     ...spoonful1,
     ...spoonful2,
@@ -201,6 +207,26 @@ function generateLightsForOpening({
     });
 
     sequence++;
+  }
+
+  return lights;
+}
+
+function generateForGledopto(
+  xPosition: number,
+  width: number,
+  height: number
+): Light[] {
+  const lights: Light[] = [];
+
+  for (let i = 0; i < 100; i++) {
+    const xPos = Math.random() * width + xPosition;
+    const yPos = Math.random() * height;
+    lights.push({
+      light_id: `gledopto-${i}`,
+      x_coordinate: fx(xPos),
+      y_coordinate: fx(yPos),
+    });
   }
 
   return lights;

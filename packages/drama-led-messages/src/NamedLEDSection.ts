@@ -13,6 +13,7 @@ const NamedLEDSection = z.union([
   z.literal('ALL_ARCHES_FULL'),
   z.literal('ALL_ARCHES_OUTER'),
   z.literal('ALL_ARCHES_INNER'),
+  z.literal('HOUSE'),
 ]);
 
 export { NamedLEDSection };

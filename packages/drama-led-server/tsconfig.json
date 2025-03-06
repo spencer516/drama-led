@@ -23,5 +23,6 @@
     "index.ts",
     "src/**/*.ts",
     "mapping/**/*.csv",
+    "mapping/**/*.ts",
   ]
 }

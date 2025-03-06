@@ -12,12 +12,14 @@ import { checkSACNSocket, getUniverseChannelMaker, range } from './utils';
 import { Sender } from 'sacn';
 import { getIPForInterface, getIPAddressForHost } from './network';
 import Broadcaster from './Broadcaster';
+import LightMapping from './LightMapping';
 
 type GledoptoControllerConfig = {
   id: string;
   host: string;
   startUniverse: number;
   numberOfLights: number;
+  lightMapping: LightMapping;
 };
 
 export default class GledoptoController {
@@ -42,13 +44,11 @@ export default class GledoptoController {
       );
 
       const lightID = this.makeLightID(sequenceNumber + 1);
+      const coordinates = config.lightMapping.getLightCoordinates(lightID);
 
       const light = new Light(
         lightID,
-        {
-          x: 0,
-          y: 0,
-        },
+        coordinates,
         [
           makeChannelByOffset(0),
           makeChannelByOffset(1),
