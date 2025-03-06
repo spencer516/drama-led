@@ -1,8 +1,5 @@
 import Broadcaster from './Broadcaster';
-import {
-  InputMessage,
-  UpdateLightByID,
-} from '@spencer516/drama-led-messages';
+import { InputMessage, UpdateLightByID } from '@spencer516/drama-led-messages';
 import Light from './Light';
 import LEDSystem from './LEDSystem';
 import Animator from './Animator';
@@ -64,6 +61,8 @@ export default class MessageHandler {
       animator: this.#animator,
       macroCoordinator: this.#macroCoordinator,
     };
+
+    console.log('Message:', message.type);
 
     switch (message.type) {
       /**
