@@ -11,9 +11,9 @@ export default class RandomSparkle extends SingleShotMacro<
     return {};
   }
 
-  tick(_percentComplete: number) {
+  tick(percentComplete: number) {
     for (const [, light] of this.lightsIterator()) {
-      if (Math.random() > 0.8) {
+      if (Math.random() > 0.8 && percentComplete < 1) {
         light.turnOn();
       } else {
         light.turnOff();

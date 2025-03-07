@@ -34,7 +34,7 @@ export default class Pulse extends ContinuousMacro<
     const colorInterpolator = interpolateRgb(startColor, endColor);
 
     const maxVisibleScale = scaleLinear()
-      .domain([0, this.data.durationPerLight])
+      .domain([0, this.data.rampUpDuration])
       .range([0, maxVisibleLights])
       .clamp(true);
 
@@ -73,7 +73,9 @@ export default class Pulse extends ContinuousMacro<
     color: string,
   ): [number, ScaleLinear<string, string>] {
     const duration = this.data.durationPerLight;
-    const finishTime = currentTime + duration;
+    const buffer = duration * 0.2;
+    const randomOffset = buffer * Math.random() - buffer * 2;
+    const finishTime = currentTime + duration + randomOffset;
 
     const fadeAnimator = scaleLinear<string>()
       .domain([currentTime, currentTime + duration / 2, finishTime])
@@ -92,21 +94,25 @@ export default class Pulse extends ContinuousMacro<
     } = params;
     const maxVisibleLights = maxVisibleScale(timeElapsed);
 
-    const [finishTime, fadeAnimator] = this.createAnimatorForTime(
-      timeElapsed,
-      getRandomColor(),
-    );
-
     while (activeLightStates.size < maxVisibleLights) {
       const randomLight = this.getRandomLight(inactiveLights);
 
       if (randomLight != null) {
+        const [finishTime, fadeAnimator] = this.createAnimatorForTime(
+          timeElapsed,
+          getRandomColor(),
+        );
+
         inactiveLights.delete(randomLight);
         activeLightStates.set(randomLight, {
           fadeAnimator,
           finishTime,
         });
       }
+    }
+
+    for (const light of inactiveLights) {
+      light.turnOff();
     }
 
     for (const [light, state] of activeLightStates.entries()) {
