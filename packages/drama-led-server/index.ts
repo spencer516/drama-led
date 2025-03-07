@@ -82,8 +82,8 @@ async function startup() {
     id: 'gledopto_1',
     host: 'gledopto-1-wireless.local',
     startUniverse: 1600,
-    numberOfLights: 50,
-    lightMapping
+    numberOfLights: 100,
+    lightMapping,
   });
 
   const qlab = new QLabReceiver({
@@ -138,9 +138,7 @@ async function startup() {
         CONTROLLER_SPOONFUL_1,
         CONTROLLER_BERTS_BRIGHTS_1,
       ]),
-      HOUSE: set([
-        GLED_CONTROLLER_1
-      ])
+      HOUSE: set([GLED_CONTROLLER_1]),
     },
   );
 

@@ -64,9 +64,9 @@ export default class MovingShimmer extends SingleShotMacro<
         ]),
       spreadScale: scaleLinear()
         .domain([0, this.data.spread])
-        .rangeRound([100, 0]),
+        .rangeRound([1, 0]),
       colorInterpolator,
-      backgroundColor
+      backgroundColor,
     };
   }
 

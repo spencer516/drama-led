@@ -33,27 +33,29 @@ export default class MacroCoordinator {
     }
 
     // If there is a macro with the same segment, cancel it
-    const existingSegmentMacro = this.#findMacroOverlappingSegment(
+    const existingSegmentMacros = this.#findMacroOverlappingSegmens(
       macro.segment,
     );
 
     const fadeInTransition =
       macro.fadeInDuration > 0
         ? new FadeIn(this.#animator, {
-          duration: macro.fadeInDuration,
-        })
+            duration: macro.fadeInDuration,
+          })
         : null;
 
     if (fadeInTransition != null) {
       macro.setTransition(fadeInTransition);
 
       fadeInTransition.start(() => {
-        if (existingSegmentMacro) {
-          existingSegmentMacro.stop();
+        for (const macro of existingSegmentMacros) {
+          macro.stop();
         }
       });
-    } else if (existingSegmentMacro) {
-      existingSegmentMacro.stop();
+    } else {
+      for (const macro of existingSegmentMacros) {
+        macro.stop();
+      }
     }
 
     this.#activeMacros.set(macro.cueID, macro);
@@ -130,14 +132,16 @@ export default class MacroCoordinator {
     return status;
   }
 
-  #findMacroOverlappingSegment(segment: NamedLEDSection): MacroBase | null {
+  #findMacroOverlappingSegmens(segment: NamedLEDSection): MacroBase[] {
     // Find the controllers for the segment.
+    const overlapping = [];
+
     for (const macro of this.#activeMacros.values()) {
       if (this.#ledSystem.doSegmentsOverlap(macro.segment, segment)) {
-        return macro;
+        overlapping.push(macro);
       }
     }
 
-    return null;
+    return overlapping;
   }
 }

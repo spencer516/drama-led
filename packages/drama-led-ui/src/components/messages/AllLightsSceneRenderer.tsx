@@ -12,7 +12,7 @@ function Camera() {
   const { camera } = useThree();
 
   useEffect(() => {
-    const x = 175;
+    const x = 195;
     const y = 75;
     camera.position.set(x, y, 200);
     camera.lookAt(x, y, 0);
@@ -21,7 +21,7 @@ function Camera() {
   return <></>;
 }
 
-export default function AllLightsSceneRenderer({ }: Props) {
+export default function AllLightsSceneRenderer({}: Props) {
   const message = useLatestMessage();
   const lights = message.lights;
 
