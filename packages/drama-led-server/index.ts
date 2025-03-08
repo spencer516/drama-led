@@ -6,6 +6,15 @@ import LEDSystem, { SACN_NETWORK_INTERFACE } from './src/LEDSystem';
 import LightMapping from './src/LightMapping';
 import QLabReceiver from './src/QLabReceiver';
 import GledoptoController from './src/GledoptoController';
+import { parse } from 'ts-command-line-args';
+
+interface ServerArguments {
+  showMode: boolean;
+}
+
+const args = parse<ServerArguments>({
+  showMode: Boolean,
+});
 
 function set<T>(items: T[]): Set<T> {
   return new Set(items);
@@ -146,7 +155,44 @@ async function startup() {
 
   const messageHandler = new MessageHandler(broadcaster, system);
 
-  await qlab.start(messageHandler, broadcaster);
+  if (args.showMode) {
+    console.log('==================');
+    console.log('Starting in CELSIUS mode.');
+    console.log('QLab & Octo Controllers pre-started');
+    console.log('...please confirm the Gledopto is connected!');
+    console.log('==================');
+    console.log(
+      ' _                                                     _       _                   ',
+    );
+    console.log(
+      '| |__   __ ___   _____    __ _    __ _  ___   ___   __| |  ___| |__   _____      __',
+    );
+    console.log(
+      "| '_ \\ / _` \\ \\ / / _ \\  / _` |  / _` |/ _ \\ / _ \\ / _` | / __| '_ \\ / _ \\ \\ /\\ / /",
+    );
+    console.log(
+      '| | | | (_| |\\ V /  __/ | (_| | | (_| | (_) | (_) | (_| | \\__ \\ | | | (_) \\ V  V / ',
+    );
+    console.log(
+      '|_| |_|\\__,_| \\_/ \\___|  \\__,_|  \\__, |\\___/ \\___/ \\__,_| |___/_| |_|\\___/ \\_/\\_/  ',
+    );
+    console.log(
+      '                                  |___/                                             ',
+    );
+
+    console.log('\n\n');
+    console.log(
+      'For any LED-related emergencies, please ask Mr. Trafton to explain the code.',
+    );
+
+    await qlab.start(messageHandler, broadcaster);
+    await CONTROLLER_SUPERCALI_1.setupSacnSenders(broadcaster);
+    await CONTROLLER_SUPERCALI_2.setupSacnSenders(broadcaster);
+    await CONTROLLER_BERTS_BRIGHTS_1.setupSacnSenders(broadcaster);
+    await CONTROLLER_BERTS_BRIGHTS_2.setupSacnSenders(broadcaster);
+    await CONTROLLER_SPOONFUL_1.setupSacnSenders(broadcaster);
+    await CONTROLLER_SPOONFUL_2.setupSacnSenders(broadcaster);
+  }
 
   wss.on('connection', function connection(ws) {
     console.log('connected!');
