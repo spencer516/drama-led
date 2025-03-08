@@ -13,10 +13,6 @@ export default class FadeIn extends TransitionBase<Params> {
     const lastColor = queuedColors.at(-1);
     const secondToLastColor = queuedColors.at(-2);
 
-    // console.log('MULT COLORS', _light.id, queuedColors.length);
-    // // if (queuedColors.length > 1) {
-    // // }
-
     if (lastColor == null) {
       return BLACK;
     }

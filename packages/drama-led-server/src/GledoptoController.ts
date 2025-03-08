@@ -46,15 +46,11 @@ export default class GledoptoController {
       const lightID = this.makeLightID(sequenceNumber + 1);
       const coordinates = config.lightMapping.getLightCoordinates(lightID);
 
-      const light = new Light(
-        lightID,
-        coordinates,
-        [
-          makeChannelByOffset(0),
-          makeChannelByOffset(1),
-          makeChannelByOffset(2),
-        ],
-      );
+      const light = new Light(lightID, coordinates, [
+        makeChannelByOffset(0),
+        makeChannelByOffset(1),
+        makeChannelByOffset(2),
+      ]);
 
       return light;
     });
@@ -71,7 +67,7 @@ export default class GledoptoController {
 
       broadcaster.broadcastGledoptosStatus();
 
-      const iface = getIPForInterface('en1');
+      const iface = getIPForInterface('en0');
       await checkSACNSocket(iface);
       const ipAddress = await getIPAddressForHost(this.#host);
 

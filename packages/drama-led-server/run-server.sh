@@ -1,2 +1,3 @@
 #!/bin/bash
-node ./build/index.js
+
+node --max-old-space-size=8192 ./build/index.js

@@ -32,6 +32,8 @@ export default class AnimatedPattern extends ContinuousMacro<
 
       if (color != null) {
         light.setColor(color);
+      } else {
+        light.setColorString('rgb(0,0,0)');
       }
     }
   }
