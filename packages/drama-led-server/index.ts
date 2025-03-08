@@ -146,6 +146,8 @@ async function startup() {
 
   const messageHandler = new MessageHandler(broadcaster, system);
 
+  await qlab.start(messageHandler, broadcaster);
+
   wss.on('connection', function connection(ws) {
     console.log('connected!');
     ws.on('close', function close() {
